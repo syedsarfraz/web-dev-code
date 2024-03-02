@@ -1,0 +1,28 @@
+.all-container * {
+    color: indigo;
+}
+
+ol.list li:first-child {
+    color: green;
+}
+
+ol.list :last-child {
+    color: red;
+}
+
+.list :empty {
+    background-color: #ff9999;
+}
+
+.list :nth-child(4) {
+    color: green;
+    font-weight: bold;
+}
+
+.list li:nth-of-type(4) {
+    color: blue;
+}
+
+.list li:nth-of-type(2n + 1) {
+    color: purple;
+}

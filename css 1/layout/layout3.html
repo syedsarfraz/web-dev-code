@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flex layout</title>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+                height: 100%;
+                align-items: stretch;
+                justify-content: space-evenly;
+            }
+            .row > div {
+                flex-grow: 0;
+                flex-shrink: 1;
+                flex-basis: 400px;
+                text-align: center;
+
+            }
+            .row div:nth-child(2n + 1) {
+                background-color: chartreuse;
+            }
+            .row div:nth-child(2n) {
+                background-color: chocolate;
+            }
+
+            .column {
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                align-items: stretch;
+                justify-content: center;
+                align-content: center;
+
+                height: 100%;
+            }
+
+            .column > div {
+                min-width: 100px;
+                flex: 1 300px;
+            }
+
+
+            .column div:nth-child(2n + 1) {
+                background-color: chartreuse;
+            }
+            .column div:nth-child(2n) {
+                background-color: chocolate;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Flex layout</h1>
+
+        <div class="column">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+        </div>
+    </body>
+</html>

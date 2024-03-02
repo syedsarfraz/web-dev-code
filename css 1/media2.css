@@ -1,0 +1,13 @@
+.items {
+    display: flex;
+    justify-content: space-around;
+
+    flex-direction: column;
+    gap: 8px;
+}
+.items > div {
+    min-width: 100px;
+    min-height: 100px;
+    border: 1px solid blue;
+    border-radius: 8px;
+}

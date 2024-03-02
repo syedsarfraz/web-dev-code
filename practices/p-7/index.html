@@ -1,0 +1,182 @@
+<html>
+    <head>
+        <title>Pages with templates</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>User management</h1>
+
+        <div id="page" class="page"></div>
+
+        <template id="user-list">
+            <h2>User list</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Province</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">No users</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button id="gotoUserAdd">Add User</button>
+            <button onclick="gotoPage('about')">About</button>
+        </template>
+
+        <template id="user-add">
+            <h2>User Add</h2>
+
+            <form id="userform" class="userform">
+                <label>
+                    Full name
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                        oninvalid="this.setCustomValidity('Enter your full name')"
+                        oninput="this.setCustomValidity('')"
+                        maxlength="12"
+                        minlength="3"
+                    />
+                </label>
+                <div>
+                    Gender:
+                    <label>
+                        <input
+                            type="radio"
+                            name="gender"
+                            value="male"
+                            required
+                        />
+                        Male
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="gender"
+                            value="female"
+                            required
+                        />
+                        Female
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            name="gender"
+                            value="other"
+                            required
+                        />
+                        Other
+                    </label>
+                </div>
+                <label>
+                    Age:
+                    <input
+                        type="number"
+                        name="age"
+                        placeholder="Enter your age"
+                        required
+                        min="12"
+                        max="75"
+                    />
+                </label>
+                <div>
+                    <label for="address">Address:</label>
+                    <br />
+                    <textarea
+                        id="address"
+                        name="address"
+                        placeholder="Enter your address"
+                        rows="3"
+                        cols="30"
+                        required
+                    ></textarea>
+                </div>
+                <div>
+                    <label for="province">Province</label>
+                    <select name="province" id="province" required>
+                        <option value="" selected disabled>
+                            Select Province
+                        </option>
+                        <option>Sindh</option>
+                        <option>Punjab</option>
+                        <option>KPK</option>
+                        <option>Balochistan</option>
+                    </select>
+                </div>
+                <label>
+                    <input type="checkbox" name="concern" required />
+                    Are you sure, all above details are correct?
+                </label>
+                <div>
+                    <button type="submit">Submit Form</button>
+                    <button type="reset">Reset</button>
+                </div>
+            </form>
+
+            <button id="gotoUserList" class="gotoUserList">
+                Back to User list
+            </button>
+        </template>
+        <template id="user-view">
+            <h2>User Details</h2>
+
+            <table></table>
+
+            <button id="gotoUserList" class="gotoUserList">
+                Back to user list
+            </button>
+        </template>
+        <template id="about">
+            <h2>About US</h2>
+            <button onclick="gotoPage('user-list')">User List</button>
+        </template>
+
+        <template id="user-row-template">
+            <tr>
+                <td id="user-name"></td>
+                <td id="user-gender"></td>
+                <td id="user-province"></td>
+                <td><button id="view-button">Show</button></td>
+            </tr>
+        </template>
+
+        <template id="user-info-template">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Full Name</th>
+                        <td id="user-name"></td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td id="user-gender"></td>
+                    </tr>
+                    <tr>
+                        <th>Age</th>
+                        <td id="user-age"></td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td id="user-address"></td>
+                    </tr>
+                    <tr>
+                        <th>Province</th>
+                        <td id="user-province"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <script src="script.js"></script>
+    </body>
+</html>

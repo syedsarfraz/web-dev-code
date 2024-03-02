@@ -1,0 +1,27 @@
+.content {
+    float: left;
+    width: 25%;
+    padding: 10px;
+}
+
+.content h2 {
+    text-align: center;
+}
+
+.content.right {
+    float: right;
+}
+
+.column-50 {
+    float: left;
+    width: 50%;
+}
+
+.column-25 {
+    float: left;
+    width: 25%;
+}
+
+.fix-float {
+    clear: both;
+}

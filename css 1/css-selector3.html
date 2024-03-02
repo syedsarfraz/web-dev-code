@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSS selector 3</title>
+        <style>
+            button:enabled {
+                background-color: red;
+                color: white;
+            }
+
+            button:disabled {
+                cursor: not-allowed;
+                background-color: antiquewhite;
+            }
+
+            p ~ a {
+                color: darkslategray;
+            }
+
+            p + a {
+                color: brown;
+            }
+
+            p a:nth-of-type(2n) {
+                color: red;
+            }
+
+            p a:nth-of-type(2n + 1) {
+                color: green;
+            }
+
+            body h2:nth-of-type(1) {
+                color: purple;
+            }
+
+            ul li {
+                color: red;
+            }
+
+            .list li {
+                color: green;
+            }
+
+            ul.list li {
+                color: purple;
+            }
+
+            #list li {
+                color: brown;
+            }
+
+            #list li:first-child {
+                color: darkslategray;
+            }
+
+            ul#list.list[ABC] li {
+                color: black;
+            }
+
+            * {
+                color: tomato;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>CSS selector part 3</h1>
+
+        <h2>Select Enable or Disable</h2>
+
+        <button>Click me</button>
+        <button disabled>Hold me</button>
+
+        <h2>Sibling selectors</h2>
+        <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit
+
+            <br /><a href="css-selector2.html">CSS selector 2</a> <br /><a
+                href="css-selector.html"
+                >CSS selector
+            </a>
+            <br /><a href="css-selector.html">CSS selector another </a> <br /><a
+                href="css-selector2.html"
+                >CSS selector 2</a
+            >
+            <br /><a href="css-selector.html">CSS selector </a> <br /><a
+                href="css-selector.html"
+                >CSS selector another
+            </a>
+        </p>
+
+        <a href="css-selector2.html">CSS selector 2</a>
+
+        <ul id="list">
+            <li>Apple</li>
+            <li>Banana</li>
+            <li>Coconut</li>
+        </ul>
+
+        <ul class="list">
+            <li>Apple</li>
+            <li>Banana</li>
+            <li>Coconut</li>
+        </ul>
+
+        <ul>
+            <li>Apple</li>
+            <li>Banana</li>
+            <li>Coconut</li>
+        </ul>
+    </body>
+</html>

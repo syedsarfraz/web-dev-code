@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>Move Elements part 2</title>
+        <style>
+            html {
+                font-family: sans-serif;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .box {
+                width: 15px;
+                height: 15px;
+                background-color: red;
+                border-radius: 100%;
+
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                transform: translate(-50%, -50%);
+
+                cursor: pointer;
+                transition: 0.5s;
+                transition-property: transform;
+            }
+
+            .box.active {
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Moving elements</h1>
+
+        <div id="box" class="box"></div>
+
+        <script>
+            const boxElm = document.getElementById("box");
+
+            boxElm.style.top = "60px";
+            boxElm.style.left = "20px";
+
+            let move = false;
+
+            document.addEventListener("mousemove", (e) => {
+                if (move) {
+                    boxElm.style.top =
+                        clamp(innerHeight - 20, e.pageY, 60) + "px";
+                    boxElm.style.left =
+                        clamp(innerWidth - 20, e.pageX, 20) + "px";
+                }
+            });
+
+            boxElm.addEventListener("mousedown", (e) => {
+                boxElm.classList.add("active");
+                move = true;
+
+                document.body.style.cursor = "none";
+                boxElm.style.cursor = "none";
+            });
+
+            document.addEventListener("mouseup", () => {
+                boxElm.classList.remove("active");
+                move = false;
+
+                document.body.style.cursor = "default";
+                boxElm.style.cursor = "pointer";
+            });
+
+            function clamp(max, val, min) {
+                return Math.max(Math.min(max, val), min);
+            }
+        </script>
+    </body>
+</html>

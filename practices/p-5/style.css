@@ -1,0 +1,16 @@
+html {
+    font-family: sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.userform {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    width: 400px;
+    margin: auto;
+}

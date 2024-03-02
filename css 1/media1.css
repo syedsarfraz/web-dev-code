@@ -1,0 +1,22 @@
+.items {
+    display: flex;
+    justify-content: space-around;
+}
+.items > div {
+    min-width: 100px;
+    min-height: 100px;
+    border: 1px solid red;
+}
+
+@media (min-width: 500px) and (max-width: 700px) {
+    .items > div {
+        padding: 16px;
+    }
+}
+
+@media (min-width: 700px) {
+    .items > div {
+        padding: 32px;
+        font-size: 24px;
+    }
+}

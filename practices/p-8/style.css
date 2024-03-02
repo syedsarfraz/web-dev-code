@@ -1,0 +1,51 @@
+html {
+    font-family: sans-serif;
+}
+
+h1,
+h2 {
+    text-align: center;
+}
+
+.page {
+    display: flex;
+    margin: auto;
+    max-width: 400px;
+
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+
+table {
+    margin: auto;
+    min-width: 400px;
+}
+
+tbody + tfoot td {
+    display: none;
+    text-align: center;
+}
+
+tbody:empty + tfoot td {
+    display: table-cell;
+}
+
+table + p {
+    display: none;
+    text-align: center;
+}
+
+table:empty + p {
+    display: block;
+}
+
+.userform {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    width: 400px;
+    margin: auto;
+}

@@ -1,0 +1,46 @@
+body {
+    background-color: darkred;
+    color: white;
+}
+
+#first-para {
+    font-style: italic;
+    border: 0;
+}
+
+.text-bold {
+    font-weight: 600;
+} 
+
+.black {
+    color: black;
+}
+
+.box {
+    width: 100px;
+    height: 100px;
+
+    background-color: aquamarine;
+    margin: 8px;
+}
+
+[dir] {
+    text-decoration: underline;
+}
+
+[lang=ur] {
+    font-size: 24px;
+}
+
+p::selection {
+    color: yellow;
+    background-color: black;
+}
+
+:empty {
+    border: 5px solid white;
+}
+
+* {
+    border: 2px solid darkgreen;
+}

@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Move Elements part 1</title>
+        <style>
+            html {
+                font-family: sans-serif;
+                cursor: none;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .box {
+                width: 15px;
+                height: 15px;
+                background-color: red;
+                border-radius: 100%;
+                pointer-events: none;
+
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Moving elements</h1>
+
+        <div id="box" class="box"></div>
+
+        <script>
+            const boxElm = document.getElementById("box");
+
+            boxElm.style.top = "10px";
+            boxElm.style.left = "10px";
+
+            document.addEventListener("mousemove", (e) => {
+                boxElm.style.top = e.pageY + "px";
+                boxElm.style.left = e.pageX + "px";
+            });
+        </script>
+    </body>
+</html>

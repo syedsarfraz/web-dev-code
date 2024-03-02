@@ -1,0 +1,23 @@
+ul li:hover {
+    border: 1px solid red;
+}
+
+a:focus {
+    font-size: 18px;
+    color: red;
+}
+
+a:active {
+    font-size: 20px;
+    color: green;
+}
+
+
+button:enabled {
+    background-color: lightblue;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    background-color: antiquewhite;
+}

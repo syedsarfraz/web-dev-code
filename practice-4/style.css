@@ -1,0 +1,137 @@
+html {
+    font-family: sans-serif;
+}
+
+body,
+h1,
+h2,
+p {
+    margin: 0;
+}
+
+body {
+    background-color: #ddd;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: #fafafa;
+
+    display: flex;
+    justify-content: space-between;
+
+    padding: 16px 0;
+}
+
+header .brand {
+    padding: 0 16px;
+}
+header .brand h2 {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-family: cursive;
+    line-height: 26px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+}
+
+nav a {
+    color: #eee;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+nav a:hover,
+nav .sub-nav-wrapper:hover > a {
+    background-color: #171717;
+}
+
+nav .sub-nav-wrapper {
+    position: relative;
+}
+
+nav .gap {
+    position: absolute;
+    width: 100%;
+}
+
+nav .sub-nav {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    gap: 8px;
+
+    top: 34px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background-color: #555;
+    min-width: max-content;
+
+    border-radius: 8px;
+}
+
+.arrow {
+    position: absolute;
+    top: -20px;
+    left: calc(50% - 10px);
+    border: 10px solid;
+    border-color: transparent transparent #555 transparent;
+}
+
+nav .sub-nav-wrapper:focus-within .gap,
+nav .sub-nav-wrapper:hover .gap {
+    height: 16px;
+}
+
+nav .sub-nav-wrapper:focus-within .sub-nav,
+nav .sub-nav-wrapper:hover .sub-nav {
+    display: flex;
+}
+
+.welcome {
+    min-height: 100px;
+    height: calc(100vh - 66px - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    font-family: cursive;
+}
+
+.welcome h1 {
+    font-size: 36px;
+}
+
+footer {
+    background-color: #333;
+    color: #eee;
+    text-align: center;
+    padding: 16px 0;
+}
+
+@media (max-width: 786px) {
+    header {
+        flex-direction: column;
+    }
+
+    header .brand h2 {
+        text-align: center;
+    }
+
+    nav {
+        margin-top: 16px;
+        justify-content: center;
+    }
+
+    .welcome {
+        height: calc(100vh - 108px - 50px);
+    }
+}

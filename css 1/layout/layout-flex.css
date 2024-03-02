@@ -1,0 +1,26 @@
+.column {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid;
+    min-height: 120px;
+}
+
+.box {
+    flex: 0 30px;
+    min-width: 50px;
+
+    border: 2px solid coral;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.items-end {
+    align-items: flex-end;
+}

@@ -1,0 +1,16 @@
+.parent p {
+    color: red;
+}
+
+.parent > p {
+    font-size: 24px;
+    font-style: italic;
+}
+
+.parent .child > p {
+    font-weight: 600;
+}
+
+.parent .child p {
+    text-decoration: underline dashed;
+}

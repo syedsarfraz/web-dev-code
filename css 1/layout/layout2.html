@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSS layout part 2</title>
+        <style>
+            .column2 {
+                display: flex;
+            }
+            .column2 > div {
+                height: 100px;
+                background-color: brown;
+                border: 1px solid cornflowerblue;
+            }
+            .column2 > div:nth-child(1) {
+                flex: 1;
+            }
+
+            .column2 > div:nth-child(2) {
+                width: 200px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div><h2>Header</h2></div>
+        <div>Navigation</div>
+        <div class="column2">
+            <div>Main Content</div>
+            <div>Side Bar</div>
+        </div>
+        <div>Footer</div>
+    </body>
+</html>

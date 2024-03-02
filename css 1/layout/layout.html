@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Layout part 1</title>
+
+        <style>
+            body {
+                margin: 0;
+            }
+            .box {
+                background-color: darkgreen;
+                width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+                height: 200px;
+            }
+
+            .container > div {
+                float: left;
+                width: 300px;
+                height: 100px;
+                background-color: violet;
+                border: 1px solid red;
+            }
+
+            .fix-float {
+                clear: both;
+            }
+
+            .layout {
+                text-align: center;
+            }
+
+            .layout > div {
+            }
+
+            .layout .content {
+                float: right;
+                width: 75%;
+            }
+
+            .right-side {
+                width: 25%;
+                float: left;
+            }
+
+            .layout .footer {
+                clear: both;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Layout part 1</h1>
+        <div class="box"></div>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus
+            libero perspiciatis ea minima illo. Necessitatibus dolor veniam
+            eaque, commodi mollitia sit quod minus pariatur architecto quia et
+            iusto quo dignissimos!
+        </p>
+
+        <div class="layout">
+            <div class="header">Header</div>
+            <div class="nav">Navigation</div>
+            <div class="content">
+                <h2>Main Content</h2>
+                <p>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Ullam beatae, voluptates non vero culpa hic velit modi
+                    adipisci explicabo, dolorum odio atque? Perspiciatis
+                    laudantium quos, deleniti necessitatibus nesciunt sit quasi!
+                </p>
+            </div>
+            <div class="right-side">
+                <h2>Side Content</h2>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Iure suscipit voluptatem quia qui explicabo tempore quidem
+                    similique, nobis at illum atque. Corrupti harum, deserunt
+                    autem vero nisi possimus neque. Ut.
+                </p>
+            </div>
+            <div class="footer">Footer</div>
+        </div>
+
+        <div class="container">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="fix-float"></div>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto minus dolor ullam eligendi provident inventore animi cum, consequatur eum ipsum repellat, id vel accusantium ut earum expedita quae dignissimos blanditiis.</p>
+    </body>
+</html>

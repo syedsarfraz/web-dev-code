@@ -1,0 +1,23 @@
+h2 {
+    text-align: center;
+}
+
+#main-heading {
+    color: slateblue;
+}
+
+.fancy-text {
+    font-family: cursive;
+}
+
+.fancy-text.bigger {
+    font-size: 18px;
+}
+
+[dir] {
+    background-color: #ffff90;
+}
+
+[lang=ur] {
+    font-size: 20px;
+}

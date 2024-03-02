@@ -1,0 +1,59 @@
+ul li {
+    color: red;
+}
+h2 {
+    color: blueviolet;
+}
+
+body > h2 {
+    font-style: italic;
+}
+
+body > div > h2 {
+    text-decoration: underline dotted;
+}
+
+body div > ol {
+    border: 1px solid green;
+}
+
+body > ol > li {
+    border: 1px solid violet;
+}
+
+ul li:first-child {
+    color: green;
+}
+
+ul li:last-child {
+    color: yellowgreen;
+}
+
+ul li:nth-child(3) {
+    color: blue;
+}
+
+li {
+    color: black;
+}
+
+ol li:nth-child(3) {
+    color: peru;
+}
+
+body > h2:nth-of-type(2) {
+color: green;
+}
+
+ul li:hover {
+    border: 1px solid red;
+}
+
+a:focus {
+    font-size: 18px;
+}
+
+a:active {
+    font-size: 20px;
+    color: green;
+}

@@ -1,0 +1,35 @@
+html {
+    font-family: sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+.area {
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+    height: 100%;
+    border: 5px solid;
+}
+
+.box {
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 100%;
+
+    transition: 0.5s;
+    transition-property: transform;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.box.active {
+    transform: translate(-50%, -50%) scale(1.5);
+}
