@@ -74,7 +74,7 @@
             const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
 
             timeGraph.scrollTop =
-                Math.max(0, hours * 60 + min - scrollMargin) * pixelPerMinute;
+                Math.max(0, hours * 60 + min - scrollMarginInMinutes) * pixelPerMinute;
 
             updateLinePosition(hours, min);
             displayTime(hours, min);
