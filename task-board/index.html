@@ -43,11 +43,13 @@
                             <div>10pm</div>
                             <div>11pm</div>
                         </div>
-                        <div class="day flex-1"></div>
-                        <div class="day flex-1"></div>
-                        <div class="day flex-1"></div>
-                        <div class="day flex-1"></div>
-                        <div class="day flex-1"></div>
+                        <div class="days flex-1 layout-flex">
+                            <div class="day flex-1"></div>
+                            <div class="day flex-1"></div>
+                            <div class="day flex-1"></div>
+                            <div class="day flex-1"></div>
+                            <div class="day flex-1"></div>
+                        </div>
                         <div class="time-now">
                             <span></span>
                         </div>
@@ -74,7 +76,8 @@
             const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
 
             timeGraph.scrollTop =
-                Math.max(0, hours * 60 + min - scrollMarginInMinutes) * pixelPerMinute;
+                Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
+                pixelPerMinute;
 
             updateLinePosition(hours, min);
             displayTime(hours, min);
