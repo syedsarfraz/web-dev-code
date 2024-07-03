@@ -12,6 +12,15 @@ h2 {
     padding: 8px 16px;
     background-color: lightskyblue;
     border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+[draggable="true"] {
+    cursor: move;
+}
+
+.drag-target-active {
+    border: 5px dotted red !important;
 }
 
 .wrapper-time-graph {
@@ -24,19 +33,27 @@ h2 {
 }
 .time-graph {
     position: relative;
-    height: 2496px; /* cell size 26px of 15 min duration */
+    height: 2498px; /* cell size 26px of 15 min duration and plus 2px for hour grid line */
+}
+
+.time-graph .task {
+    margin: 0;
+    height: 26px;
+    font-size: 14px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .days {
-    background: 
-        repeating-linear-gradient(
+    background: repeating-linear-gradient(
             180deg,
             #aaa,
             #aaa 2px,
             transparent 2px,
             transparent 104px
         ),
-        linear-gradient(180deg, transparent 2494px, #aaa 2px),
         repeating-linear-gradient(
             180deg,
             transparent 52px,

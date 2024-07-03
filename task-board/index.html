@@ -9,9 +9,11 @@
         <div class="layout-flex">
             <div class="unschedule">
                 <h2>Tasks <br />(Un-scheduled)</h2>
-                <div class="task">Task 1</div>
-                <div class="task">Task 2</div>
-                <div class="task">Task 4</div>
+                <div class="tasks">
+                    <div class="task" draggable="true">Task 1</div>
+                    <div class="task" draggable="true">Task 2</div>
+                    <div class="task" draggable="true">Task 3</div>
+                </div>
             </div>
             <div class="flex-1">
                 <h2>Day View</h2>
@@ -44,7 +46,10 @@
                             <div>11pm</div>
                         </div>
                         <div class="days flex-1 layout-flex">
-                            <div class="day flex-1"></div>
+                            <div class="day flex-1">
+                                <div class="task" draggable="true">Task 4</div>
+                                <div class="task" draggable="true">Task 5</div>
+                            </div>
                             <div class="day flex-1"></div>
                             <div class="day flex-1"></div>
                             <div class="day flex-1"></div>
@@ -59,56 +64,102 @@
         </div>
 
         <script>
-            const timeGraph = document.querySelector(".wrapper-time-graph");
-            const timeNowElm = document.querySelector(".time-now");
-            const timeNow = timeNowElm.querySelector("span");
+            const dragzones = [
+                document.querySelector(".tasks"),
+                ...document.querySelectorAll(".day"),
+            ];
 
-            const cellSize = 26; // 15 min
-            const pixelPerMinute = cellSize / 15;
+            const tasksElm = document.querySelectorAll(".task");
 
-            const now = new Date();
+            let dragElm = null;
 
-            const hours = now.getHours();
-            const min = now.getMinutes();
+            for (const dragzone of dragzones) {
+                dragzone.addEventListener("dragover", (e) => {
+                    if (e.target === dragzone) e.preventDefault();
+                });
+                dragzone.addEventListener("dragenter", (e) => {
+                    if (e.target === dragzone)
+                        e.target.classList.add("drag-target-active");
+                });
+                dragzone.addEventListener("dragleave", (e) => {
+                    if (e.target === dragzone)
+                        e.target.classList.remove("drag-target-active");
+                });
+                dragzone.addEventListener("drop", (e) => {
+                    e.target.classList.remove("drag-target-active");
+                    if (e.target === dragzone) {
+                        e.preventDefault();
+                        e.target.appendChild(dragElm);
+                    }
+                });
+            }
 
-            // scroll height
-            const graphHeight = timeGraph.getClientRects()[0].height - 8;
-            const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
+            for (const task of tasksElm) {
+                task.addEventListener("dragstart", (e) => {
+                    dragElm = e.target;
+                });
+            }
 
-            timeGraph.scrollTop =
-                Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
-                pixelPerMinute;
+            const startHour = 20;
+            const startMin = 0;
 
-            updateLinePosition(hours, min);
-            displayTime(hours, min);
+            const endHour = 8;
+            const endMin = 0;
 
-            setInterval(() => {
+            updateTime();
+
+            function updateTime() {
+                const timeGraph = document.querySelector(".wrapper-time-graph");
+                const timeNowElm = document.querySelector(".time-now");
+                const timeNow = timeNowElm.querySelector("span");
+
+                const cellSize = 26; // 15 min
+                const pixelPerMinute = cellSize / 15;
+
                 const now = new Date();
+
                 const hours = now.getHours();
                 const min = now.getMinutes();
 
+                // scroll height
+                const graphHeight = timeGraph.getClientRects()[0].height - 8;
+                const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
+
+                timeGraph.scrollTop =
+                    Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
+                    pixelPerMinute;
+
                 updateLinePosition(hours, min);
                 displayTime(hours, min);
-            }, 1000);
 
-            function updateLinePosition(hours, min) {
-                // line position
-                const height = (hours * 60 + min) * pixelPerMinute;
-                timeNowElm.style.top = height;
-            }
+                setInterval(() => {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const min = now.getMinutes();
 
-            function displayTime(hours, min) {
-                // display time
-                let _12hours = hours % 12;
-                if (_12hours === 0) _12hours = 12;
+                    updateLinePosition(hours, min);
+                    displayTime(hours, min);
+                }, 1000);
 
-                let ampm = hours >= 12 ? "pm" : "am";
+                function updateLinePosition(hours, min) {
+                    // line position
+                    const height = (hours * 60 + min) * pixelPerMinute;
+                    timeNowElm.style.top = height;
+                }
 
-                timeNow.textContent =
-                    _12hours.toString().padStart(2, "0") +
-                    ":" +
-                    min.toString().padStart(2, "0") +
-                    ampm;
+                function displayTime(hours, min) {
+                    // display time
+                    let _12hours = hours % 12;
+                    if (_12hours === 0) _12hours = 12;
+
+                    let ampm = hours >= 12 ? "pm" : "am";
+
+                    timeNow.textContent =
+                        _12hours.toString().padStart(2, "0") +
+                        ":" +
+                        min.toString().padStart(2, "0") +
+                        ampm;
+                }
             }
         </script>
     </body>
