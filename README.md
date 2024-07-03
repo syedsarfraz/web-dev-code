@@ -69,3 +69,4 @@
 - [practices/p-8/index.html](https://hafizahmedmoon.github.io/web-dev-code/practices/p-8/)
 - [practices/p-9/index.html](https://hafizahmedmoon.github.io/web-dev-code/practices/p-9/)
 - [bash-practice/index.html](https://hafizahmedmoon.github.io/web-dev-code/bash-practice/)
+- [task-board/index.html](https://hafizahmedmoon.github.io/web-dev-code/task-board/)
