@@ -1,0 +1,169 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* :is(div, span):nth-of-type(4n - 3) {
+  background-color: #77f5;
+}
+:is(div, span):nth-of-type(4n - 2) {
+  background-color: #7775;
+}
+:is(div, span):nth-of-type(4n - 1) {
+  background-color: #f775;
+}
+:is(div, span):nth-of-type(4n) {
+  background-color: #7f75;
+} */
+
+.layout-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+  /* flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto; */
+}
+.flex-2 {
+  flex: 2;
+}
+.flex-3 {
+  flex: 3;
+}
+.flex-4 {
+  flex: 4;
+}
+.flex-5 {
+  flex: 5;
+}
+.flex-6 {
+  flex: 6;
+}
+
+/* default flex-start */
+.justify-center {
+  justify-content: center;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* default stretch */
+.align-items-start {
+  align-items: flex-start;
+}
+.align-items-center {
+  align-items: center;
+}
+.align-items-end {
+  align-items: flex-end;
+}
+
+.align-self-stretch {
+  align-self: stretch; /* default */
+}
+.align-self-start {
+  align-self: flex-start;
+}
+.align-self-center {
+  align-self: center;
+}
+.align-self-end {
+  align-self: flex-end;
+}
+
+/* default stretch */
+.align-content-start {
+  align-content: start;
+}
+.align-content-center {
+  align-content: center;
+}
+.align-content-end {
+  align-content: end;
+}
+.align-content-between {
+  align-content: space-between;
+}
+.align-content-around {
+  align-content: space-around;
+}
+.align-content-evenly {
+  align-content: space-evenly;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+.gap-16 {
+  gap: 16px;
+}
+
+.h-50vh {
+  height: 50vh;
+}
+.h-100vh {
+  height: 100vh;
+}
+
+.min-w-100 {
+  min-width: 100px;
+}
+.min-h-100 {
+  min-height: 100px;
+}
+.max-h-100 {
+  max-height: 100px;
+}
+
+/* .layout-flex > div:nth-child(1):after {
+  content: "";
+  position: absolute;
+  left: 188px;
+  top:0;
+  bottom: 0;
+  width: 1px;
+  background-color: red;
+}
+.layout-flex > div:nth-child(4):after {
+  content: "";
+  position: absolute;
+  left: calc(188px * 2);
+  top:0;
+  bottom: 0;
+  width: 1px;
+  background-color: red;
+}
+.layout-flex > div:nth-child(7):after {
+  content: "";
+  position: absolute;
+  left: calc(188px * 3);
+  top:0;
+  bottom: 0;
+  width: 1px;
+  background-color: red;
+} */
+
+/* direct child selector */
+ul > li, ol > li {
+  text-decoration: underline;
+}

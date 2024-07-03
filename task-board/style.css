@@ -1,0 +1,60 @@
+.unschedule {
+    min-width: 220px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.task {
+    text-align: center;
+    margin: 8px 16px;
+    padding: 8px 16px;
+    background-color: lightskyblue;
+    border: 1px solid #ccc;
+}
+
+.wrapper-time-graph {
+    border: 1px solid #ccc;
+    padding-top: 16px;
+    height: calc(100vh - 68px);
+    overflow-y: auto;
+}
+.time-graph {
+    position: relative;
+    height: 2496px; /* cell size 26px of 15 min duration */
+}
+
+.day {
+    position: relative;
+    top: -8px;
+    border-left: 1px solid #ccc;
+    height: 2496px;
+}
+
+.time > div {
+    position: relative;
+    top: -8px;
+    height: 104px; /* equal to 26 * 4 cell size */
+    padding: 0 4px;
+}
+
+.time-now {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid red;
+}
+
+.time-now:has(span:empty) {
+    visibility: hidden;
+}
+
+.time-now span {
+    position: absolute;
+    top: -14px;
+    left: 1px;
+    color: red;
+    background: white;
+    font-size: 12px;
+}
