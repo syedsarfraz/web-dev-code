@@ -1,0 +1,99 @@
+<html>
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar UI</title>
+    <link rel="stylesheet" href="./layout.css" />
+    <style>
+      .calendar {
+        counter-reset: days 26;
+        gap: 2px;
+        background-color: #fff !important;
+      }
+
+      .day:nth-child(6) {
+        counter-reset: days;
+      }
+
+      .day::before {
+        content: counter(days);
+        counter-increment: days;
+        background-color: rgb(51, 51, 51);
+        color: white;
+        border-radius: 50%;
+
+        font-size: 14px;
+        /* font-size: clamp(8px, 2.25vw,12px); */
+
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        position: relative;
+        top: 2px;
+        left: 2px;
+      }
+
+      .day {
+        flex-grow: 1;
+        flex-basis: calc(14.2857142857% - 2px);
+        /* min-height: 100px; */
+        aspect-ratio: 4/3;
+      }
+
+      .event {
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid green;
+        border-radius: 5px;
+        margin: 4px 8px 0;
+        background-color: #0a0 !important;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calendar layout-flex flex-wrap">
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day">
+        <div class="event">Eid ul Adha</div>
+        <div class="event">Bakra Eid</div>
+      </div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+      <div class="day"></div>
+    </div>
+  </body>
+</html>
