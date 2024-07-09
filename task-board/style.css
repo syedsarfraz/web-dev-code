@@ -95,3 +95,10 @@ h2 {
     background: white;
     font-size: 12px;
 }
+
+.time-highlight {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #a553;
+}

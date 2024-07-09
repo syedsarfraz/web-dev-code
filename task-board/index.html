@@ -1,166 +1,202 @@
 <html>
-    <head>
-        <title>Tasks</title>
-        <link rel="stylesheet" href="layout.css" />
-        <link rel="stylesheet" href="style.css" />
-    </head>
+<head>
+    <title>Tasks</title>
+    <link rel="stylesheet" href="layout.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
 
-    <body>
-        <div class="layout-flex">
-            <div class="unschedule">
-                <h2>Tasks <br />(Un-scheduled)</h2>
-                <div class="tasks">
-                    <div class="task" draggable="true">Task 1</div>
-                    <div class="task" draggable="true">Task 2</div>
-                    <div class="task" draggable="true">Task 3</div>
-                </div>
+<body>
+    <div class="layout-flex">
+        <div class="unschedule">
+            <h2>Tasks <br />(Un-scheduled)</h2>
+            <div class="tasks">
+                <div class="task" draggable="true">Task 1</div>
+                <div class="task" draggable="true">Task 2</div>
+                <div class="task" draggable="true">Task 3</div>
             </div>
-            <div class="flex-1">
-                <h2>Day View</h2>
-                <div class="wrapper-time-graph">
-                    <div class="time-graph layout-flex">
-                        <div class="time">
-                            <div>12am</div>
-                            <div>01am</div>
-                            <div>02am</div>
-                            <div>03am</div>
-                            <div>04am</div>
-                            <div>05am</div>
-                            <div>06am</div>
-                            <div>07am</div>
-                            <div>08am</div>
-                            <div>09am</div>
-                            <div>10am</div>
-                            <div>11am</div>
-                            <div>12pm</div>
-                            <div>01pm</div>
-                            <div>02pm</div>
-                            <div>03pm</div>
-                            <div>04pm</div>
-                            <div>05pm</div>
-                            <div>06pm</div>
-                            <div>07pm</div>
-                            <div>08pm</div>
-                            <div>09pm</div>
-                            <div>10pm</div>
-                            <div>11pm</div>
-                        </div>
-                        <div class="days flex-1 layout-flex">
-                            <div class="day flex-1">
-                                <div class="task" draggable="true">Task 4</div>
-                                <div class="task" draggable="true">Task 5</div>
-                            </div>
-                            <div class="day flex-1"></div>
-                            <div class="day flex-1"></div>
-                            <div class="day flex-1"></div>
-                            <div class="day flex-1"></div>
-                        </div>
-                        <div class="time-now">
-                            <span></span>
-                        </div>
+        </div>
+        <div class="flex-1">
+            <h2>Day View</h2>
+            <div class="wrapper-time-graph">
+                <div class="time-graph layout-flex">
+                    <div class="time">
+                        <div>12am</div>
+                        <div>01am</div>
+                        <div>02am</div>
+                        <div>03am</div>
+                        <div>04am</div>
+                        <div>05am</div>
+                        <div>06am</div>
+                        <div>07am</div>
+                        <div>08am</div>
+                        <div>09am</div>
+                        <div>10am</div>
+                        <div>11am</div>
+                        <div>12pm</div>
+                        <div>01pm</div>
+                        <div>02pm</div>
+                        <div>03pm</div>
+                        <div>04pm</div>
+                        <div>05pm</div>
+                        <div>06pm</div>
+                        <div>07pm</div>
+                        <div>08pm</div>
+                        <div>09pm</div>
+                        <div>10pm</div>
+                        <div>11pm</div>
                     </div>
+                    <div class="days flex-1 layout-flex">
+                        <div class="day flex-1">
+                            <div class="task" draggable="true">Task 4</div>
+                            <div class="task" draggable="true">Task 5</div>
+                        </div>
+                        <div class="day flex-1"></div>
+                        <div class="day flex-1"></div>
+                        <div class="day flex-1"></div>
+                        <div class="day flex-1"></div>
+                    </div>
+                    <div class="time-now">
+                        <span></span>
+                    </div>
+                    <div class="time-highlight"></div>
+                    <div class="time-highlight"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            const dragzones = [
-                document.querySelector(".tasks"),
-                ...document.querySelectorAll(".day"),
-            ];
+    <script>
+        const dragzones = [
+            document.querySelector(".tasks"),
+            ...document.querySelectorAll(".day"),
+        ];
 
-            const tasksElm = document.querySelectorAll(".task");
+        const tasksElm = document.querySelectorAll(".task");
 
-            let dragElm = null;
+        let dragElm = null;
 
-            for (const dragzone of dragzones) {
-                dragzone.addEventListener("dragover", (e) => {
-                    if (e.target === dragzone) e.preventDefault();
-                });
-                dragzone.addEventListener("dragenter", (e) => {
-                    if (e.target === dragzone)
-                        e.target.classList.add("drag-target-active");
-                });
-                dragzone.addEventListener("dragleave", (e) => {
-                    if (e.target === dragzone)
-                        e.target.classList.remove("drag-target-active");
-                });
-                dragzone.addEventListener("drop", (e) => {
+        for (const dragzone of dragzones) {
+            dragzone.addEventListener("dragover", (e) => {
+                if (e.target === dragzone) e.preventDefault();
+            });
+            dragzone.addEventListener("dragenter", (e) => {
+                if (e.target === dragzone)
+                    e.target.classList.add("drag-target-active");
+            });
+            dragzone.addEventListener("dragleave", (e) => {
+                if (e.target === dragzone)
                     e.target.classList.remove("drag-target-active");
-                    if (e.target === dragzone) {
-                        e.preventDefault();
-                        e.target.appendChild(dragElm);
-                    }
-                });
-            }
+            });
+            dragzone.addEventListener("drop", (e) => {
+                e.target.classList.remove("drag-target-active");
+                if (e.target === dragzone) {
+                    e.preventDefault();
+                    e.target.appendChild(dragElm);
+                }
+            });
+        }
 
-            for (const task of tasksElm) {
-                task.addEventListener("dragstart", (e) => {
-                    dragElm = e.target;
-                });
-            }
+        for (const task of tasksElm) {
+            task.addEventListener("dragstart", (e) => {
+                dragElm = e.target;
+            });
+        }
 
-            const startHour = 20;
-            const startMin = 0;
 
-            const endHour = 8;
-            const endMin = 0;
+        const cellSize = 26; // 15 min
+        const pixelPerMinute = cellSize / 15;
 
-            updateTime();
+        const startHour = 21;
+        const startMin = 30;
 
-            function updateTime() {
-                const timeGraph = document.querySelector(".wrapper-time-graph");
-                const timeNowElm = document.querySelector(".time-now");
-                const timeNow = timeNowElm.querySelector("span");
+        const endHour = 12;
+        const endMin = 45;
 
-                const cellSize = 26; // 15 min
-                const pixelPerMinute = cellSize / 15;
+        const maxDuration = 24 * 60 * pixelPerMinute;
 
+        const offset = getOffset(startHour, startMin) * pixelPerMinute
+        const duration = getDuration(startHour, startMin, endHour, endMin) * pixelPerMinute
+
+
+
+        const highlightElm = document.querySelectorAll('.time-highlight');
+
+        if (duration < 0) {
+            highlightElm[0].style.top = offset;
+            highlightElm[0].style.height = maxDuration - offset;
+
+            highlightElm[1].style.top = 0;
+            highlightElm[1].style.height = getDuration(0, 0, endHour, endMin) * pixelPerMinute
+        } else {
+            highlightElm[0].style.top = offset;
+            highlightElm[0].style.height = duration;
+        }
+
+
+
+        function getOffset(startHour, startMin) {
+            return startHour * 60 + startMin;
+        }
+
+        function getDuration(startHour, startMin, endHour, endMin) {
+            return (endHour * 60 + endMin) - (startHour * 60 + startMin)
+        }
+
+
+
+        updateTime();
+
+        function updateTime() {
+            const timeGraph = document.querySelector(".wrapper-time-graph");
+            const timeNowElm = document.querySelector(".time-now");
+            const timeNow = timeNowElm.querySelector("span");
+
+            const now = new Date();
+
+            const hours = now.getHours();
+            const min = now.getMinutes();
+
+            // scroll height
+            const graphHeight = timeGraph.getClientRects()[0].height - 8;
+            const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
+
+            timeGraph.scrollTop =
+                Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
+                pixelPerMinute;
+
+            updateLinePosition(hours, min);
+            displayTime(hours, min);
+
+            setInterval(() => {
                 const now = new Date();
-
                 const hours = now.getHours();
                 const min = now.getMinutes();
 
-                // scroll height
-                const graphHeight = timeGraph.getClientRects()[0].height - 8;
-                const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
-
-                timeGraph.scrollTop =
-                    Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
-                    pixelPerMinute;
-
                 updateLinePosition(hours, min);
                 displayTime(hours, min);
+            }, 1000);
 
-                setInterval(() => {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const min = now.getMinutes();
-
-                    updateLinePosition(hours, min);
-                    displayTime(hours, min);
-                }, 1000);
-
-                function updateLinePosition(hours, min) {
-                    // line position
-                    const height = (hours * 60 + min) * pixelPerMinute;
-                    timeNowElm.style.top = height;
-                }
-
-                function displayTime(hours, min) {
-                    // display time
-                    let _12hours = hours % 12;
-                    if (_12hours === 0) _12hours = 12;
-
-                    let ampm = hours >= 12 ? "pm" : "am";
-
-                    timeNow.textContent =
-                        _12hours.toString().padStart(2, "0") +
-                        ":" +
-                        min.toString().padStart(2, "0") +
-                        ampm;
-                }
+            function updateLinePosition(hours, min) {
+                // line position
+                const height = (hours * 60 + min) * pixelPerMinute;
+                timeNowElm.style.top = height;
             }
-        </script>
-    </body>
+
+            function displayTime(hours, min) {
+                // display time
+                let _12hours = hours % 12;
+                if (_12hours === 0) _12hours = 12;
+
+                let ampm = hours >= 12 ? "pm" : "am";
+
+                timeNow.textContent =
+                    _12hours.toString().padStart(2, "0") +
+                    ":" +
+                    min.toString().padStart(2, "0") +
+                    ampm;
+            }
+        }
+    </script>
+</body>
+
 </html>
