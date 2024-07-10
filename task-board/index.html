@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>Tasks</title>
     <link rel="stylesheet" href="layout.css" />
@@ -7,12 +8,19 @@
 
 <body>
     <div class="layout-flex">
-        <div class="unschedule">
-            <h2>Tasks <br />(Un-scheduled)</h2>
-            <div class="tasks">
-                <div class="task" draggable="true">Task 1</div>
-                <div class="task" draggable="true">Task 2</div>
-                <div class="task" draggable="true">Task 3</div>
+        <div class="unschedule layout-flex flex-column justify-between">
+            <div>
+                <h2>Tasks <br />(Un-scheduled)</h2>
+                <div class="tasks">
+                    <div class="task" draggable="true">Task 1</div>
+                    <div class="task" draggable="true">Task 2</div>
+                    <div class="task" draggable="true">Task 3</div>
+                </div>
+            </div>
+            <div class="settings layout-flex flex-column">
+                <h4>Settings</h4>
+                <label>Start Time: <input id="startTime" type="time" /></label>
+                <label>End Time: <input id="endTime" type="time" /></label>
             </div>
         </div>
         <div class="flex-1">
@@ -106,30 +114,48 @@
         const cellSize = 26; // 15 min
         const pixelPerMinute = cellSize / 15;
 
-        const startHour = 21;
-        const startMin = 30;
+        const startTimeElm = document.querySelector('#startTime');
+        const endTimeElm = document.querySelector('#endTime');
 
-        const endHour = 12;
-        const endMin = 45;
+        updateHighlight(startTimeElm.value, endTimeElm.value)
 
-        const maxDuration = 24 * 60 * pixelPerMinute;
+        startTimeElm.addEventListener('change', () => {
+            updateHighlight(startTimeElm.value, endTimeElm.value)
+        })
 
-        const offset = getOffset(startHour, startMin) * pixelPerMinute
-        const duration = getDuration(startHour, startMin, endHour, endMin) * pixelPerMinute
+        endTimeElm.addEventListener('change', () => {
+            updateHighlight(startTimeElm.value, endTimeElm.value)
+        })
 
+        function updateHighlight(startTime, endTime) {
+            if (!startTime || !endTime) return;
 
+            const startHourMin = startTime.split(':');
+            const endHourMin = endTime.split(':');
 
-        const highlightElm = document.querySelectorAll('.time-highlight');
+            const startHour = parseInt(startHourMin[0]);
+            const startMin = parseInt(startHourMin[1]);
+            const endHour = parseInt(endHourMin[0]);
+            const endMin = parseInt(endHourMin[1]);
 
-        if (duration < 0) {
-            highlightElm[0].style.top = offset;
-            highlightElm[0].style.height = maxDuration - offset;
+            const maxDuration = 2496;// 24 * 60 * pixelPerMinute;
 
-            highlightElm[1].style.top = 0;
-            highlightElm[1].style.height = getDuration(0, 0, endHour, endMin) * pixelPerMinute
-        } else {
-            highlightElm[0].style.top = offset;
-            highlightElm[0].style.height = duration;
+            const offset = getOffset(startHour, startMin) * pixelPerMinute
+            const duration = getDuration(startHour, startMin, endHour, endMin) * pixelPerMinute
+
+            const highlightElm = document.querySelectorAll('.time-highlight');
+
+            if (duration < 0) {
+                highlightElm[0].style.top = offset;
+                highlightElm[0].style.height = maxDuration - offset;
+
+                highlightElm[1].style.top = 0;
+                highlightElm[1].style.height = getDuration(0, 0, endHour, endMin) * pixelPerMinute
+            } else {
+                highlightElm[0].style.top = duration === 0 ? 0 : offset;
+                highlightElm[0].style.height = duration === 0 ? maxDuration : duration;
+                highlightElm[1].style.height = 0
+            }
         }
 
 
