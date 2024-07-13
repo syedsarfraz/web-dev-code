@@ -11,10 +11,7 @@
         <div class="unschedule layout-flex flex-column justify-between">
             <div>
                 <h2>Tasks <br />(Un-scheduled)</h2>
-                <div class="tasks">
-                    <div class="task" draggable="true">Task 1</div>
-                    <div class="task" draggable="true">Task 2</div>
-                    <div class="task" draggable="true">Task 3</div>
+                <div id="taskList" class="tasks">
                 </div>
             </div>
             <div class="settings layout-flex flex-column">
@@ -26,6 +23,14 @@
         <div class="flex-1">
             <h2>Day View</h2>
             <div class="wrapper-time-graph">
+                <div class="days-name layout-flex">
+                    <div class="time"></div>
+                    <h4 class="flex-1">Monday</h4>
+                    <h4 class="flex-1">Tuesday</h4>
+                    <h4 class="flex-1">Wednesday</h4>
+                    <h4 class="flex-1">Thursday</h4>
+                    <h4 class="flex-1">Friday</h4>
+                </div>
                 <div class="time-graph layout-flex">
                     <div class="time">
                         <div>12am</div>
@@ -55,8 +60,6 @@
                     </div>
                     <div class="days flex-1 layout-flex">
                         <div class="day flex-1">
-                            <div class="task" draggable="true">Task 4</div>
-                            <div class="task" draggable="true">Task 5</div>
                         </div>
                         <div class="day flex-1"></div>
                         <div class="day flex-1"></div>
@@ -74,6 +77,64 @@
     </div>
 
     <script>
+        // const tasks = [{ id: 1, title: 'Do Chores' }, { id: 2, title: 'Fill tank' },]
+
+        /// write down logic to create task elements in HTML
+
+        const tasksArray = [{ id: 1, name: "Task 1" }, { id: 2, name: "Task 2" },
+        { id: 3, name: "Task 3" },
+        { name: 'Do chores', start: new Date(2024, 6, 15, 15), end: new Date(2024, 6, 15, 16) }, { name: 'Fill Tank', start: new Date(2024, 6, 13), end: new Date(2024, 6, 18, 1) }];
+        // Function to create task elements and append to task list
+        function createTasks(tasks) {
+            const taskList = document.getElementById("taskList");
+            const taskDays = document.querySelectorAll(".day");
+
+            const graphStartDate = new Date();
+            graphStartDate.setHours(0)
+            graphStartDate.setMinutes(0)
+            graphStartDate.setSeconds(0)
+            graphStartDate.setMilliseconds(0)
+
+            const day = graphStartDate.getDay()
+            if (day > 0 && day < 6) {
+                graphStartDate.setDate(graphStartDate.getDate() + day - (day * 2) + 1)
+            } else {
+                graphStartDate.setDate(graphStartDate.getDate() + (day === 6 ? 2 : 1))
+            }
+
+            const graphEndDate = new Date(graphStartDate)
+            graphEndDate.setDate(graphEndDate.getDate() + 4);
+            console.log(graphStartDate, graphEndDate)
+            tasks.forEach(task => {
+                if (task.start && task.start >= graphStartDate && task.start <= graphEndDate) {
+                    const taskDayIndex = task.start.getDay() - 1;
+
+                    const taskDiv = document.createElement("div");
+                    taskDiv.className = 'task';
+                    taskDiv.draggable = true;
+                    taskDiv.textContent = task.name;
+
+                    // offset
+                    // task.style.top = 
+                    // duration
+                    // task.style.height =  
+
+                    taskDays[taskDayIndex].appendChild(taskDiv)
+                    return;
+                } else if (!task.start) {
+                    const taskDiv = document.createElement("div");
+                    taskDiv.className = 'task';
+                    taskDiv.draggable = true;
+                    taskDiv.textContent = task.name;
+                    taskList.appendChild(taskDiv);
+                }
+            });
+        }
+
+        // Initial call to create tasks
+        createTasks(tasksArray);
+
+
         const dragzones = [
             document.querySelector(".tasks"),
             ...document.querySelectorAll(".day"),
@@ -183,8 +244,8 @@
             const min = now.getMinutes();
 
             // scroll height
-            const graphHeight = timeGraph.getClientRects()[0].height - 8;
-            const scrollMarginInMinutes = graphHeight / 2 / pixelPerMinute;
+            const visibleGraphHeight = timeGraph.getClientRects()[0].height - 8;
+            const scrollMarginInMinutes = visibleGraphHeight / 2 / pixelPerMinute;
 
             timeGraph.scrollTop =
                 Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
