@@ -10,14 +10,25 @@
     <div class="layout-flex">
         <div class="unschedule layout-flex flex-column justify-between">
             <div>
+                <h2>Add Task</h2>
+                <div class="layout-flex justify-center">
+                    <input id="taskInput" type="text" placeholder="Task name">
+                    <button id="taskAdd">Add</button>
+                </div>
                 <h2>Tasks <br />(Un-scheduled)</h2>
                 <div id="taskList" class="tasks">
+                </div>
+                <h2>Tasks (Past)</h2>
+                <div id="taskListPast" class="tasks">
+                </div>
+                <h2>Tasks <br />(Upcoming)</h2>
+                <div id="taskListUpcoming" class="tasks">
                 </div>
             </div>
             <div class="settings layout-flex flex-column">
                 <h4>Settings</h4>
-                <label>Start Time: <input id="startTime" type="time" /></label>
-                <label>End Time: <input id="endTime" type="time" /></label>
+                <label>Start Time: <input id="startTime" type="time" value="14:00" /></label>
+                <label>End Time: <input id="endTime" type="time" value="16:00" /></label>
             </div>
         </div>
         <div class="flex-1">
@@ -32,6 +43,8 @@
                     <h4 class="flex-1">Friday</h4>
                 </div>
                 <div class="time-graph layout-flex">
+                    <div class="time-highlight"></div>
+                    <div class="time-highlight"></div>
                     <div class="time">
                         <div>12am</div>
                         <div>01am</div>
@@ -69,25 +82,45 @@
                     <div class="time-now">
                         <span></span>
                     </div>
-                    <div class="time-highlight"></div>
-                    <div class="time-highlight"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // const tasks = [{ id: 1, title: 'Do Chores' }, { id: 2, title: 'Fill tank' },]
 
-        /// write down logic to create task elements in HTML
+        const tasksArray = [
+            { id: 1, name: "Task 1" },
+            { id: 2, name: "Task 2" },
+            { id: 3, name: "Task 3" },
+            { name: 'Do chores 18', start: new Date(2024, 6, 18, 15), end: new Date(2024, 6, 18, 16) },
+            { name: 'Do chores 30', start: new Date(2024, 6, 30, 15), end: new Date(2024, 6, 30, 16) },
+            { name: 'Do chores', start: new Date(2024, 6, 25, 15), end: new Date(2024, 6, 25, 16) },
+            { name: 'Fill Tank', start: "2024-07-23T00:00", end: "2024-07-23T01:00:00.000" },
+            { name: 'Repair wiring', start: "2024-07-23T23:00", end: "2024-07-24T11:00:00.000" },
+            { name: 'fix a bulb', start: "2024-07-26T08:00", end: "2024-07-26T08:00:00.000" }
+        ];
 
-        const tasksArray = [{ id: 1, name: "Task 1" }, { id: 2, name: "Task 2" },
-        { id: 3, name: "Task 3" },
-        { name: 'Do chores', start: new Date(2024, 6, 15, 15), end: new Date(2024, 6, 15, 16) }, { name: 'Fill Tank', start: new Date(2024, 6, 13), end: new Date(2024, 6, 18, 1) }];
+
+        const taskList = document.getElementById("taskList");
+        const taskListPast = document.getElementById("taskListPast");
+        const taskListUpcoming = document.getElementById("taskListUpcoming");
+        const taskDays = document.querySelectorAll(".day");
+
+        const taskInput = document.querySelector('#taskInput')
+        document.querySelector('#taskAdd').addEventListener('click', () => {
+            if (taskInput.value === '') return;
+            tasksArray.push({ name: taskInput.value })
+            taskList.appendChild(createTaskElm(taskInput.value))
+            taskInput.value = '';
+        });
+
+
+        // Initial call to create tasks
+        createTasks(tasksArray);
+
         // Function to create task elements and append to task list
         function createTasks(tasks) {
-            const taskList = document.getElementById("taskList");
-            const taskDays = document.querySelectorAll(".day");
 
             const graphStartDate = new Date();
             graphStartDate.setHours(0)
@@ -104,35 +137,69 @@
 
             const graphEndDate = new Date(graphStartDate)
             graphEndDate.setDate(graphEndDate.getDate() + 4);
-            console.log(graphStartDate, graphEndDate)
+
+            const daysName = document.querySelectorAll('.days-name h4');
+            for (let i = 0; i < daysName.length; i++) {
+                const dayName = daysName[i];
+                const date = new Date(graphStartDate);
+                date.setDate(date.getDate() + i);
+                dayName.textContent = dayName.textContent + " " + (date.getDate().toString().padStart(2, '0'))
+            }
+
             tasks.forEach(task => {
-                if (task.start && task.start >= graphStartDate && task.start <= graphEndDate) {
-                    const taskDayIndex = task.start.getDay() - 1;
+                const taskStart = new Date(task.start)
+                const taskEnd = new Date(task.end)
+                // task may start earlier than the week span and may end in visible week
+                if (task.start && taskStart >= graphStartDate && taskStart <= graphEndDate) {
+                    const taskDayIndex = taskStart.getDay() - 1;
 
-                    const taskDiv = document.createElement("div");
-                    taskDiv.className = 'task';
-                    taskDiv.draggable = true;
-                    taskDiv.textContent = task.name;
+                    const taskDiv = createTaskElm(task.name)
 
+                    const offset = getOffset(taskStart.getHours(), taskStart.getMinutes())
                     // offset
-                    // task.style.top = 
-                    // duration
-                    // task.style.height =  
+                    taskDiv.style.top = minuteToPixel(offset)
+                    const daysDiff = taskEnd.getDate() - taskStart.getDate()
+                    if (daysDiff === 0) {
+                        // duration
+                        taskDiv.style.height = minuteToPixel(getDuration(taskStart.getHours(), taskStart.getMinutes(), taskEnd.getHours(), taskEnd.getMinutes()))
+                    } else {
+                        const duration = 24 * 60 - offset + getDuration(0, 0, taskEnd.getHours(), taskEnd.getMinutes());
+                        const duration1 = Math.min(24 * 60, duration + offset) - offset
+                        const duration2 = duration - duration1
+                        taskDiv.style.height = minuteToPixel(duration1)
+
+                        if (duration2 !== 0) {
+                            const taskDiv2 = createTaskElm(task.name);
+                            taskDiv2.style.top = 0
+                            taskDiv2.style.height = minuteToPixel(duration - duration1)
+                            taskDays[taskDayIndex + 1].appendChild(taskDiv2)
+                        }
+
+                    }
 
                     taskDays[taskDayIndex].appendChild(taskDiv)
                     return;
                 } else if (!task.start) {
-                    const taskDiv = document.createElement("div");
-                    taskDiv.className = 'task';
-                    taskDiv.draggable = true;
-                    taskDiv.textContent = task.name;
+                    const taskDiv = createTaskElm(task.name)
                     taskList.appendChild(taskDiv);
+                } else if (taskEnd < graphStartDate) {
+                    const taskDiv = createTaskElm(task.name)
+                    taskListPast.appendChild(taskDiv);
+                } else if (taskStart > graphEndDate) {
+                    const taskDiv = createTaskElm(task.name)
+                    taskListUpcoming.appendChild(taskDiv);
                 }
             });
         }
 
-        // Initial call to create tasks
-        createTasks(tasksArray);
+        function createTaskElm(name) {
+            const taskDiv = document.createElement("div");
+            taskDiv.className = 'task';
+            taskDiv.draggable = true;
+            taskDiv.textContent = name;
+            return taskDiv
+        }
+
 
 
         const dragzones = [
@@ -171,10 +238,6 @@
             });
         }
 
-
-        const cellSize = 26; // 15 min
-        const pixelPerMinute = cellSize / 15;
-
         const startTimeElm = document.querySelector('#startTime');
         const endTimeElm = document.querySelector('#endTime');
 
@@ -189,7 +252,12 @@
         })
 
         function updateHighlight(startTime, endTime) {
-            if (!startTime || !endTime) return;
+            const highlightElm = document.querySelectorAll('.time-highlight');
+            if (!startTime || !endTime) {
+                highlightElm[0].style.height = 0
+                highlightElm[1].style.height = 0
+                return
+            };
 
             const startHourMin = startTime.split(':');
             const endHourMin = endTime.split(':');
@@ -201,17 +269,15 @@
 
             const maxDuration = 2496;// 24 * 60 * pixelPerMinute;
 
-            const offset = getOffset(startHour, startMin) * pixelPerMinute
-            const duration = getDuration(startHour, startMin, endHour, endMin) * pixelPerMinute
-
-            const highlightElm = document.querySelectorAll('.time-highlight');
+            const offset = minuteToPixel(getOffset(startHour, startMin))
+            const duration = minuteToPixel(getDuration(startHour, startMin, endHour, endMin))
 
             if (duration < 0) {
                 highlightElm[0].style.top = offset;
                 highlightElm[0].style.height = maxDuration - offset;
 
                 highlightElm[1].style.top = 0;
-                highlightElm[1].style.height = getDuration(0, 0, endHour, endMin) * pixelPerMinute
+                highlightElm[1].style.height = minuteToPixel(getDuration(0, 0, endHour, endMin))
             } else {
                 highlightElm[0].style.top = duration === 0 ? 0 : offset;
                 highlightElm[0].style.height = duration === 0 ? maxDuration : duration;
@@ -231,6 +297,18 @@
 
 
 
+        function minuteToPixel(min) {
+            const cellSize = 26; // 15 min
+            const pixelPerMinute = cellSize / 15;
+            return min * pixelPerMinute;
+        }
+
+        function pixelToMinute(pixel) {
+            const cellSize = 26; // 15 min
+            const pixelPerMinute = cellSize / 15;
+            return pixel / pixelPerMinute;
+        }
+
         updateTime();
 
         function updateTime() {
@@ -245,11 +323,10 @@
 
             // scroll height
             const visibleGraphHeight = timeGraph.getClientRects()[0].height - 8;
-            const scrollMarginInMinutes = visibleGraphHeight / 2 / pixelPerMinute;
+            const scrollMarginInMinutes = pixelToMinute(visibleGraphHeight / 2);
 
             timeGraph.scrollTop =
-                Math.max(0, hours * 60 + min - scrollMarginInMinutes) *
-                pixelPerMinute;
+                minuteToPixel(Math.max(0, hours * 60 + min - scrollMarginInMinutes));
 
             updateLinePosition(hours, min);
             displayTime(hours, min);
@@ -265,7 +342,7 @@
 
             function updateLinePosition(hours, min) {
                 // line position
-                const height = (hours * 60 + min) * pixelPerMinute;
+                const height = minuteToPixel(hours * 60 + min);
                 timeNowElm.style.top = height;
             }
 

@@ -45,7 +45,7 @@ h2, h3, h4 {
 
 
 .time-graph {
-    min-width: 500px;
+    min-width: 688px;
     position: relative;
     height: 2498px; /* cell size 26px of 15 min duration and plus 2px for hour grid line */
 }
