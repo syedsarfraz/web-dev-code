@@ -87,19 +87,43 @@
         </div>
     </div>
 
+    <template id="task-modal-template">
+        <div class="modal">
+            <div class="backdrop"></div>
+            <div class="modal-content layout-flex flex-column">
+                <div class="layout-flex header">
+                    <input class="flex-1" type="text" placeholder="Task Name">
+                    <button class="dismiss">Close</button>
+                </div>
+                <div class="flex-1 layout-flex justify-start">
+                    <textarea class="flex-1" placeholder="Notes"></textarea>
+
+                    <div class="layout-flex flex-column side">
+                        <h4>Time</h4>
+                        <label>Start Time: <br><input class="start" type="datetime-local" /></label>
+                        <label>End Time: <br><input class="end" type="datetime-local" /></label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
     <script>
 
         const tasksArray = [
             { id: 1, name: "Task 1" },
             { id: 2, name: "Task 2" },
             { id: 3, name: "Task 3" },
-            { name: 'Do chores 18', start: new Date(2024, 6, 18, 15), end: new Date(2024, 6, 18, 16) },
-            { name: 'Do chores 30', start: new Date(2024, 6, 30, 15), end: new Date(2024, 6, 30, 16) },
-            { name: 'Do chores', start: new Date(2024, 6, 25, 15), end: new Date(2024, 6, 25, 16) },
-            { name: 'Fill Tank', start: "2024-07-23T00:00", end: "2024-07-23T01:00:00.000" },
-            { name: 'Repair wiring', start: "2024-07-23T23:00", end: "2024-07-24T11:00:00.000" },
-            { name: 'fix a bulb', start: "2024-07-26T08:00", end: "2024-07-26T08:00:00.000" }
+            { id: 4, name: 'Do chores 18', start: '2024-07-18T10:00:00.000', end: '2024-07-18T11:00:00.000' },
+            { id: 5, name: 'Do chores 30', start: '2024-07-30T10:00:00.000', end: '2024-07-30T11:00:00.000' },
+            { id: 6, name: 'Do chores', start: '2024-07-25T10:00:00.000', end: '2024-07-25T11:00:00.000' },
+            { id: 7, name: 'Fill Tank', start: "2024-07-23T00:00", end: "2024-07-23T01:00:00.000" },
+            { id: 8, name: 'Repair wiring', start: "2024-07-23T23:00", end: "2024-07-24T11:00:00.000" },
+            { id: 9, name: 'fix a bulb', start: "2024-07-26T08:00", end: "2024-07-26T09:00:00.000" }
         ];
+
+        let lastTaskId = Math.max(...tasksArray.map((task) => task.id))
 
 
         const taskList = document.getElementById("taskList");
@@ -108,20 +132,35 @@
         const taskDays = document.querySelectorAll(".day");
 
         const taskInput = document.querySelector('#taskInput')
-        document.querySelector('#taskAdd').addEventListener('click', () => {
+        document.querySelector('#taskAdd').addEventListener('click', function () {
             if (taskInput.value === '') return;
-            tasksArray.push({ name: taskInput.value })
-            taskList.appendChild(createTaskElm(taskInput.value))
+            const task = { id: ++lastTaskId, name: taskInput.value }
+            tasksArray.push(task)
+            const taskDiv = createTaskElm(task)
+            taskList.appendChild(taskDiv)
             taskInput.value = '';
         });
 
+        const [graphStartDate, graphEndDate] = getGraphRange()
 
-        // Initial call to create tasks
-        createTasks(tasksArray);
+        updateDaysName(graphStartDate);
 
-        // Function to create task elements and append to task list
-        function createTasks(tasks) {
+        tasksArray.forEach(task => {
+            distributeTask(task, graphStartDate, graphEndDate)
+        });
 
+
+        function updateDaysName(graphStartDate) {
+            const daysName = document.querySelectorAll('.days-name h4');
+            for (let i = 0; i < daysName.length; i++) {
+                const dayName = daysName[i];
+                const date = new Date(graphStartDate);
+                date.setDate(date.getDate() + i);
+                dayName.textContent = dayName.textContent + " " + (date.getDate().toString().padStart(2, '0'))
+            }
+        }
+
+        function getGraphRange() {
             const graphStartDate = new Date();
             graphStartDate.setHours(0)
             graphStartDate.setMinutes(0)
@@ -136,68 +175,112 @@
             }
 
             const graphEndDate = new Date(graphStartDate)
-            graphEndDate.setDate(graphEndDate.getDate() + 4);
-
-            const daysName = document.querySelectorAll('.days-name h4');
-            for (let i = 0; i < daysName.length; i++) {
-                const dayName = daysName[i];
-                const date = new Date(graphStartDate);
-                date.setDate(date.getDate() + i);
-                dayName.textContent = dayName.textContent + " " + (date.getDate().toString().padStart(2, '0'))
-            }
-
-            tasks.forEach(task => {
-                const taskStart = new Date(task.start)
-                const taskEnd = new Date(task.end)
-                // task may start earlier than the week span and may end in visible week
-                if (task.start && taskStart >= graphStartDate && taskStart <= graphEndDate) {
-                    const taskDayIndex = taskStart.getDay() - 1;
-
-                    const taskDiv = createTaskElm(task.name)
-
-                    const offset = getOffset(taskStart.getHours(), taskStart.getMinutes())
-                    // offset
-                    taskDiv.style.top = minuteToPixel(offset)
-                    const daysDiff = taskEnd.getDate() - taskStart.getDate()
-                    if (daysDiff === 0) {
-                        // duration
-                        taskDiv.style.height = minuteToPixel(getDuration(taskStart.getHours(), taskStart.getMinutes(), taskEnd.getHours(), taskEnd.getMinutes()))
-                    } else {
-                        const duration = 24 * 60 - offset + getDuration(0, 0, taskEnd.getHours(), taskEnd.getMinutes());
-                        const duration1 = Math.min(24 * 60, duration + offset) - offset
-                        const duration2 = duration - duration1
-                        taskDiv.style.height = minuteToPixel(duration1)
-
-                        if (duration2 !== 0) {
-                            const taskDiv2 = createTaskElm(task.name);
-                            taskDiv2.style.top = 0
-                            taskDiv2.style.height = minuteToPixel(duration - duration1)
-                            taskDays[taskDayIndex + 1].appendChild(taskDiv2)
-                        }
-
-                    }
-
-                    taskDays[taskDayIndex].appendChild(taskDiv)
-                    return;
-                } else if (!task.start) {
-                    const taskDiv = createTaskElm(task.name)
-                    taskList.appendChild(taskDiv);
-                } else if (taskEnd < graphStartDate) {
-                    const taskDiv = createTaskElm(task.name)
-                    taskListPast.appendChild(taskDiv);
-                } else if (taskStart > graphEndDate) {
-                    const taskDiv = createTaskElm(task.name)
-                    taskListUpcoming.appendChild(taskDiv);
-                }
-            });
+            graphEndDate.setDate(graphEndDate.getDate() + 5);
+            return [graphStartDate, graphEndDate]
         }
 
-        function createTaskElm(name) {
+        function distributeTask(task, graphStartDate, graphEndDate) {
+            const taskStart = new Date(task.start)
+            const taskEnd = new Date(task.end)
+            // task may start earlier than the week span and may end in visible week
+            if (task.start && taskStart >= graphStartDate && taskStart < graphEndDate) {
+                const taskDayIndex = taskStart.getDay() - 1;
+
+                const taskDiv = createTaskElm(task)
+
+                const offset = getOffset(taskStart.getHours(), taskStart.getMinutes())
+                // offset
+                taskDiv.style.top = minuteToPixel(offset)
+                const daysDiff = taskEnd.getDate() - taskStart.getDate()
+                if (daysDiff === 0) {
+                    // duration
+                    taskDiv.style.height = minuteToPixel(getDuration(taskStart.getHours(), taskStart.getMinutes(), taskEnd.getHours(), taskEnd.getMinutes()))
+                } else {
+                    const duration = 24 * 60 - offset + getDuration(0, 0, taskEnd.getHours(), taskEnd.getMinutes());
+                    const duration1 = Math.min(24 * 60, duration + offset) - offset
+                    const duration2 = duration - duration1
+                    taskDiv.style.height = minuteToPixel(duration1)
+
+                    if (duration2 !== 0) {
+                        const taskDiv2 = createTaskElm(task);
+                        taskDiv2.style.top = 0
+                        taskDiv2.style.height = minuteToPixel(duration - duration1)
+                        taskDays[taskDayIndex + 1].appendChild(taskDiv2)
+                    }
+
+                }
+
+                taskDays[taskDayIndex].appendChild(taskDiv)
+                return;
+            } else if (!task.start) {
+                const taskDiv = createTaskElm(task)
+                taskList.appendChild(taskDiv);
+            } else if (taskEnd < graphStartDate) {
+                const taskDiv = createTaskElm(task)
+                taskListPast.appendChild(taskDiv);
+            } else if (taskStart > graphEndDate) {
+                const taskDiv = createTaskElm(task)
+                taskListUpcoming.appendChild(taskDiv);
+            }
+        }
+
+        function createTaskElm(task) {
             const taskDiv = document.createElement("div");
-            taskDiv.className = 'task';
+            taskDiv.className = 'task task-' + task.id;
             taskDiv.draggable = true;
-            taskDiv.textContent = name;
+            taskDiv.textContent = task.name;
+
+            taskDiv.addEventListener('click', () => {
+                const template = document.querySelector('#task-modal-template')
+                const taskModal = template.content.cloneNode(true);
+                const modal = taskModal.firstElementChild;
+
+                modal.querySelector('input').value = task.name
+
+                modal.querySelector('.start').value = task.start;
+                modal.querySelector('.end').value = task.end
+                modal.querySelector('textarea').value = task.note || ''
+
+                modal.querySelector('.dismiss').addEventListener('click', () => {
+                    const name = modal.querySelector('input').value
+                    const start = modal.querySelector('.start').value
+                    const end = modal.querySelector('.end').value
+                    if (!name) return;
+                    task.note = modal.querySelector('textarea').value
+                    const didTimeUpdate = createTaskWithTime(task, start, end);
+                    if (!didTimeUpdate) updateTaskName(task, name);
+
+                    modal.remove();
+
+                })
+                document.body.appendChild(modal)
+            })
+
             return taskDiv
+        }
+
+        function updateTaskName(task, name) {
+            task.name = name;
+            const tasks = document.querySelectorAll('.task-' + task.id);
+            for (const task of tasks) {
+                task.textContent = name;
+            }
+        }
+
+        function createTaskWithTime(task, start, end) {
+            // both times are required
+            if (!task.start && !start || !task.end && !end) return false;
+            // any of time has changed
+            if (+new Date(task.start) === +new Date(start) && +new Date(task.end) === +new Date(end)) return false;
+            const tasks = document.querySelectorAll('.task-' + task.id);
+            for (const task of tasks) {
+                task.remove()
+            }
+
+            task.start = start;
+            task.end = end;
+
+            distributeTask(task, graphStartDate, graphEndDate)
         }
 
 

@@ -4,6 +4,7 @@
 
 h2, h3, h4 {
     text-align: center;
+    margin: 8px 0;
 }
 
 .task {
@@ -124,4 +125,55 @@ h2, h3, h4 {
     left: 0;
     right: 0;
     background-color: #a553;
+}
+
+.modal {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+}
+.modal .backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: #0005;
+}
+.modal .modal-content {
+    position: absolute;
+    inset:0;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    margin: auto;
+    border: 1px solid #999;
+    border-radius: 12px;
+    max-width: 600px;
+    background-color: #ccc;
+    padding: 16px;
+}
+.modal .side {
+    margin-left: 8px;
+}
+.modal .header {
+    margin-bottom: 16px;
+}
+.modal .header input {
+    padding: 8px;
+    border: 1px solid;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+.modal .header input {
+    border-radius: 4px;
+}
+.modal .header input {
+    padding: 8px;
+    border: 1px solid;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+.modal textarea {
+    padding: 8px;
+    border: 1px solid;
+    border-radius: 8px;
+    min-height: 120px;
 }
