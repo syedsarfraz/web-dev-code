@@ -201,7 +201,7 @@
                     const duration2 = duration - duration1
                     taskDiv.style.height = minuteToPixel(duration1)
 
-                    if (duration2 !== 0) {
+                    if (duration2 !== 0 && taskDays.length >= taskDayIndex + 1 - 1) {
                         const taskDiv2 = createTaskElm(task);
                         taskDiv2.style.top = 0
                         taskDiv2.style.height = minuteToPixel(duration - duration1)
