@@ -1,8 +1,16 @@
-import { Component, effect, EffectRef, inject, Injector, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  EffectRef,
+  inject,
+  Injector,
+  signal,
+} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
   standalone: true,
+  host: { class: 'block p-4 flex flex-col gap-2 items-center', '(click)': 'log("clicked")' },
   templateUrl: './counter.component.html',
 })
 export class CounterComponent {
@@ -56,5 +64,9 @@ export class CounterComponent {
     if (this.effectRef != null) {
       this.effectRef.destroy();
     }
+  }
+
+  log(msg: string) {
+    console.log(msg);
   }
 }
