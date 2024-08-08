@@ -1,0 +1,9 @@
+<p>Counter: {{ counter }}</p>
+<label>Delay: <input type="number" [value]="delay()" (input)="delay.set($any($event.target).value)" /></label>
+<div>
+  <button (click)="increment()">Increment</button>
+  <button (click)="decrement()">Decrement</button>
+  <button (click)="autoIncrement()">Auto Increment</button>
+  <button (click)="autoDecrement()">Auto Decrement</button>
+  <button (click)="stopAuto()">Stop Auto</button>
+</div>
