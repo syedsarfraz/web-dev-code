@@ -179,7 +179,6 @@ shapes.forEach((shape) => {
   }
 });
 
-
 /// solution with discriminated unions
 interface Square2 {
   kind: "square";
@@ -196,14 +195,13 @@ interface Rectangle2 {
   height: number;
 }
 
-type Shape3 = Square2 | Circle2 | Rectangle2
+type Shape3 = Square2 | Circle2 | Rectangle2;
 
 let shapes2: Shape3[] = [
   { kind: "circle", radius: 5 },
   { kind: "square", width: 5, height: 5 },
   { kind: "rectangle", width: 5, height: 10 },
 ];
-
 
 shapes2.forEach((shape) => {
   if (shape.kind === "circle") {
@@ -217,3 +215,158 @@ shapes2.forEach((shape) => {
     );
   }
 });
+
+let inputValue: string[] | Event | Date = a
+  ? new Date()
+  : b
+  ? new Event("click")
+  : [];
+if (inputValue instanceof Array) {
+  inputValue; // Array;
+} else if (inputValue instanceof Date) {
+  inputValue; // Date
+} else {
+  inputValue; // Event
+}
+
+class User {
+  name!: string;
+  age!: number;
+  gender!: string;
+  skills!: string[];
+}
+
+const user: User = new User();
+
+if (
+  typeof unknownInput === "object" &&
+  unknownInput !== null &&
+  "name" in unknownInput &&
+  "age" in unknownInput &&
+  "gender" in unknownInput &&
+  typeof unknownInput.name === "string" &&
+  typeof unknownInput.age === "number" &&
+  typeof unknownInput.gender === "string" &&
+  "skills" in unknownInput &&
+  Array.isArray(unknownInput.skills)
+) {
+  unknownInput.skills;
+}
+
+interface Measurement {
+  unit: "ft" | "cm" | "m" | "inch";
+  value: number;
+}
+interface Size {
+  height: Measurement;
+  width: Measurement;
+}
+interface Dimensions {
+  height: Measurement;
+  width: Measurement;
+  thickness: Measurement;
+}
+
+class Product {
+  image!: string[];
+  quantity!: string;
+
+  constructor(public name: string, public price: number) {}
+
+  applyDiscount() {
+    return this.price * 0.9;
+  }
+}
+
+class Door extends Product {
+  color!: string[];
+  dimensions!: Dimensions;
+
+  constructor(
+    name: string,
+    price: number,
+    public variant: "redwood" | "kale" | "patax"
+  ) {
+    super(name, price);
+  }
+
+  applyPattern(patternType: string){}
+}
+
+class Mobile extends Product {
+  dimensions!: Dimensions;
+  color!: string[];
+  storage!: number;
+  screenType!: "lcd" | "oled" | "amoled" | "microled";
+  screenSize!: Size;
+
+  static create(
+    name: string,
+    price: number,
+    opt: Partial<Omit<Mobile, keyof Product>>
+  ) {
+    const m = new Mobile(name, price);
+    Object.assign(m, opt);
+    return m;
+  }
+}
+
+class Laptop extends Product {
+  dimensions!: Dimensions;
+  color!: string[];
+  storage!: number;
+  screenType!: "lcd" | "oled" | "amoled" | "microled";
+  screenSize!: Size;
+}
+
+let products = [
+  new Door("Redwood", 10000, "redwood"),
+  new Door("Patex", 5000, "patax"),
+  new Door("Kale", 7000, "kale"),
+  new Mobile("A", 19999),
+  new Mobile("B", 2999),
+  new Mobile("C", 3999),
+  Mobile.create("D", 59999, {
+    screenType: "oled",
+    screenSize: {
+      height: { unit: "cm", value: 100 },
+      width: { unit: "cm", value: 20 },
+    },
+    dimensions: {
+      height: { unit: "inch", value: 6.2 },
+      width: { unit: "inch", value: 3.9 },
+      thickness: { unit: "inch", value: 0.3 },
+    },
+  }),
+  new Laptop("E", 199999),
+];
+
+// show different types of Products
+products.forEach((product) => {
+  if (product instanceof Mobile) {
+    // render mobile product view
+  } else if (product instanceof Door) {
+    // render Door product view
+  }
+});
+
+// show products in cart list
+products.forEach((product) => {
+  // render product name, image, price in the view
+  product.name;
+  product.image;
+  product.price;
+  product.applyDiscount()
+});
+
+let mobile1 = Mobile.create("ABc", 35999, { color: ["White", "black"] });
+if (unknownInput instanceof Product) {
+  unknownInput.price;
+} else {
+  new Error("selected Item is not a product");
+}
+
+Object.assign;
+Array.isArray;
+Date.now;
+Math.floor;
