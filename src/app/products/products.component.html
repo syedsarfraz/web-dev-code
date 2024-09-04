@@ -4,27 +4,29 @@
   @for (product of products; track product.id) {
   <div
     class="block min-w-40 border rounded-t-lg border-neutral-300 cursor-pointer"
-    [ngClass]="{ 'border-blue-500 ring-blue-500 ring-1': isSelected(product) }"
-    (click)="toggleSelectProduct(product)"
+    [ngClass]="{ 'border-blue-500 ring-blue-500 ring-1': product.selected() }"
+    (click)="product.toggleSelect()"
   >
-    <!-- Image placeholder -->
-    <div class="bg-rose-500 rounded-t-lg h-28"></div>
+    <img
+      class="rounded-t-lg w-40 h-28 object-cover object-center"
+      [src]="product.image"
+    />
     <p class="py-2 px-2 font-bold">{{ product.name }}</p>
     <div
       class="px-2 pb-2 flex justify-end"
-      [ngClass]="{ invisible: !isSelected(product) }"
+      [ngClass]="{ invisible: !product.selected() }"
       (click)="$event.stopPropagation()"
     >
       <button
         class="text-white bg-gray-600 rounded-full w-6 h-6 text-center mr-1"
-        (click)="increment(product)"
+        (click)="product.increment()"
       >
         +
       </button>
-      <p class="tabular-nums">{{ getQty(product) }}</p>
+      <p class="tabular-nums">{{ product.qty() }}</p>
       <button
         class="text-white bg-gray-600 rounded-full w-6 h-6 text-center ml-1"
-        (click)="decrement(product)"
+        (click)="product.decrement()"
       >
         -
       </button>

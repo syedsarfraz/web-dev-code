@@ -1,14 +1,23 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  signal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-interface Product {
-  id: number;
-  name: string;
-  price: number;
+class Product {
+  id = autoId();
+
+  readonly selected = signal(false);
+  readonly qty = signal(1);
+  constructor(public name: string, public price: number, public image: string) {}
+
+  toggleSelect() {
+    this.selected.set(!this.selected());
+  }
+
+  increment() {
+    this.qty.set(this.qty() + 1);
+  }
+  decrement() {
+    if (this.qty() > 1) this.qty.set(this.qty() - 1);
+  }
 }
 
 @Component({
@@ -19,54 +28,18 @@ interface Product {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent {
-
-  products: Product[] = [
-    { id: 1, name: 'Fries', price: 100 },
-    { id: 2, name: 'Burger', price: 200 },
-    { id: 3, name: 'Cheese Burger', price: 250 },
-    { id: 4, name: 'Nuggets', price: 180 },
-    { id: 5, name: 'Broast Quarter', price: 200 },
-    { id: 6, name: 'Broast Half', price: 350 },
-    { id: 7, name: 'Broast Full', price: 650 },
+  products = [
+    new Product('Fries', 100, '/assets/French fries image.webp'),
+    new Product('Burger', 200 ,'/assets/Airfryer Chicken Sandwich from YouTube.webp'),
+    new Product('Cheese Burger', 250 , '/assets/Chicken Cheese Burger Recipe.jpg'),
+    new Product('Nuggets', 180, '/assets/Chicken Nuggets Image.jpeg'),
+    new Product('Broast Quarter', 200, '/assets/Spicy Broaster Chicken.jpg'),
+    new Product('Broast Half', 350, '/assets/Spicy Broaster Chicken.jpg'),
+    new Product('Broast Full', 650, '/assets/Spicy Broaster Chicken.jpg'),
   ];
+}
 
-  // interval = setInterval(() => {
-  //   this.products.pop()
-  // }, 3000)
-
-  selected = signal<number[]>([]);
-
-  toggleSelectProduct(product: Product) {
-    this.selected.update((selected) => {
-      const index = selected.indexOf(product.id);
-      if (index === -1) selected.push(product.id);
-      else selected.splice(index, 1);
-      return selected;
-    });
-  }
-
-  isSelected(product: Product) {
-    return this.selected().includes(product.id);
-  }
-
-  orderQtyMap = signal<Record<number, number>>({});
-
-  increment(product: Product) {
-    this.orderQtyMap.update((map) => {
-      if (!map[product.id]) map[product.id] = 1;
-      map[product.id]++;
-      return map;
-    });
-  }
-  decrement(product: Product) {
-    this.orderQtyMap.update((map) => {
-      if (!map[product.id]) map[product.id] = 1;
-      if (map[product.id] > 1) map[product.id]--;
-      return map;
-    });
-  }
-
-  getQty(product: Product) {
-    return this.orderQtyMap()[product.id] || 1;
-  }
+let _id = 0;
+function autoId() {
+  return ++_id;
 }
