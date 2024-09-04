@@ -1,0 +1,51 @@
+<h1 class="p-4 text-4xl text-center">Review Order</h1>
+@if (products().length === 0) {
+<div class="flex flex-col items-center gap-2">
+  <p>No product selected, please select order first</p>
+  <button
+    class="px-4 py-2 bg-orange-600 text-white rounded-md"
+    routerLink="/products"
+  >
+    Go to Products
+  </button>
+</div>
+} @else {
+<div class="p-4 flex flex-col gap-2">
+  <div class="flex items-center">
+    <p class="min-w-6 font-bold">ID</p>
+    <p class="flex-1 font-bold">Name</p>
+    <p class="min-w-10 font-bold">Qty</p>
+    <p class="min-w-12 font-bold">Price</p>
+    <p class="min-w-12 font-bold">Action</p>
+  </div>
+  @for (product of products(); track product.id) {
+  <div class="flex items-center">
+    <p class="min-w-6">{{ product.id }}</p>
+    <p class="flex-1">{{ product.name }}</p>
+    <p class="min-w-10">{{ product.qty() }}</p>
+    <p class="min-w-12">{{ product.price }}</p>
+    <button
+      class="w-12 px-4 py-1 bg-red-500 text-white rounded-md"
+      (click)="product.toggleSelect()"
+    >
+      x
+    </button>
+  </div>
+  }
+  <div class="flex items-center">
+    <p class="flex-1 font-bold">Total</p>
+    <p class="min-w-10 font-bold"></p>
+    <p class="min-w-12 font-bold">{{ calculateTotal() }}</p>
+    <p class="min-w-12 font-bold"></p>
+  </div>
+</div>
+
+<div class="flex justify-center">
+  <button
+    class="px-4 py-2 bg-orange-600 text-white rounded-md"
+    routerLink="/products"
+  >
+    Change Order
+  </button>
+</div>
+}
