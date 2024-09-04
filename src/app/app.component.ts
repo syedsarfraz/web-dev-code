@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { CounterComponent } from "./counter/counter.component";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  imports: [CounterComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterModule],
 })
 export class AppComponent {}

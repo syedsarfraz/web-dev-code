@@ -2,6 +2,7 @@
   "name": "ng-play",
   "version": "0.0.0",
   "scripts": {
+    "clean": "rm -rf dist",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -26,6 +27,7 @@
     "@angular-devkit/build-angular": "^18.1.3",
     "@angular/cli": "^18.1.3",
     "@angular/compiler-cli": "^18.1.0",
+    "@tailwindcss/typography": "^0.5.14",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.20",
     "jasmine-core": "~5.1.0",

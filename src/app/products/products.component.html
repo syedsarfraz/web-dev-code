@@ -1,0 +1,34 @@
+<h1 class="text-center text-4xl my-4">Products</h1>
+
+<div class="px-4 flex gap-2 flex-wrap justify-center">
+  @for (product of products; track product.id) {
+  <div
+    class="block min-w-40 border rounded-t-lg border-neutral-300 cursor-pointer"
+    [ngClass]="{ 'border-blue-500 ring-blue-500 ring-1': isSelected(product) }"
+    (click)="toggleSelectProduct(product)"
+  >
+    <!-- Image placeholder -->
+    <div class="bg-rose-500 rounded-t-lg h-28"></div>
+    <p class="py-2 px-2 font-bold">{{ product.name }}</p>
+    <div
+      class="px-2 pb-2 flex justify-end"
+      [ngClass]="{ invisible: !isSelected(product) }"
+      (click)="$event.stopPropagation()"
+    >
+      <button
+        class="text-white bg-gray-600 rounded-full w-6 h-6 text-center mr-1"
+        (click)="increment(product)"
+      >
+        +
+      </button>
+      <p class="tabular-nums">{{ getQty(product) }}</p>
+      <button
+        class="text-white bg-gray-600 rounded-full w-6 h-6 text-center ml-1"
+        (click)="decrement(product)"
+      >
+        -
+      </button>
+    </div>
+  </div>
+  }
+</div>
