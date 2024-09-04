@@ -40,12 +40,18 @@
   </div>
 </div>
 
-<div class="flex justify-center">
+<div class="flex justify-center gap-4">
   <button
     class="px-4 py-2 bg-orange-600 text-white rounded-md"
     routerLink="/products"
   >
     Change Order
+  </button>
+  <button
+    class="px-4 py-2 bg-emerald-600 text-white rounded-md"
+    (click)="placeOrder()"
+  >
+    Complete Order
   </button>
 </div>
 }

@@ -10,8 +10,13 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class OrderReviewComponent {
   productService = inject(ProductService);
+  router = inject(Router);
 
   products = this.productService.selectedProducts;
   calculateTotal = this.productService.calculateTotal;
 
+  placeOrder() {
+    const orderId = this.productService.placeOrder();
+    this.router.navigate(['order-complete'], { queryParams: { orderId } });
+  }
 }
