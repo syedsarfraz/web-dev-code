@@ -1,0 +1,67 @@
+<ActionBar title="Order Review"></ActionBar>
+
+<StackLayout>
+  @if (products().length === 0) {
+  <FlexboxLayout class="p-4 flex-col items-center">
+    <Label
+      class="text-2xl"
+      text="No product selected, please go back and select product first"
+    ></Label>
+    <Button
+      class="px-4 text-2xl bg-orange-600 text-white rounded-md"
+      text="Goto Products"
+      nsRouterLink="/products"
+      clearHistory="true"
+      pageTransition="slideRight"
+    ></Button>
+  </FlexboxLayout>
+  } @else {
+  <FlexboxLayout class="p-4 flex-col">
+    <FlexboxLayout>
+      <Label class="text-2xl font-bold min-w-14" text="ID"></Label>
+      <Label class="text-2xl font-bold flex-1" text="Name"></Label>
+      <Label class="text-2xl font-bold min-w-16" text="Qty"></Label>
+      <Label class="text-2xl font-bold min-w-16" text="Price"></Label>
+      <Label class="text-2xl font-bold min-w-24" text="Action"></Label>
+    </FlexboxLayout>
+    @for (product of products(); track product.id) {
+    <FlexboxLayout>
+      <Label class="text-2xl min-w-14" [text]="product.id"></Label>
+      <Label class="text-2xl flex-1" [text]="product.name"></Label>
+      <Label class="text-2xl min-w-16" [text]="product.qty()"></Label>
+      <Label class="text-2xl min-w-16" [text]="product.price"></Label>
+      <StackLayout class="min-w-24">
+        <Button
+          class="text-2xl bg-red-500 text-white rounded-md"
+          text="x"
+          (tap)="product.toggleSelect()"
+        ></Button>
+      </StackLayout>
+    </FlexboxLayout>
+    }
+    <FlexboxLayout>
+      <Label class="text-2xl font-bold flex-1" text="Total"></Label>
+      <Label class="text-2xl min-w-16"></Label>
+      <Label
+        class="text-2xl font-bold min-w-16"
+        [text]="calculateTotal()"
+      ></Label>
+      <Label class="min-w-24"></Label>
+    </FlexboxLayout>
+  </FlexboxLayout>
+  <FlexboxLayout class="justify-center">
+    <Button
+      class="px-4 text-2xl bg-orange-600 text-white rounded-md"
+      text="Change Order"
+      nsRouterLink="/products"
+      clearHistory="true"
+      pageTransition="slideRight"
+    ></Button>
+    <Button
+      class="px-4 text-2xl bg-emerald-600 text-white rounded-md"
+      text="Complete Order"
+      (tap)="placeOrder()"
+    ></Button>
+  </FlexboxLayout>
+  }
+</StackLayout>

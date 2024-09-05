@@ -1,0 +1,18 @@
+<ActionBar title="Order Complete"></ActionBar>
+
+<FlexboxLayout class="p-4 flex-col items-center justify-center">
+  <Label class="text-4xl font-bold" text="Your order is completed"></Label>
+  <Label class="text-4xl">
+    <FormattedString>
+      <Span>Your order id is </Span>
+      <Span class="font-bold">#{{ id }}</Span>
+    </FormattedString>
+  </Label>
+  <Button
+    class="px-4 text-2xl bg-gray-600 text-white rounded-md"
+    text="Place a new order"
+    nsRouterLink="/products"
+    clearHistory="true"
+    pageTransition="slideRight"
+  ></Button>
+</FlexboxLayout>

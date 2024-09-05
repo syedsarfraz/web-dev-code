@@ -1,0 +1,63 @@
+<ActionBar title="Products"></ActionBar>
+
+<ScrollView height="100%">
+  <StackLayout>
+    <FlexboxLayout
+      class="px-4 flex-wrap justify-center content-start items-start overflow-hidden"
+    >
+      @for(product of products; track product.id;) {
+      <StackLayout
+        class="min-w-48 border-4 rounded-t-lg mr-4 mb-4"
+        [ngClass]="{
+          'border-blue-500': product.selected(),
+          'border-neutral-500': !product.selected()
+        }"
+        (tap)="product.toggleSelect()"
+      >
+        <Image
+          class="w-48 h-40"
+          stretch="aspectFill"
+          [src]="product.image"
+        ></Image>
+        <Label
+          class="px-2 py-2 text-2xl font-bold"
+          [text]="product.name"
+        ></Label>
+        <FlexboxLayout
+          [ngClass]="{
+            'justify-end': product.selected(),
+            'justify-center': !product.selected()
+          }"
+        >
+          @if (product.selected()) {
+          <Button
+            class="text-xl rounded-full bg-gray-500 text-white"
+            text="+"
+            (tap)="product.increment()"
+          ></Button>
+          <Label class="text-xl" [text]="product.qty()"></Label>
+          <Button
+            class="text-xl rounded-full bg-gray-500 text-white"
+            text="-"
+            (tap)="product.decrement()"
+          ></Button>
+          } @else {
+          <Button
+            class="px-4 text-xl rounded-full bg-gray-500 text-white active:bg-gray-600 active:text-yellow-50"
+            text="Select"
+            (tap)="product.toggleSelect()"
+          ></Button>
+          }
+        </FlexboxLayout>
+      </StackLayout>
+      }
+    </FlexboxLayout>
+    <FlexboxLayout class="justify-center">
+      <Button
+        class="px-4 text-2xl bg-orange-600 text-white rounded-md"
+        text="Review Order"
+        [nsRouterLink]="['/order-review']"
+      ></Button>
+    </FlexboxLayout>
+  </StackLayout>
+</ScrollView>
