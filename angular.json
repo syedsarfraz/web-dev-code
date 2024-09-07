@@ -46,7 +46,7 @@
             "outputPath": "dist/practice",
             "index": "projects/practice/src/index.html",
             "browser": "projects/practice/src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [],
             "tsConfig": "projects/practice/tsconfig.app.json",
             "assets": [
               {
@@ -99,7 +99,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [],
             "tsConfig": "projects/practice/tsconfig.spec.json",
             "assets": [
               {
