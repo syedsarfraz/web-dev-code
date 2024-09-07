@@ -1,0 +1,45 @@
+<div class="p-4 prose">
+  <h1 class="p-4 font-b text-4xl text-center">Welcome</h1>
+  <strong>Text binding/interpolation:</strong>
+  <ul>
+    <li>
+      {{ text }}
+    </li>
+    <li>
+      {{ "This is text written in string directly in template" }}
+    </li>
+    <li>
+      {{ text + ", combined text" }}
+    </li>
+    <li>{{ text }}, combined text</li>
+    <li>Number {{ 1000 }}</li>
+    <li>Date Obj {{ dateObj }}</li>
+    <li>Date JSON {{ dateJSON }}</li>
+    <li>obj {{ obj }}</li>
+    <li>Array empty {{ [] }}</li>
+    <li>Array {{ [1, 2, 3].join("-") }}</li>
+    <li>Array {{ [1, 2, 3].map(mapFunc) }}</li>
+  </ul>
+  <strong>Property Binding:</strong>
+  <ul>
+    <li [textContent]="text"></li>
+    <li [className]="'text-red-500'">Style applied</li>
+    <li [innerHTML]="'<a>Abc</a>'"></li>
+  </ul>
+  <strong>Property Binding (Angular provided):</strong>
+  <ul>
+    <li [class]="'text-orange-500'">inline Style</li>
+    <li [style]="'color: blue;'">inline Style</li>
+  </ul>
+  <strong>Event Binding:</strong>
+  <ul>
+    <li>{{ list }}</li>
+    <li [textContent]="count"></li>
+    <li>Next count: {{ count }}</li>
+    <li><button (click)="add()">Add</button></li>
+    <li><button (dblclick)="add()">Add on double click</button></li>
+    <li><button (mouseover)="add()">Add on mouse over</button></li>
+    <li><input [value]="text" (input)="text = $any($event.target).value" /></li>
+    <li><input type="date" [value]="dateJSON.slice(0, 10)" (input)="setDate($event)" /></li>
+  </ul>
+</div>
