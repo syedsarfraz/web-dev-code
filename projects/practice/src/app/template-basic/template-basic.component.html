@@ -1,0 +1,76 @@
+<div class="p-4 prose">
+  @if (userType === 'guest') {
+  <button class="px-4 py-2 bg-gray-600 text-white rounded-md" (click)="login()">
+    Login
+  </button>
+  } @else {
+  <div class="flex gap-4">
+    <button
+      class="px-4 py-2 bg-gray-600 text-white rounded-md"
+      (click)="toggleSecret()"
+    >
+      @if (showContent) { Hide } @else {Show} Secret
+    </button>
+    <button
+      class="px-4 py-2 bg-gray-600 text-white rounded-md"
+      (click)="logout()"
+    >
+      Logout
+    </button>
+    @if (userType === 'member') {
+    <button
+      class="px-4 py-2 bg-gray-600 text-white rounded-md"
+      (click)="promote()"
+    >
+      Promote to Admin
+    </button>
+    }
+  </div>
+  } @if (showContent) {
+  <h1>Confidential Content</h1>
+  <p>
+    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla quibusdam
+    mollitia voluptatum earum culpa eos! Eos voluptas aliquid non porro
+    accusamus quaerat eius dolore quisquam inventore amet, quidem facere
+    ducimus.
+  </p>
+  } @else if (userType === 'guest') {
+  <p>There is no content available for you.</p>
+  } @else {
+  <p>The content is hidden</p>
+  }
+
+  <div class="flex gap-0.5">
+    @for (tab of tabs; track $index) {
+    <button
+      class="px-4 py-2 bg-gray-600 text-white rounded-md"
+      (click)="selectTab(tab)"
+    >
+      {{ tab.name }}
+    </button>
+    }
+  </div>
+  <p>
+    @switch(selectedTab?.type) { @case ('admin'){ Admin:
+    {{ selectedTab?.content }} } @case ('member'){ Member:
+    {{ selectedTab?.content }} } @default { Guest:
+    {{ selectedTab?.content }}
+    } }
+  </p>
+
+  <ul>
+    @for(veg of veggies; track veg) {
+    <li>
+      {{ debug(veg) }}
+      <button
+        class="px-4 py-2 bg-red-600 text-white rounded-md"
+        (click)="removeVeg($index)"
+      >
+        Remove
+      </button>
+    </li>
+    } @empty {
+    <p>No Veggies</p>
+    }
+  </ul>
+</div>
