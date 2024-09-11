@@ -1,14 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ModelDirective } from '../app-model.directive';
+import { RainbowColorDirective, RandomColorDirective } from '../random-color.directive';
 
 @Component({
   selector: 'app-basic-content',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, ModelDirective, RandomColorDirective, RainbowColorDirective],
   templateUrl: './basic-content.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -35,6 +33,7 @@ export class BasicContentComponent {
   // }, 500);
 
   setDate(event: Event) {
-    this.dateJSON = (event.target as HTMLInputElement).value + this.dateJSON.slice(10);
+    this.dateJSON =
+      (event.target as HTMLInputElement).value + this.dateJSON.slice(10);
   }
 }

@@ -28,8 +28,18 @@
   </ul>
   <strong>Property Binding (Angular provided):</strong>
   <ul>
-    <li [class]="'text-orange-500'">inline Style</li>
+    <li [class]="'text-orange-500'">inline Class</li>
+    <li [class.text-emerald-500]="true">inline Class</li>
+    <li [class.text-orange-500]="false">inline Class</li>
     <li [style]="'color: blue;'">inline Style</li>
+    <li [style.color]="'blue'">inline Style</li>
+    <li [style.border-width]="count + 'px'">inline Style</li>
+    <li [style.border-width.px]="count" [style.border-color]="'blue'">
+      inline Style
+    </li>
+    <li [style.border-width.rem]="count / 8" [style.border-color]="'blue'">
+      inline Style
+    </li>
   </ul>
   <strong>Event Binding:</strong>
   <ul>
@@ -40,6 +50,38 @@
     <li><button (dblclick)="add()">Add on double click</button></li>
     <li><button (mouseover)="add()">Add on mouse over</button></li>
     <li><input [value]="text" (input)="text = $any($event.target).value" /></li>
-    <li><input type="date" [value]="dateJSON.slice(0, 10)" (input)="setDate($event)" /></li>
+    <li>
+      <input
+        type="date"
+        [value]="dateJSON.slice(0, 10)"
+        (input)="setDate($event)"
+      />
+    </li>
+  </ul>
+  <strong>Two-way Binding:</strong>
+  <ul>
+    <li>
+      using [ngModel] and (ngModelChange)<input
+        [ngModel]="text"
+        (ngModelChange)="text = $event"
+      />
+    </li>
+    <li>
+      using [(ngModel)] two-way binding (banana in box syntax):
+      <input [(ngModel)]="text" />
+    </li>
+    <li>
+      appModel Directive:
+      <input [appModel]="text" (appModelChange)="text = $event" />
+    </li>
+    <li>appModel Directive Two-way binding: <input [(appModel)]="text" /></li>
+  </ul>
+  <strong>Random Colors</strong>
+  <ul>
+    <li class="text-2xl" appRandomColor="smooth">Apple</li>
+    <li class="text-2xl" appRandomColor="smooth" digits="6">Banana</li>
+    <li class="text-2xl" appRandomColor>Coconut</li>
+    <li class="text-2xl" appRainbowColor="smooth" speed="1">Orange</li>
+    <li class="text-2xl" appRainbowColor>Mango</li>
   </ul>
 </div>
