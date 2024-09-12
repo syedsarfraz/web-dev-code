@@ -1,0 +1,92 @@
+<div class="p-4 prose">
+  <strong>Date</strong>
+  <ul>
+    <li>String: {{ dateString }}</li>
+    <li>Number: {{ dateNumber }}</li>
+    <li>Object: {{ date }}</li>
+    <li>String with pipe: {{ dateString | date }}</li>
+    <li>Number with pipe: {{ dateNumber | date }}</li>
+    <li>Object with pipe: {{ date | date }}</li>
+    <li>format short: {{ date | date : "short" }}</li>
+    <li>format medium: {{ date | date : "medium" }}</li>
+    <li>format long: {{ date | date : "long" }}</li>
+    <li>format full: {{ date | date : "full" }}</li>
+    <li>format shortDate: {{ date | date : "shortDate" }}</li>
+    <li>format mediumDate: {{ date | date : "mediumDate" }}</li>
+    <li>format longDate: {{ date | date : "longDate" }}</li>
+    <li>format fullDate: {{ date | date : "fullDate" }}</li>
+    <li>format shortTime: {{ date | date : "shortTime" }}</li>
+    <li>format mediumTime: {{ date | date : "mediumTime" }}</li>
+    <li>format longTime: {{ date | date : "longTime" }}</li>
+    <li>format fullTime: {{ date | date : "fullTime" }}</li>
+    <li>Custom date: {{ date | date : "dd-MM-yyyy" }}</li>
+    <li>Custom date: {{ date | date : "hh:mm a" }}</li>
+  </ul>
+
+  <strong>JSON</strong>
+  <ul>
+    <li>Object: {{ obj }}</li>
+    <li>Object with pipe: {{ obj | json }}</li>
+    <li>
+      KeyValue with pipe: {{ obj | keyvalue | json }}
+      <ol>
+        @for(o of obj | keyvalue; track $index) {
+        <li>Key {{ o.key }}, Value {{ o.value | json }}</li>
+        }
+      </ol>
+    </li>
+    <li>Array: {{ arr }}</li>
+    <li>Array with pipe: {{ arr | json }}</li>
+  </ul>
+
+  <strong>Slicing</strong>
+  <ul>
+    <li>String with slice pipe: {{ dateString | slice : 0 : 10 }}</li>
+    <li>Array with slice pipe: {{ arr | slice : 1 : 2 | json }}</li>
+    <li>Array with slice pipe: {{ arr | slice : -1 | json }}</li>
+  </ul>
+
+  <strong>Currency</strong>
+  <ul>
+    <li>Currency default format : {{ number | currency }}</li>
+    <li>Currency custom format : {{ number | currency : "PKR" : "Rs." }}</li>
+    <li>Currency custom format : {{ number | currency : "INR" }}</li>
+    <li>Currency custom format : {{ number | currency : "EUR" }}</li>
+    <li>Currency custom format : {{ number | currency : "CNY" }}</li>
+    <li>Currency custom format : {{ number | currency : "JPY" }}</li>
+    <li>Currency custom format : {{ number | currency : "AUD" }}</li>
+    <li>Currency custom format : {{ number | currency : "CAD" }}</li>
+    <li>
+      Price custom format :
+      {{ number | currency : undefined : undefined : "3.2" }}
+    </li>
+    <li>
+      Price custom format :
+      {{ price | currency : undefined : undefined : "2.2" }}
+    </li>
+    <li>
+      Price custom format :
+      {{ priceLong | currency : undefined : undefined : "2.2-2" }}
+    </li>
+    <li>
+      Price custom format :
+      {{ number | currency : undefined : undefined : "2.0-2" }}
+    </li>
+    <li>
+      Number custom format :
+      {{ number | number : "2.2-2" }}
+    </li>
+    <li>
+      Percent default format :
+      {{ number | percent }}
+    </li>
+    <li>
+      Percent default format :
+      {{ 0.23456 | percent:'2.0-2' }}
+    </li>
+    <li>
+      Percent default format :
+      {{ 0.02 | percent:'2.0-2' }}
+    </li>
+  </ul>
+</div>
