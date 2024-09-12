@@ -69,7 +69,7 @@
   <ul>
     @for(veg of veggies; track veg) {
     <li>
-      {{ veg }}
+      {{ veg | fuzzyCase }}
       <button
         class="px-4 py-2 bg-red-600 text-white rounded-md"
         (click)="removeVeg($index)"

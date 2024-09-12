@@ -1,9 +1,11 @@
+import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FuzzyCasePipe } from '../fuzzy-case.pipe';
 
 @Component({
   selector: 'app-template-basic',
   standalone: true,
-  imports: [],
+  imports: [UpperCasePipe, FuzzyCasePipe],
   templateUrl: './template-basic.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
