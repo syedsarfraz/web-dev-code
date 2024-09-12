@@ -51,17 +51,25 @@
     }
   </div>
   <p>
-    @switch(selectedTab?.type) { @case ('admin'){ Admin:
-    {{ selectedTab?.content }} } @case ('member'){ Member:
-    {{ selectedTab?.content }} } @default { Guest:
-    {{ selectedTab?.content }}
-    } }
+    <!-- prettier-ignore-start -->
+    @switch(selectedTab?.type) {
+      @case ('admin'){
+        Admin: {{ selectedTab?.content }}
+      }
+      @case ('member'){
+        Member: {{ selectedTab?.content }}
+      }
+      @default {
+        Guest: {{ selectedTab?.content }}
+    }
+  }
+  <!-- prettier-ignore-end -->
   </p>
 
   <ul>
     @for(veg of veggies; track veg) {
     <li>
-      {{ debug(veg) }}
+      {{ veg }}
       <button
         class="px-4 py-2 bg-red-600 text-white rounded-md"
         (click)="removeVeg($index)"
