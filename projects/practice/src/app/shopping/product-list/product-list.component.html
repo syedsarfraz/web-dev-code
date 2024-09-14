@@ -1,0 +1,39 @@
+<div class="p-4 prose">
+  @if (loading()) {
+  <p>Loading...</p>
+  } @else {
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Color</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+    @for (product of products(); track product.id) {
+    <tr>
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td class="flex gap-1">
+        @if (product.productVariants.length > 1) { @for(variant of
+        product.productVariants; track variant.id) {
+        <button
+          class="py-0.5 px-1.5 border rounded-xl hover:bg-gray-300"
+          [class.bg-gray-200]="getSelectedVariant(product).id === variant.id"
+          [class.bg-gray-50]="getSelectedVariant(product).id !== variant.id"
+          (click)="selectVariant(product.id, variant.id)"
+        >
+          {{ variant.color }}
+        </button>
+        } }
+      </td>
+      <td>{{ getSelectedVariant(product).quantity }}</td>
+      <td>{{ getSelectedVariant(product).price }}</td>
+    </tr>
+    }
+    @empty {
+      <p>No products there</p>
+    }
+  </table>
+  }
+</div>

@@ -1,0 +1,34 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Product 1"
+    },
+    {
+      "id": "2",
+      "name": "Product 2"
+    }
+  ],
+  "productVariants": [
+    {
+      "id": "2",
+      "price": 699,
+      "quantity": 50,
+      "color": "royal_blue",
+      "productId": "1"
+    },
+    {
+      "id": "1",
+      "price": 499,
+      "quantity": 100,
+      "color": "red",
+      "productId": "1"
+    },
+    {
+      "id": "3",
+      "price": 299,
+      "quantity": 50,
+      "productId": "2"
+    }
+  ]
+}
