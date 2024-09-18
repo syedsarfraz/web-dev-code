@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Route, RouterModule, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { API_BASE } from './api-base.token';
 
 @Component({
