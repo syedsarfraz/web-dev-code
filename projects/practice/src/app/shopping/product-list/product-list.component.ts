@@ -6,14 +6,16 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, EMPTY, finalize, Observable } from 'rxjs';
 import { API_BASE } from '../api-base.token';
+import { CartComponent, CartItem } from '../cart/cart.component';
 
 interface ProductVariant {
   id: string;
   color: string;
   price: number;
   quantity: number;
+  productId: string;
 }
 
 interface Product {
@@ -25,7 +27,7 @@ interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [],
+  imports: [CartComponent],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -37,8 +39,11 @@ export class ProductListComponent {
   products = signal<Product[]>([]);
   productVariantSelection = signal<Record<string, string>>({});
 
+  cart = signal<CartItem[]>([]);
+
   constructor() {
-    this.loadProducts();
+    this.loadProducts4();
+    this.loadCart();
   }
 
   getSelectedVariant(product: Product) {
@@ -56,23 +61,69 @@ export class ProductListComponent {
     });
   }
 
-  loadProducts1() {
-    // Promise/then nested callback style
-    fetch(`${this.apiBase}/products?_embed=productVariants`).then((res) => {
-      res.json().then((data: Product[]) => {});
+  async addToCart({ id, ...productVariant }: ProductVariant) {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    await fetch(`${this.apiBase}/cart`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ...productVariant,
+        quantity: 1,
+        productVariantId: id,
+        userId: user.id,
+      }),
     });
+    this.loadCart();
+  }
+
+  async loadCart() {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const res = await fetch(`${this.apiBase}/cart?_embed=product&userId=${user.id}`);
+    const cartList: CartItem[] = await res.json();
+    this.cart.set(cartList);
+  }
+
+  loadProducts1() {
+    this.loading.set(true);
+    // Promise/then nested callback style
+    fetch(`${this.apiBase}/products?_embed=productVariants`)
+      .then((res) => {
+        res
+          .json()
+          .then((data: Product[]) => {
+            this.products.set(data);
+          })
+          .catch(() => {
+            console.log('failed to parse data');
+          });
+      })
+      .catch(() => {
+        console.log('failed to fetch data');
+      })
+      .finally(() => {
+        this.loading.set(false);
+      });
   }
 
   loadProducts2() {
     // Promise/then callback chain style
     console.log('loading started');
     fetch(`${this.apiBase}/products?_embed=productVariants`)
+      // then can return value which can received in next then
       .then((res) => {
         console.log('fetch completed');
         return res.json();
       })
+      // catch in middle of chain will always return value to next then
+      .catch(() => {
+        console.log('failed to fetch data');
+        return Promise.resolve([]);
+      })
       .then((data: Product[]) => {
+        console.log('products', data);
         this.products.set(data);
+      })
+      .catch(() => {
+        console.log('failed to parse data');
       });
     console.log('fetch started');
   }
@@ -88,12 +139,18 @@ export class ProductListComponent {
   }
 
   loadProducts4() {
+    this.loading.set(true);
     // Angular official way using rxjs/Observable
-    this.http.get<Product[]>(`/products?_embed=productVariants`).subscribe({
-      next: (data) => {
+    this.http
+      .get<Product[]>(`${this.apiBase}/products?_embed=productVariants`)
+      .pipe(
+        catchError(() => EMPTY),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe((data) => {
+        console.log('products', data);
         this.products.set(data);
-      },
-    });
+      });
   }
 
   async loadProducts() {

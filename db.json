@@ -30,5 +30,34 @@
       "quantity": 50,
       "productId": "2"
     }
+  ],
+  "cart": [
+    {
+      "id": "216a",
+      "price": 699,
+      "quantity": 50,
+      "color": "royal_blue",
+      "productId": "1",
+      "productVariantId": "2",
+      "userId": "1"
+    },
+    {
+      "id": "3541",
+      "price": 699,
+      "quantity": 1,
+      "color": "royal_blue",
+      "productId": "1",
+      "productVariantId": "2",
+      "userId": "2"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Admin",
+      "lastName": "",
+      "username": "admin",
+      "password": "YWRtaW4="
+    }
   ]
 }

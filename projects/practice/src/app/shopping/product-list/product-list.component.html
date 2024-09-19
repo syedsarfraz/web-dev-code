@@ -9,6 +9,7 @@
       <th>Color</th>
       <th>Quantity</th>
       <th>Price</th>
+      <th>Action</th>
     </tr>
     @for (product of products(); track product.id) {
     <tr>
@@ -29,11 +30,19 @@
       </td>
       <td>{{ getSelectedVariant(product).quantity }}</td>
       <td>{{ getSelectedVariant(product).price }}</td>
+      <td>
+        <button
+          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
+          (click)="addToCart(getSelectedVariant(product))"
+        >
+          Add to cart
+        </button>
+      </td>
     </tr>
-    }
-    @empty {
-      <p>No products there</p>
+    } @empty {
+    <p>No products there</p>
     }
   </table>
   }
+  <app-cart [list]="cart()"></app-cart>
 </div>
