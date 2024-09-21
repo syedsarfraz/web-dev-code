@@ -29,11 +29,11 @@
         } }
       </td>
       <td>{{ getSelectedVariant(product).quantity }}</td>
-      <td>{{ getSelectedVariant(product).price }}</td>
+      <td>{{ getSelectedVariant(product).price | currency: 'PKR' : 'symbol-narrow' }}</td>
       <td>
         <button
           class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
-          (click)="addToCart(getSelectedVariant(product))"
+          (click)="addToCart(product, getSelectedVariant(product))"
         >
           Add to cart
         </button>
@@ -44,5 +44,5 @@
     }
   </table>
   }
-  <app-cart [list]="cart()"></app-cart>
+  <app-cart [list]="cart()" (remove)="removeCartItem($event)"></app-cart>
 </div>

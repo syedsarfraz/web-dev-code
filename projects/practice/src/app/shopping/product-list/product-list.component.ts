@@ -8,7 +8,13 @@ import {
 } from '@angular/core';
 import { catchError, EMPTY, finalize, Observable } from 'rxjs';
 import { API_BASE } from '../api-base.token';
-import { CartComponent, CartItem } from '../cart/cart.component';
+import {
+  CartComponent,
+  CartItem,
+  CartItemWithProduct,
+} from '../cart/cart.component';
+import { CurrencyPipe } from '@angular/common';
+import { autoId } from '../../auto-id';
 
 interface ProductVariant {
   id: string;
@@ -27,7 +33,7 @@ interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CartComponent],
+  imports: [CartComponent, CurrencyPipe],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,7 +45,7 @@ export class ProductListComponent {
   products = signal<Product[]>([]);
   productVariantSelection = signal<Record<string, string>>({});
 
-  cart = signal<CartItem[]>([]);
+  cart = signal<CartItemWithProduct[]>([]);
 
   constructor() {
     this.loadProducts4();
@@ -61,24 +67,121 @@ export class ProductListComponent {
     });
   }
 
-  async addToCart({ id, ...productVariant }: ProductVariant) {
+  async addToCart(
+    { id, name }: Product,
+    { id: productVariantId, ...productVariant }: ProductVariant
+  ) {
     const user = JSON.parse(localStorage.getItem('user')!);
-    await fetch(`${this.apiBase}/cart`, {
-      method: 'POST',
-      body: JSON.stringify({
-        ...productVariant,
+    const cartItems = this.cart().filter(
+      (item) =>
+        item.userId === user.id &&
+        item.productId === id &&
+        item.productVariantId === productVariantId
+    );
+
+    if (cartItems.length === 0) {
+      const cartItem: CartItemWithProduct = {
+        id: autoId('temp'),
         quantity: 1,
-        productVariantId: id,
+        productVariantId: productVariantId,
+        productId: id,
         userId: user.id,
-      }),
-    });
+        product: {
+          name,
+        },
+        productVariant: {
+          color: productVariant.color,
+          price: productVariant.price,
+        },
+      };
+
+      this.cart.update((items) => items.concat(cartItem));
+
+      const res = await fetch(`${this.apiBase}/cart`, {
+        method: 'POST',
+        body: JSON.stringify({
+          quantity: 1,
+          productVariantId: productVariantId,
+          productId: id,
+          userId: user.id,
+        }),
+      });
+      const newItem: Omit<CartItem, 'productVariant'> = await res.json();
+
+      this.cart.update((items) =>
+        items.map((item) =>
+          item.id === cartItem.id ? { ...item, id: newItem.id } : item
+        )
+      );
+
+      this.continueUpdateItems(cartItem.id, newItem.id);
+    } else {
+      const cartItem = cartItems[0];
+      if (cartItem.quantity < productVariant.quantity) {
+        const newCartItem: CartItemWithProduct = {
+          ...cartItem,
+          quantity: cartItem.quantity + 1,
+          product: {
+            name,
+          },
+          productVariant: {
+            color: productVariant.color,
+            price: productVariant.price,
+          },
+        };
+        this.cart.update((items) =>
+          items.map((item) => (item.id === newCartItem.id ? newCartItem : item))
+        );
+
+        if (cartItem.id.startsWith('temp')) {
+          this.addUpdateItemToQueue(cartItem.id, async (newId) => {
+            await fetch(`${this.apiBase}/cart/${newId}`, {
+              method: 'PATCH',
+              body: JSON.stringify({
+                quantity: newCartItem.quantity,
+              }),
+            });
+          });
+        } else {
+          await fetch(`${this.apiBase}/cart/${cartItem.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              quantity: newCartItem.quantity,
+            }),
+          });
+        }
+      }
+    }
+  }
+
+  updateItemQueueMap: Record<string, ((newId: string) => void)[] | undefined> = {};
+  async continueUpdateItems(oldId: string, newId: string) {
+    if (this.updateItemQueueMap[oldId]){
+      while (this.updateItemQueueMap[oldId].length) {
+        const callback = this.updateItemQueueMap[oldId].shift();
+        await callback!(newId);
+      }
+    }
+  }
+  addUpdateItemToQueue(itemId: string, callback: (newId: string) => void) {
+    if (!this.updateItemQueueMap[itemId]) {
+      this.updateItemQueueMap[itemId] = [callback];
+    } else {
+      this.updateItemQueueMap[itemId].push(callback);
+    }
+  }
+
+  async removeCartItem(id: string) {
+    await fetch(`${this.apiBase}/cart/${id}`, { method: 'DELETE' });
     this.loadCart();
   }
 
   async loadCart() {
     const user = JSON.parse(localStorage.getItem('user')!);
-    const res = await fetch(`${this.apiBase}/cart?_embed=product&userId=${user.id}`);
-    const cartList: CartItem[] = await res.json();
+    const res = await fetch(
+      `${this.apiBase}/cart?_embed=product&_embed=productVariant&userId=${user.id}`
+    );
+    const cartList: CartItemWithProduct[] = await res.json();
     this.cart.set(cartList);
   }
 

@@ -1,5 +1,20 @@
+<h2 class="text-xl">Cart Items</h2>
 <ul>
   @for(item of list; track item.id) {
-  <li>{{ item.product.name }}</li>
+  <li>
+    {{ item.product.name }} | {{ item.productVariant.color }} |
+    {{ item.quantity }} |
+    {{ item.productVariant.price | currency : "PKR" : "symbol-narrow" }} |
+    <button
+      class="px-2 py-1 bg-red-600 text-white rounded-md"
+      (click)="remove.emit(item.id)"
+    >
+      Remove
+    </button>
+  </li>
   }
+  <li>
+    <strong class="font-bold">Total: </strong
+    >{{ calculateTotal() | currency : "PKR" : "symbol-narrow" }}
+  </li>
 </ul>

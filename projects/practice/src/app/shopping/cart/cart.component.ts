@@ -1,13 +1,25 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 
 export interface CartItem {
   id: string;
-  color: string;
+  productVariant: {
+    color: string;
+    price: number;
+  };
   quantity: number;
-  price: number;
   productVariantId: string;
   productId: string;
   userId: string;
+}
+
+export interface CartItemWithProduct extends CartItem {
   product: {
     name: string;
   };
@@ -16,10 +28,19 @@ export interface CartItem {
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './cart.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent {
-  @Input() list: CartItem[] = [];
+  @Input() list: CartItemWithProduct[] = [];
+
+  @Output() remove = new EventEmitter<string>();
+
+  calculateTotal() {
+    return this.list.reduce(
+      (total, item) => total + item.quantity * item.productVariant.price,
+      0
+    );
+  }
 }
