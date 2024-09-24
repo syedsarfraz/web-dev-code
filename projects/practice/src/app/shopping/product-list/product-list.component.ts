@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -5,14 +6,14 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { autoId } from '../../auto-id';
 import { API_BASE } from '../api-base.token';
 import {
   CartComponent,
   CartItem,
   CartItemWithProduct,
 } from '../cart/cart.component';
-import { CurrencyPipe } from '@angular/common';
-import { autoId } from '../../auto-id';
+import { UserService } from '../shared/user.service';
 
 interface ProductVariant {
   id: string;
@@ -38,6 +39,7 @@ export interface Product {
 export class ProductListComponent {
   apiBase = inject(API_BASE);
   http = inject(HttpClient);
+  userServer = inject(UserService);
 
   loading = signal(false);
   products = signal<Product[]>([]);
@@ -69,7 +71,8 @@ export class ProductListComponent {
     { id, name }: Product,
     { id: productVariantId, ...productVariant }: ProductVariant
   ) {
-    const user = JSON.parse(localStorage.getItem('user')!);
+    const user = this.userServer.getUser();
+
     const cartItems = this.cart().filter(
       (item) =>
         item.userId === user.id &&
@@ -152,9 +155,10 @@ export class ProductListComponent {
     }
   }
 
-  updateItemQueueMap: Record<string, ((newId: string) => void)[] | undefined> = {};
+  updateItemQueueMap: Record<string, ((newId: string) => void)[] | undefined> =
+    {};
   async continueUpdateItems(oldId: string, newId: string) {
-    if (this.updateItemQueueMap[oldId]){
+    if (this.updateItemQueueMap[oldId]) {
       while (this.updateItemQueueMap[oldId].length) {
         const callback = this.updateItemQueueMap[oldId].shift();
         await callback!(newId);
@@ -175,7 +179,7 @@ export class ProductListComponent {
   }
 
   async loadCart() {
-    const user = JSON.parse(localStorage.getItem('user')!);
+    const user = this.userServer.getUser();
     const res = await fetch(
       `${this.apiBase}/cart?_embed=product&_embed=productVariant&userId=${user.id}`
     );

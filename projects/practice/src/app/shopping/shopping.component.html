@@ -1,1 +1,38 @@
+<header class="flex bg-neutral-300">
+  <div class="flex items-center px-4 py-2 text-xl font-bold">
+    <h1>e-Shopping</h1>
+  </div>
+  <nav class="flex-1 px-2 flex">
+    <ul class="flex-1 flex">
+      <li class="flex">
+        <button
+          class="px-2 hover:bg-neutral-500 hover:text-white"
+          routerLink="products"
+          routerLinkActive="bg-slate-400 text-white"
+        >
+          Products
+        </button>
+      </li>
+      <li class="flex">
+        <button
+          class="px-2 disabled:opacity-50 disabled:hover:bg-inherit disabled:hover:text-inherit hover:bg-neutral-500 hover:text-white"
+          disabled
+        >
+          Locations
+        </button>
+      </li>
+    </ul>
+    @if(userService.getUserType() === 'guest') {
+    <button
+      class="px-4 py-2 text-lg hover:bg-neutral-500 hover:text-white"
+      routerLink="auth/login"
+      routerLinkActive="bg-slate-400 text-white"
+    >
+      Login
+    </button>
+    } @else {
+    <app-user-menu></app-user-menu>
+    }
+  </nav>
+</header>
 <router-outlet></router-outlet>
