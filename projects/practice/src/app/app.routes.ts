@@ -5,7 +5,7 @@ import { TemplateBasicComponent } from './template-basic/template-basic.componen
 import { TemplateCommonComponent } from './template-common/template-common.component';
 import { ShoppingComponent } from './shopping/shopping.component';
 import { ProductListComponent } from './shopping/product-list/product-list.component';
-import { LoginComponent } from './auth/login/login.component';
+import { LoginComponent } from './shopping/auth/login/login.component';
 
 export const routes: Routes = [
   {

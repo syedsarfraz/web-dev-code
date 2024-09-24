@@ -4,8 +4,8 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { ModelDirective } from '../../app-model.directive';
-import { API_BASE } from '../../shopping/api-base.token';
+import { ModelDirective } from '../../../app-model.directive';
+import { API_BASE } from '../../../shopping/api-base.token';
 import { Router } from '@angular/router';
 
 interface User {
