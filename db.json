@@ -15,7 +15,13 @@
       "price": 699,
       "quantity": 50,
       "color": "royal_blue",
-      "productId": "1"
+      "productId": "1",
+      "mainVariant": "color",
+      "variantsMap": {
+        "color": "blue",
+        "type": "abc",
+        "size": "2m"
+      }
     },
     {
       "id": "1",
@@ -34,25 +40,30 @@
   "cart": [
     {
       "id": "3541",
-      "price": 699,
       "quantity": 1,
-      "color": "royal_blue",
       "productId": "1",
       "productVariantId": "2",
       "userId": "2"
     },
     {
-      "id": "f796",
-      "quantity": 4,
+      "id": "8f4c",
+      "quantity": 12,
       "productVariantId": "2",
       "productId": "1",
       "userId": "1"
     },
     {
-      "id": "f08f",
-      "quantity": 30,
+      "id": "3e95",
+      "quantity": 3,
       "productVariantId": "3",
       "productId": "2",
+      "userId": "1"
+    },
+    {
+      "id": "18e3",
+      "quantity": 3,
+      "productVariantId": "1",
+      "productId": "1",
       "userId": "1"
     }
   ],
@@ -63,6 +74,41 @@
       "lastName": "",
       "username": "admin",
       "password": "YWRtaW4="
+    },
+    {
+      "id": "ee35",
+      "firstName": "",
+      "lastName": "",
+      "username": "",
+      "password": ""
+    },
+    {
+      "id": "e3c7",
+      "firstName": "",
+      "lastName": "",
+      "username": "",
+      "password": ""
+    },
+    {
+      "id": "7b98",
+      "firstName": "",
+      "lastName": "",
+      "username": "",
+      "password": ""
+    },
+    {
+      "id": "a80f",
+      "firstName": "",
+      "lastName": "",
+      "username": "",
+      "password": ""
+    },
+    {
+      "id": "7af2",
+      "firstName": "",
+      "lastName": "",
+      "username": "",
+      "password": ""
     }
   ]
 }
