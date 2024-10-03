@@ -3,7 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  input,
   Input,
+  output,
   Output,
 } from '@angular/core';
 
@@ -34,8 +36,10 @@ export interface CartItemWithProduct extends CartItem {
 })
 export class CartComponent {
   @Input() list: CartItemWithProduct[] = [];
+  // list = input<CartItemWithProduct[]>([]);
 
   @Output() remove = new EventEmitter<string>();
+  // remove = output<string>()
 
   calculateTotal() {
     return this.list.reduce(

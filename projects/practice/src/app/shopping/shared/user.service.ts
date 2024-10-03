@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ShoppingComponent } from '../shopping.component';
+import { Router } from '@angular/router';
 
 interface User {
   id: string;
@@ -8,18 +9,23 @@ interface User {
   username: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UserService {
+  router = inject(Router);
+
   getUser() {
     const user: User = JSON.parse(localStorage.getItem('user')!);
     return user;
   }
 
   getUserType() {
-    return this.getUser() ? 'user' : 'guest';
+    return this.getUser() ? 'member' : 'guest';
   }
 
   logout() {
     localStorage.removeItem('user');
+    this.router.navigate(['shopping', 'auth', 'login']);
   }
 }

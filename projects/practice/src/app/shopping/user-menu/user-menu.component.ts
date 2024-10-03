@@ -7,7 +7,7 @@ import { UserService } from '../shared/user.service';
   standalone: true,
 })
 export class UserMenuComponent {
-  userService = inject(UserService);
+  private userService = inject(UserService);
 
   private readonly user = this.userService.getUser();
 

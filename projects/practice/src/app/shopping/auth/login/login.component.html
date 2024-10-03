@@ -21,8 +21,20 @@
           [(appModel)]="password"
       /></label>
     </div>
-    @if(userNotFound()) {
-    <p class="text-center text-red-500">User not found!</p>
+
+    @switch (error()) {
+      @case ('not-found') {
+        <p class="text-center text-red-500">User not found!</p>
+      }
+      @case ('network') {
+        <p class="text-center text-red-500">Network error!</p>
+      }
+      @case ('bad-request') {
+        <p class="text-center text-red-500">Bad Request!</p>
+      }
+      @case ('server') {
+        <p class="text-center text-red-500">Server error!</p>
+      }
     }
     <button
       class="py-1 px-2 bg-orange-600 text-white rounded-md self-end"

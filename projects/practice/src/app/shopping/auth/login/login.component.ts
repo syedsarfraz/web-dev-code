@@ -29,22 +29,33 @@ export class LoginComponent {
 
   username = signal('');
   password = signal('');
-  userNotFound = signal(false);
+  error = signal<
+    'none' | 'not-found' | 'bad-request' | 'server' | 'network'
+  >('none');
 
   async login(event: SubmitEvent) {
     event.preventDefault();
 
-    const res = await fetch(
-      `${this.apiBase}/users?username=${this.username()}&password=${btoa(
-        this.password()
-      )}`
-    );
-    const users: User[] = await res.json();
-    if (users.length) {
-      localStorage.setItem('user', JSON.stringify(users[0]));
-      this.router.navigate(['shopping/products']);
-    } else {
-      this.userNotFound.set(true);
+    try {
+      const res = await fetch(
+        `${this.apiBase}/users?username=${this.username()}&password=${btoa(
+          this.password()
+        )}`
+      );
+
+      if (res.status >= 500) return this.error.set('server');
+
+      if (res.status >= 400) return this.error.set('bad-request');
+
+      const users: User[] = await res.json();
+      if (users.length) {
+        localStorage.setItem('user', JSON.stringify(users[0]));
+        this.router.navigate(['shopping/products'], { replaceUrl: true });
+      } else {
+        this.error.set('not-found');
+      }
+    } catch (e) {
+      this.error.set('network');
     }
   }
 }
