@@ -14,6 +14,7 @@ import {
   CartItemWithProduct,
 } from '../cart/cart.component';
 import { UserService } from '../shared/user.service';
+import { RouterLink } from '@angular/router';
 
 interface ProductVariant {
   id: string;
@@ -32,7 +33,7 @@ export interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CartComponent, CurrencyPipe, KeyValuePipe],
+  imports: [CartComponent, CurrencyPipe, KeyValuePipe, RouterLink],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

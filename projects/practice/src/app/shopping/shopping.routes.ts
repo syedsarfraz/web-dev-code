@@ -3,6 +3,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { UserExistGuard } from './auth/guards/user-exist.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { ProductViewComponent } from './product-view/product-view.component';
 
 export const shoppingRoutes: Routes = [
   {
@@ -10,6 +11,7 @@ export const shoppingRoutes: Routes = [
     canActivate: [UserExistGuard],
     children: [
       { path: '', component: ProductListComponent },
+      { path: ':id', component: ProductViewComponent },
       { path: 'add', component: AddProductComponent },
     ],
   },
