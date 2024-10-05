@@ -189,11 +189,7 @@ export class ProductListComponent {
 
   async loadProducts() {
     this.loading.set(true);
-    console.log('loading started');
-    const resPromise = fetch(`${this.apiBase}/products?_embed=productVariants`);
-    console.log('fetch started');
-    const res = await resPromise;
-    console.log('fetch completed');
+    const res = await fetch(`${this.apiBase}/products?_embed=productVariants`);
     const data: Product[] = await res.json();
     this.products.set(data);
     this.loading.set(false);
