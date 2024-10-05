@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -17,10 +17,10 @@ import { UserService } from '../shared/user.service';
 
 interface ProductVariant {
   id: string;
-  color: string;
   price: number;
   quantity: number;
   productId: string;
+  variantMap: Record<string, string>
 }
 
 export interface Product {
@@ -32,7 +32,7 @@ export interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CartComponent, CurrencyPipe],
+  imports: [CartComponent, CurrencyPipe, KeyValuePipe],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -67,92 +67,94 @@ export class ProductListComponent {
     });
   }
 
+
+  // not working with new variant logic
   async addToCart(
     { id, name }: Product,
     { id: productVariantId, ...productVariant }: ProductVariant
   ) {
-    const user = this.userServer.getUser();
+    // const user = this.userServer.getUser();
 
-    const cartItems = this.cart().filter(
-      (item) =>
-        item.userId === user.id &&
-        item.productId === id &&
-        item.productVariantId === productVariantId
-    );
+    // const cartItems = this.cart().filter(
+    //   (item) =>
+    //     item.userId === user.id &&
+    //     item.productId === id &&
+    //     item.productVariantId === productVariantId
+    // );
 
-    if (cartItems.length === 0) {
-      const cartItem: CartItemWithProduct = {
-        id: autoId('temp'),
-        quantity: 1,
-        productVariantId: productVariantId,
-        productId: id,
-        userId: user.id,
-        product: {
-          name,
-        },
-        productVariant: {
-          color: productVariant.color,
-          price: productVariant.price,
-        },
-      };
+    // if (cartItems.length === 0) {
+    //   const cartItem: CartItemWithProduct = {
+    //     id: autoId('temp'),
+    //     quantity: 1,
+    //     productVariantId: productVariantId,
+    //     productId: id,
+    //     userId: user.id,
+    //     product: {
+    //       name,
+    //     },
+    //     productVariant: {
+    //       color: productVariant.color,
+    //       price: productVariant.price,
+    //     },
+    //   };
 
-      this.cart.update((items) => items.concat(cartItem));
+    //   this.cart.update((items) => items.concat(cartItem));
 
-      const res = await fetch(`${this.apiBase}/cart`, {
-        method: 'POST',
-        body: JSON.stringify({
-          quantity: 1,
-          productVariantId: productVariantId,
-          productId: id,
-          userId: user.id,
-        }),
-      });
-      const newItem: Omit<CartItem, 'productVariant'> = await res.json();
+    //   const res = await fetch(`${this.apiBase}/cart`, {
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //       quantity: 1,
+    //       productVariantId: productVariantId,
+    //       productId: id,
+    //       userId: user.id,
+    //     }),
+    //   });
+    //   const newItem: Omit<CartItem, 'productVariant'> = await res.json();
 
-      this.cart.update((items) =>
-        items.map((item) =>
-          item.id === cartItem.id ? { ...item, id: newItem.id } : item
-        )
-      );
+    //   this.cart.update((items) =>
+    //     items.map((item) =>
+    //       item.id === cartItem.id ? { ...item, id: newItem.id } : item
+    //     )
+    //   );
 
-      this.continueUpdateItems(cartItem.id, newItem.id);
-    } else {
-      const cartItem = cartItems[0];
-      if (cartItem.quantity < productVariant.quantity) {
-        const newCartItem: CartItemWithProduct = {
-          ...cartItem,
-          quantity: cartItem.quantity + 1,
-          product: {
-            name,
-          },
-          productVariant: {
-            color: productVariant.color,
-            price: productVariant.price,
-          },
-        };
-        this.cart.update((items) =>
-          items.map((item) => (item.id === newCartItem.id ? newCartItem : item))
-        );
+    //   this.continueUpdateItems(cartItem.id, newItem.id);
+    // } else {
+    //   const cartItem = cartItems[0];
+    //   if (cartItem.quantity < productVariant.quantity) {
+    //     const newCartItem: CartItemWithProduct = {
+    //       ...cartItem,
+    //       quantity: cartItem.quantity + 1,
+    //       product: {
+    //         name,
+    //       },
+    //       productVariant: {
+    //         color: productVariant.color,
+    //         price: productVariant.price,
+    //       },
+    //     };
+    //     this.cart.update((items) =>
+    //       items.map((item) => (item.id === newCartItem.id ? newCartItem : item))
+    //     );
 
-        if (cartItem.id.startsWith('temp')) {
-          this.addUpdateItemToQueue(cartItem.id, async (newId) => {
-            await fetch(`${this.apiBase}/cart/${newId}`, {
-              method: 'PATCH',
-              body: JSON.stringify({
-                quantity: newCartItem.quantity,
-              }),
-            });
-          });
-        } else {
-          await fetch(`${this.apiBase}/cart/${cartItem.id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({
-              quantity: newCartItem.quantity,
-            }),
-          });
-        }
-      }
-    }
+    //     if (cartItem.id.startsWith('temp')) {
+    //       this.addUpdateItemToQueue(cartItem.id, async (newId) => {
+    //         await fetch(`${this.apiBase}/cart/${newId}`, {
+    //           method: 'PATCH',
+    //           body: JSON.stringify({
+    //             quantity: newCartItem.quantity,
+    //           }),
+    //         });
+    //       });
+    //     } else {
+    //       await fetch(`${this.apiBase}/cart/${cartItem.id}`, {
+    //         method: 'PATCH',
+    //         body: JSON.stringify({
+    //           quantity: newCartItem.quantity,
+    //         }),
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   updateItemQueueMap: Record<string, ((newId: string) => void)[] | undefined> =

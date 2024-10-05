@@ -1,72 +1,87 @@
 {
   "products": [
     {
-      "id": "1",
-      "name": "Product 1"
+      "id": "d96b",
+      "name": "A25"
     },
     {
-      "id": "2",
-      "name": "Product 2"
+      "id": "8e13",
+      "name": "A35"
+    },
+    {
+      "id": "dd17",
+      "name": "A55"
     }
   ],
   "productVariants": [
     {
-      "id": "2",
-      "price": 699,
-      "quantity": 50,
-      "color": "royal_blue",
-      "productId": "1",
-      "mainVariant": "color",
-      "variantsMap": {
-        "color": "blue",
-        "type": "abc",
-        "size": "2m"
-      }
+      "id": "8da7",
+      "quantity": "10",
+      "price": "1000",
+      "variantMap": {
+        "Color": "red",
+        "Storage": "128"
+      },
+      "productId": "d96b"
     },
     {
-      "id": "1",
-      "price": 499,
-      "quantity": 100,
-      "color": "red",
-      "productId": "1"
+      "id": "83df",
+      "quantity": "10",
+      "price": "1100",
+      "variantMap": {
+        "Color": "red",
+        "Storage": "256"
+      },
+      "productId": "d96b"
     },
     {
-      "id": "3",
-      "price": 299,
-      "quantity": 50,
-      "productId": "2"
+      "id": "9246",
+      "quantity": "10",
+      "price": "1100",
+      "variantMap": {
+        "Color": "blue",
+        "Storage": "256"
+      },
+      "productId": "d96b"
+    },
+    {
+      "id": "15b6",
+      "quantity": "10",
+      "price": "1200",
+      "variantMap": {
+        "Color": "red"
+      },
+      "productId": "8e13"
+    },
+    {
+      "id": "f958",
+      "quantity": "10",
+      "price": "1299",
+      "variantMap": {
+        "Color": "blue"
+      },
+      "productId": "8e13"
+    },
+    {
+      "id": "f08a",
+      "quantity": "10",
+      "price": "1399",
+      "variantMap": {
+        "Color": "red"
+      },
+      "productId": "dd17"
+    },
+    {
+      "id": "3cfe",
+      "quantity": "10",
+      "price": "1399",
+      "variantMap": {
+        "Color": "green"
+      },
+      "productId": "dd17"
     }
   ],
-  "cart": [
-    {
-      "id": "3541",
-      "quantity": 1,
-      "productId": "1",
-      "productVariantId": "2",
-      "userId": "2"
-    },
-    {
-      "id": "8f4c",
-      "quantity": 12,
-      "productVariantId": "2",
-      "productId": "1",
-      "userId": "1"
-    },
-    {
-      "id": "3e95",
-      "quantity": 3,
-      "productVariantId": "3",
-      "productId": "2",
-      "userId": "1"
-    },
-    {
-      "id": "18e3",
-      "quantity": 3,
-      "productVariantId": "1",
-      "productId": "1",
-      "userId": "1"
-    }
-  ],
+  "cart": [],
   "users": [
     {
       "id": "1",

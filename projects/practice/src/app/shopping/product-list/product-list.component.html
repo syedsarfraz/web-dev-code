@@ -18,18 +18,27 @@
       <td class="flex gap-1">
         @if (product.productVariants.length > 1) { @for(variant of
         product.productVariants; track variant.id) {
-        <button
-          class="py-0.5 px-1.5 border rounded-xl hover:bg-gray-300"
-          [class.bg-gray-200]="getSelectedVariant(product).id === variant.id"
-          [class.bg-gray-50]="getSelectedVariant(product).id !== variant.id"
-          (click)="selectVariant(product.id, variant.id)"
-        >
-          {{ variant.color }}
-        </button>
+        <div>
+          @for(subVariant of variant.variantMap | keyvalue; track $index) {
+
+          <button
+            class="py-0.5 px-1.5 border rounded-xl hover:bg-gray-300"
+            [class.bg-gray-200]="getSelectedVariant(product).id === variant.id"
+            [class.bg-gray-50]="getSelectedVariant(product).id !== variant.id"
+            (click)="selectVariant(product.id, variant.id)"
+          >
+            {{ subVariant.key }}: {{ subVariant.value }}
+          </button>
+          }
+        </div>
         } }
       </td>
       <td>{{ getSelectedVariant(product).quantity }}</td>
-      <td>{{ getSelectedVariant(product).price | currency: 'PKR' : 'symbol-narrow' }}</td>
+      <td>
+        {{
+          getSelectedVariant(product).price | currency : "PKR" : "symbol-narrow"
+        }}
+      </td>
       <td>
         <button
           class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
@@ -44,5 +53,5 @@
     }
   </table>
   }
-  <app-cart  (remove)="removeCartItem($event)"></app-cart>
+  <app-cart (remove)="removeCartItem($event)"></app-cart>
 </div>

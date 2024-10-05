@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { autoId } from '../../auto-id';
 import { ModelDirective } from '../../app-model.directive';
+import { API_BASE } from '../api-base.token';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './add-product.component.html',
@@ -8,6 +10,11 @@ import { ModelDirective } from '../../app-model.directive';
   imports: [ModelDirective],
 })
 export class AddProductComponent {
+  apiBase = inject(API_BASE);
+  router = inject(Router);
+
+  productName = '';
+
   variants: { id: string; name: string }[] = [];
 
   productVariants: {
@@ -48,7 +55,42 @@ export class AddProductComponent {
     this.productVariants.splice(index, 1);
   }
 
-  saveProduct() {
-    console.log(this.productVariants);
+  async saveProduct() {
+    const product = { name: this.productName };
+    const productVariants = this.productVariants.map(
+      (productVariant) => {
+        return {
+          ...productVariant,
+          variantMap: this.variants.reduce((map, variant) => {
+            map[variant.name] = productVariant.variantMap[variant.id];
+            return map;
+          }, {} as Record<string, string>),
+        };
+      }
+    );
+
+    const res = await fetch(`${this.apiBase}/products`, {
+      method: 'POST',
+      body: JSON.stringify(product),
+    });
+    if (res.ok) {
+      const productData: { id: string } = await res.json();
+
+      for (let {id, ...productVariant} of productVariants) {
+        const res = await fetch(`${this.apiBase}/productVariants`, {
+          method: 'POST',
+          body: JSON.stringify({
+            ...productVariant,
+            productId: productData.id,
+          }),
+        });
+        if (res.ok) {
+          if (id === productVariants[productVariants.length - 1].id) {
+            alert('Product added successfully!');
+            this.router.navigate(['shopping', 'products']);
+          }
+        }
+      }
+    }
   }
 }

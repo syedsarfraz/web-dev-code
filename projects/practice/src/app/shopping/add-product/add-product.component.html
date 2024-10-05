@@ -12,6 +12,7 @@
             class="rounded-lg"
             type="text"
             placeholder="Enter product name"
+            [(appModel)]="productName"
           />
         </label>
       </div>
@@ -22,7 +23,7 @@
           class="mt-4 w-[120px] px-2 py-1 rounded-md bg-gray-600 text-white"
           (click)="addVariant()"
         >
-          Add Variant
+          New Variant
         </button>
         <button
           type="submit"
@@ -72,7 +73,7 @@
             <input class="rounded-lg" type="number" [(appModel)]="row.price" />
           </td>
 
-          @for (variant of variants; track $index) {
+          @for (variant of variants; track variant.id) {
           <td>
             <input
               class="rounded-lg"
