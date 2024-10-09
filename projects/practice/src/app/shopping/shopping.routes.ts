@@ -11,8 +11,8 @@ export const shoppingRoutes: Routes = [
     canActivate: [UserExistGuard],
     children: [
       { path: '', component: ProductListComponent },
-      { path: ':id', component: ProductViewComponent },
       { path: 'add', component: AddProductComponent },
+      { path: ':id', component: ProductViewComponent },
     ],
   },
   {
