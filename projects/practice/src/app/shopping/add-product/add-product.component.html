@@ -4,7 +4,12 @@
     (submit)="$event.preventDefault(); saveProduct()"
   >
     <div class="w-3/4 m-auto">
+      @if (mode === 'edit') {
+        <h2 class="text-2xl text-center">Edit Product</h2>
+      }
+      @else {
       <h2 class="text-2xl text-center">Add Product</h2>
+      }
       <div>
         <label class="flex flex-col">
           Product Name
@@ -39,7 +44,7 @@
         <tr>
           <th class="text-left">Quantity</th>
           <th class="text-left">Price</th>
-          @for (variant of variants; track variant.id) {
+          @for (variant of variants(); track variant.id) {
           <th class="text-left">
             <div class="flex justify-between items-center pr-2">
               <input
@@ -60,7 +65,7 @@
           <th></th>
         </tr>
 
-        @for(row of productVariants; track row.id) {
+        @for(row of productVariants(); track row.id) {
         <tr>
           <td>
             <input
@@ -73,7 +78,7 @@
             <input class="rounded-lg" type="number" [(appModel)]="row.price" />
           </td>
 
-          @for (variant of variants; track variant.id) {
+          @for (variant of variants(); track variant.id) {
           <td>
             <input
               class="rounded-lg"

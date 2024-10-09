@@ -12,6 +12,11 @@ export const shoppingRoutes: Routes = [
     children: [
       { path: '', component: ProductListComponent },
       { path: 'add', component: AddProductComponent },
+      {
+        path: 'edit/:id',
+        component: AddProductComponent,
+        data: { mode: 'edit' },
+      },
       { path: ':id', component: ProductViewComponent },
     ],
   },

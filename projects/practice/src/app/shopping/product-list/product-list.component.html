@@ -14,7 +14,7 @@
     @for (product of products(); track product.id) {
     <tr>
       <td>{{ product.id }}</td>
-      <td><a [routerLink]="product.id">{{ product.name }}</a></td>
+      <td>{{ product.name }}</td>
       <td class="flex gap-1">
         @if (product.productVariants.length > 1) { @for(variant of
         product.productVariants; track variant.id) {
@@ -39,12 +39,24 @@
           getSelectedVariant(product).price | currency : "PKR" : "symbol-narrow"
         }}
       </td>
-      <td>
+      <td class="flex gap-2 items-center">
         <button
           class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
           (click)="addToCart(product, getSelectedVariant(product))"
         >
           Add to cart
+        </button>
+        <button
+          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
+          [routerLink]="product.id"
+        >
+          View
+        </button>
+        <button
+          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
+          [routerLink]="['edit', product.id]"
+        >
+          Edit
         </button>
       </td>
     </tr>
