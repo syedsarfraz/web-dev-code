@@ -64,7 +64,7 @@ export class AddProductComponent {
       product.productVariants.map(({ id, price, quantity, variantMap }) => {
         return {
           id,
-          price: product.toString(),
+          price: price.toString(),
           quantity: quantity.toString(),
           variantMap: this.variants().reduce((map, variant) => {
             map[variant.id] = variantMap[variant.name];
