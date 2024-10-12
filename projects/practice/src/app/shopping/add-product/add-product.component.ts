@@ -17,6 +17,8 @@ export class AddProductComponent {
 
   mode: 'edit' | undefined = this.route.snapshot.data['mode'];
 
+  oldProduct!: Product;
+
   // cdr = inject(ChangeDetectorRef)
 
   productName = signal('');
@@ -50,6 +52,7 @@ export class AddProductComponent {
     if (!res.ok) return console.log('unknown error');
 
     const product: Product = await res.json();
+    this.oldProduct = product;
 
     this.productName.set(product.name);
 
@@ -75,8 +78,6 @@ export class AddProductComponent {
     );
 
     // this.cdr.detectChanges()
-
-    console.log(this.productName());
   }
 
   addVariant() {
@@ -130,10 +131,17 @@ export class AddProductComponent {
   }
 
   async saveProduct() {
+    if (this.mode === 'edit') return this.editProduct();
+    return this.addProduct();
+  }
+
+  async addProduct() {
     const product = { name: this.productName() };
     const productVariants = this.productVariants().map((productVariant) => {
       return {
         ...productVariant,
+        price: Number(productVariant.price),
+        quantity: Number(productVariant.quantity),
         variantMap: this.variants().reduce((map, variant) => {
           map[variant.name] = productVariant.variantMap[variant.id];
           return map;
@@ -164,5 +172,70 @@ export class AddProductComponent {
         }
       }
     }
+  }
+
+  async editProduct() {
+    const promises: Promise<unknown>[] = []
+
+    promises.push(fetch(`${this.apiBase}/products/${this.oldProduct.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name: this.productName() }),
+    }));
+
+    const oldPvIds = this.oldProduct.productVariants.map((pv) => pv.id);
+    const currentPvIds = this.productVariants().map((pv) => pv.id);
+    const productVariantMap = this.productVariants().reduce(
+      (map, { id, ...pv }) => {
+        map[id] = {
+          ...pv,
+          productId: this.oldProduct.id,
+          price: Number(pv.price),
+          quantity: Number(pv.quantity),
+          variantMap: this.variants().reduce((map, variant) => {
+            map[variant.name] = pv.variantMap[variant.id];
+            return map;
+          }, {} as Record<string, string>),
+        };
+        return map;
+      },
+      {} as Record<string, Omit<Product['productVariants'][0], 'id'>>
+    );
+
+    const pvIdsMap = {
+      create: [] as string[],
+      update: [] as string[],
+      remove: [] as string[],
+    };
+
+    oldPvIds.concat(currentPvIds).forEach((id) => {
+      if (oldPvIds.includes(id) && currentPvIds.includes(id))
+        pvIdsMap.update.includes(id) || pvIdsMap.update.push(id);
+      else if (!oldPvIds.includes(id) && currentPvIds.includes(id))
+        pvIdsMap.create.push(id);
+      else if (oldPvIds.includes(id) && !currentPvIds.includes(id))
+        pvIdsMap.remove.push(id);
+    });
+
+    for (const rmId of pvIdsMap.remove) {
+      promises.push(fetch(`${this.apiBase}/productVariants/${rmId}`, { method: 'DELETE' }));
+    }
+    for (const createId of pvIdsMap.create) {
+      promises.push(fetch(`${this.apiBase}/productVariants`, {
+        method: 'POST',
+        body: JSON.stringify(productVariantMap[createId]),
+      }));
+    }
+    for (const updateId of pvIdsMap.update) {
+      promises.push(fetch(`${this.apiBase}/productVariants/${updateId}`, {
+        method: 'PUT',
+        body: JSON.stringify(productVariantMap[updateId]),
+      }));
+    }
+
+    await Promise.all(promises)
+
+    alert('Product updated')
+
+    this.router.navigate(['shopping', 'products'])
   }
 }

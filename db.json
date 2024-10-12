@@ -1,84 +1,98 @@
 {
   "products": [
     {
-      "id": "d96b",
-      "name": "A25"
+      "name": "A25",
+      "id": "d96b"
     },
     {
-      "id": "8e13",
-      "name": "A35"
+      "name": "A35",
+      "id": "8e13"
     },
     {
-      "id": "dd17",
-      "name": "A55"
+      "name": "A55",
+      "id": "dd17"
     }
   ],
   "productVariants": [
     {
-      "id": "8da7",
-      "quantity": "10",
-      "price": "1000",
+      "price": 1000,
+      "quantity": 10,
       "variantMap": {
         "Color": "red",
-        "Storage": "128"
+        "Storage": "128",
+        "RAM": "8"
       },
-      "productId": "d96b"
+      "productId": "d96b",
+      "id": "8da7"
     },
     {
-      "id": "83df",
-      "quantity": "10",
-      "price": "1100",
-      "variantMap": {
-        "Color": "red",
-        "Storage": "256"
-      },
-      "productId": "d96b"
-    },
-    {
-      "id": "9246",
-      "quantity": "10",
-      "price": "1100",
+      "price": 1200,
+      "quantity": 10,
       "variantMap": {
         "Color": "blue",
-        "Storage": "256"
+        "Storage": "256",
+        "RAM": "16"
       },
-      "productId": "d96b"
+      "productId": "d96b",
+      "id": "9246"
     },
     {
-      "id": "15b6",
-      "quantity": "10",
-      "price": "1200",
+      "price": 1200,
+      "quantity": 10,
       "variantMap": {
         "Color": "red"
       },
-      "productId": "8e13"
+      "productId": "8e13",
+      "id": "15b6"
     },
     {
-      "id": "f958",
-      "quantity": "10",
-      "price": "1299",
+      "price": 1299,
+      "quantity": 10,
       "variantMap": {
         "Color": "blue"
       },
-      "productId": "8e13"
+      "productId": "8e13",
+      "id": "f958"
     },
     {
-      "id": "f08a",
-      "quantity": "10",
-      "price": "1399",
+      "price": 1399,
+      "quantity": 10,
       "variantMap": {
         "Color": "red"
       },
-      "productId": "dd17"
+      "productId": "dd17",
+      "id": "f08a"
     },
     {
-      "id": "3cfe",
-      "quantity": "10",
-      "price": "1399",
+      "price": 1399,
+      "quantity": 10,
       "variantMap": {
         "Color": "green"
       },
-      "productId": "dd17"
+      "productId": "dd17",
+      "id": "3cfe"
+    },
+    {
+      "price": 1200,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "green",
+        "Storage": "256",
+        "RAM": "16"
+      },
+      "productId": "d96b",
+      "id": "b3ad"
+    },
+    {
+      "id": "e387",
+      "quantity": 10,
+      "price": 1000,
+      "variantMap": {
+        "Color": "green",
+        "Storage": "128",
+        "RAM": "8"
+      },
+      "productId": "d96b"
     }
   ],
   "cart": [],
@@ -89,6 +103,20 @@
       "lastName": "",
       "username": "admin",
       "password": "YWRtaW4="
+    },
+    {
+      "id": "5e5e",
+      "firstName": "Ahmed",
+      "lastName": "Raza",
+      "username": "ahmed",
+      "password": "MTIzNA=="
+    },
+    {
+      "id": "5ca5",
+      "firstName": "AHmed",
+      "lastName": "Raza",
+      "username": "raza",
+      "password": "MTIzNA=="
     }
   ]
 }
