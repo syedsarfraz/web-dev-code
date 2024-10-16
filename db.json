@@ -40,20 +40,6 @@
       "productId": "1",
       "productVariantId": "2",
       "userId": "2"
-    },
-    {
-      "id": "f796",
-      "quantity": 4,
-      "productVariantId": "2",
-      "productId": "1",
-      "userId": "1"
-    },
-    {
-      "id": "f08f",
-      "quantity": 30,
-      "productVariantId": "3",
-      "productId": "2",
-      "userId": "1"
     }
   ],
   "users": [
@@ -63,6 +49,20 @@
       "lastName": "",
       "username": "admin",
       "password": "YWRtaW4="
+    },
+    {
+      "id": "4866",
+      "firstName": "syed",
+      "lastName": "anus",
+      "username": "syedanus",
+      "password": "0001"
+    },
+    {
+      "id": "2335",
+      "firstName": "syed",
+      "lastName": "sarfraz",
+      "username": "syedsarfraz",
+      "password": "007"
     }
   ]
 }

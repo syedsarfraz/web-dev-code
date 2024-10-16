@@ -6,7 +6,7 @@ import { TemplateCommonComponent } from './template-common/template-common.compo
 import { ShoppingComponent } from './shopping/shopping.component';
 import { ProductListComponent } from './shopping/product-list/product-list.component';
 import { LoginComponent } from './shopping/auth/login/login.component';
-
+import {AddUserComponent} from './shopping/auth/add-user/add-user.component'
 export const routes: Routes = [
   {
     path: 'shopping',
@@ -17,6 +17,7 @@ export const routes: Routes = [
         path: 'auth',
         children: [
           { path: 'login', component: LoginComponent },
+          { path: 'adduser',component: AddUserComponent},
           { path: '', redirectTo: 'login', pathMatch: 'prefix' },
         ],
       },

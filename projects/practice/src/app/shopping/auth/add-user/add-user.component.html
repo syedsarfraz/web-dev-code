@@ -1,0 +1,24 @@
+
+        <div class="h-screen flex items-center justify-center">
+            <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm" class="p-4 flex flex-col gap-4 min-w-80 rounded-lg border shadow">
+                <h1 class="text-2xl">Add User</h1>
+        
+                <div>
+                    <label for="firstname">Firstname:</label>
+                    <input id="firstname" required class="block w-full rounded-md" name="firstname" ngModel />
+                </div>
+                <div>
+                    <label for="lastname">Lastname:</label>
+                    <input id="lastname" required class="block w-full rounded-md" name="lastname" ngModel />
+                </div>
+                <div>
+                    <label for="username">Username:</label>
+                    <input id="username" required class="block w-full rounded-md" name="username" ngModel />
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required class="block w-full rounded-md" name="password" ngModel />
+                </div>
+                <button type="submit" class="px-1 py-0.5 bg-slate-700 text-white rounded-md">Add User</button>
+            </form>
+        </div>

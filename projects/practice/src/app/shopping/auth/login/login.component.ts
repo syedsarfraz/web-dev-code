@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { ModelDirective } from '../../../app-model.directive';
 import { API_BASE } from '../../../shopping/api-base.token';
-import { Router } from '@angular/router';
+import { Router,RouterLink } from '@angular/router';
 
 interface User {
   id: string;
@@ -19,7 +19,7 @@ interface User {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ModelDirective],
+  imports: [ModelDirective ,RouterLink],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
