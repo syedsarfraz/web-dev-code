@@ -116,8 +116,9 @@ class Query<Data extends object> {
   sort<
     NField extends WithTypeField<Data, string | number>,
     SortField extends NField | `-${NField}` | (string & {})
-  >(...field: SortField[]) {
-    this.query.append('_sort', field.join(','));
+  >(field: SortField) {
+    const prev = this.query.get('_sort') || '';
+    this.query.set('_sort', [prev, field].filter(Boolean).join(','));
     return this;
   }
 
@@ -203,13 +204,18 @@ const test = async () => {
   const db = new JsonDB('http://localhost:3000');
   const posts = db.collection<Post>('post');
 
-  const post1 = await posts.create({ name: '', views: 0, status: 'draft' });
-  const postAll = await posts.exec();
+  // const post1 = await posts.create({ name: '', views: 0, status: 'draft' });
+  // const postAll = await posts.exec();
   const postAll2 = await posts
     .embed<{ comments: Comment[]; tags: Tag[] }>('comments', 'tags')
     .eq('status', 'publish')
     .gte('views', 100)
-    .exec();
+    .sort('-name')
+    .sort('views')
+    .exec()
+    .catch((e) => {
+      console.log({ e });
+    });
 };
 
 // test()
