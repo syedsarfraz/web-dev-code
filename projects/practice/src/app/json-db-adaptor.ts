@@ -41,13 +41,15 @@ class Query<Data extends object> {
 
   private query = new URLSearchParams();
 
-  embed<Obj extends Record<string, unknown>, K extends keyof Obj = keyof Obj>(
+  embed<Obj extends Record<string, object>, K extends keyof Obj = keyof Obj>(
     ...collections: K[]
   ) {
     for (const collection of collections) {
       this.query.append('_embed', collection as string);
     }
-    return this as Query<Normalize<Data & Obj>>;
+    return this as Query<
+      Normalize<Data & { [K in keyof Obj]: WithId<Obj[K]> }>
+    >;
   }
 
   eq<NField extends WithTypeField<Data, string | number> | (string & {})>(
@@ -125,6 +127,10 @@ class Query<Data extends object> {
   exec() {
     return request<WithId<Data>[]>(`${this.url}?${this.query.toString()}`);
   }
+
+  get(id: string) {
+    return request<WithId<Data>>(`${this.url}/${id}?${this.query.toString()}`);
+  }
 }
 
 class Collection<Data extends object> extends Query<Data> {
@@ -132,42 +138,35 @@ class Collection<Data extends object> extends Query<Data> {
     super(url);
   }
 
-  async get(id: string) {
-    return request<WithId<Data>>(`${this.url}/${id}`);
-  }
-
-  async create(data: WithoutId<Data>) {
+  create(data: WithoutId<Data>) {
     return request<WithId<Data>>(this.url, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async update(id: string, data: WithoutId<Data>) {
+  update(id: string, data: WithoutId<Data>) {
     return request<WithId<Data>>(`${this.url}/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async updatePartial(id: string, data: Partial<WithoutId<Data>>) {
+  updatePartial(id: string, data: Partial<WithoutId<Data>>) {
     return request<WithId<Data>>(`${this.url}/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   }
 
-  async remove(id: string) {
+  remove(id: string) {
     return request<WithId<Data>>(`${this.url}/${id}`, {
       method: 'DELETE',
     });
   }
 }
 
-async function request<T = object>(
-  url: string,
-  init?: Parameters<typeof fetch>[1]
-) {
+async function request<T = object>(url: string, init?: RequestInit) {
   const res = await fetch(url, init).catch((e) => {
     throw new NetworkError(e);
   });
@@ -190,8 +189,8 @@ interface Post {
   status: 'publish' | 'draft';
 }
 
-interface Comment {
-  text: string;
+interface PostComment {
+  message: string;
   postId: string;
 }
 
@@ -201,21 +200,57 @@ interface Tag {
 }
 
 const test = async () => {
-  const db = new JsonDB('http://localhost:3000');
-  const posts = db.collection<Post>('post');
+  // const db = new JsonDB('http://localhost:3000');
+  // const posts = db.collection<Post>('post');
 
   // const post1 = await posts.create({ name: '', views: 0, status: 'draft' });
   // const postAll = await posts.exec();
-  const postAll2 = await posts
-    .embed<{ comments: Comment[]; tags: Tag[] }>('comments', 'tags')
-    .eq('status', 'publish')
-    .gte('views', 100)
-    .sort('-name')
-    .sort('views')
-    .exec()
-    .catch((e) => {
-      console.log({ e });
-    });
+  // const postAll2 = await posts
+  //   .embed<{ comments: Comment[]; tags: Tag[] }>('comments', 'tags')
+  //   .eq('status', 'publish')
+  //   .gte('views', 100)
+  //   .sort('-name')
+  //   .sort('views')
+  //   .exec()
+  //   .catch((e) => {
+  //     console.log({ e });
+  //   });
+
+  const db = new JsonDB('http://localhost:3000');
+  const posts = db.collection<Post>('posts');
+  const tags = db.collection<Tag>('tags');
+  const comments = db.collection<PostComment>('comments');
+
+  // const post1 = await posts.create({
+  //   name: 'How iran will retaliate to the israel',
+  //   status: 'publish',
+  //   views: 0,
+  // });
+
+  // await tags.create({ name: 'news', postId: post1.id });
+  // await tags.create({ name: 'iran', postId: post1.id });
+
+  // await comments.create({ message: 'Msg 1', postId: post1.id });
+  // await comments.create({ message: 'Msg 2', postId: post1.id });
+  // await comments.create({ message: 'Msg 3', postId: post1.id });
+
+  // const postAll = await posts.exec();
+  // const tagsAll = await tags.exec();
+  // const commentAll = await comments.exec();
+  // console.log(postAll);
+  // console.log(tagsAll);
+  // console.log(commentAll);
+
+  // await fetch('http://localhost:3000/tags?name=news')
+  const tagSearch = 'iran';
+  const newsTags = await tags.eq('name', tagSearch).exec();
+  console.log(newsTags);
+  for (const tag of newsTags) {
+    const post = await posts
+      .embed<{ tags: Tag; comments: PostComment }>('tags', 'comments')
+      .get(tag.postId);
+    console.log(JSON.stringify(post, null, 2));
+  }
 };
 
-// test()
+test();

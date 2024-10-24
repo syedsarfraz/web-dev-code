@@ -2,20 +2,18 @@ type Normalize<Obj extends object> = [{ [key in keyof Obj]: Obj[key] }][0];
 type WithId<Data extends object> = Normalize<Data & { id: string }>;
 type WithoutId<Data extends object> = Normalize<Omit<Data, 'id'>>;
 
-export class NetworkError extends Error {
+class NetworkError extends Error {
   constructor(error: unknown) {
     super('Network Error');
     this.cause = error;
   }
 }
 
-export class ResponseError extends Error {
+class ResponseError extends Error {
   constructor(public res: Response) {
     super('Response Error');
   }
 }
-
-
 
 class Collection<Data extends object> {
   constructor(private url: string) {}
@@ -79,7 +77,7 @@ class Collection<Data extends object> {
   }
 }
 
-export class JsonDB {
+class JsonDB {
   constructor(private baseUri: string) {}
   collection<Data extends object = object>(name: string) {
     return new Collection<Data>(`${this.baseUri}/${name}`);
@@ -90,10 +88,26 @@ interface Post {
   name: string;
 }
 
-(async () => {
-  const db = new JsonDB('http://localhost:3000');
-  const posts = db.collection<Post>('post');
+interface PostComment {
+  message: string;
+  postId: string;
+}
 
-  const post1 = await posts.create({ name: '' });
+const test = async () => {
+  const db = new JsonDB('http://localhost:3000');
+  const posts = db.collection<Post>('posts');
+  const comments = db.collection<PostComment>('comments');
+
+  const post1 = await posts.create({ name: 'Post 3' });
+
+  await comments.create({ message: 'Msg 1', postId: post1.id });
+  await comments.create({ message: 'Msg 2', postId: post1.id });
+  await comments.create({ message: 'Msg 3', postId: post1.id });
+
   const postAll = await posts.query();
-})();
+  const commentAll = await comments.query();
+  console.log(postAll);
+  console.log(commentAll);
+};
+
+// test();

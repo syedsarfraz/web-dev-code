@@ -1,4 +1,104 @@
 {
+  "posts": [
+    {
+      "id": "335f",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
+    },
+    {
+      "id": "6bdc",
+      "name": "How iran will retaliate to the israel",
+      "status": "publish",
+      "views": 0
+    },
+    {
+      "id": "c0c1",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
+    },
+    {
+      "id": "e634",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
+    }
+  ],
+  "tags": [
+    {
+      "id": "14a4",
+      "name": "election",
+      "postId": "335f"
+    },
+    {
+      "id": "1a4b",
+      "name": "news",
+      "postId": "335f"
+    },
+    {
+      "id": "78ba",
+      "name": "US",
+      "postId": "335f"
+    },
+    {
+      "id": "1de0",
+      "name": "united state",
+      "postId": "335f"
+    },
+    {
+      "id": "9630",
+      "name": "news",
+      "postId": "6bdc"
+    },
+    {
+      "id": "2b19",
+      "name": "iran",
+      "postId": "6bdc"
+    }
+  ],
+  "comments": [
+    {
+      "id": "f391",
+      "message": "Msg 1",
+      "postId": "7708"
+    },
+    {
+      "id": "884c",
+      "message": "Msg 2",
+      "postId": "7708"
+    },
+    {
+      "id": "d376",
+      "message": "Msg 1",
+      "postId": "335f"
+    },
+    {
+      "id": "f701",
+      "message": "Msg 2",
+      "postId": "335f"
+    },
+    {
+      "id": "a8de",
+      "message": "Msg 3",
+      "postId": "335f"
+    },
+    {
+      "id": "d8a5",
+      "message": "Msg 1",
+      "postId": "6bdc"
+    },
+    {
+      "id": "6a62",
+      "message": "Msg 2",
+      "postId": "6bdc"
+    },
+    {
+      "id": "39a1",
+      "message": "Msg 3",
+      "postId": "6bdc"
+    }
+  ],
   "products": [
     {
       "name": "A25",
