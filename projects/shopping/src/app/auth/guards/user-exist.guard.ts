@@ -8,5 +8,5 @@ export const UserExistGuard: CanActivateFn = function (route) {
 
   return userService.getUser()
     ? true
-    : router.createUrlTree(['shopping', 'auth', 'login']);
+    : router.createUrlTree(['auth', 'login']);
 };

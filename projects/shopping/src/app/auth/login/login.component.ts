@@ -4,9 +4,9 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { ModelDirective } from '../../../app-model.directive';
-import { API_BASE } from '../../../shopping/api-base.token';
+import { ModelDirective } from '../../../../../practice/src/app/app-model.directive';
 import { Router } from '@angular/router';
+import { JsonDB, NetworkError, ResponseError } from '../../shared/json-db-adaptor';
 
 interface User {
   id: string;
@@ -24,38 +24,32 @@ interface User {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  apiBase = inject(API_BASE);
+  jsonDB = inject(JsonDB);
+  usersCollection = this.jsonDB.collection<User>('users');
   router = inject(Router);
 
   username = signal('');
   password = signal('');
-  error = signal<
-    'none' | 'not-found' | 'bad-request' | 'server' | 'network'
-  >('none');
+  error = signal<'none' | 'not-found' | 'bad-request' | 'network'>('none');
 
   async login(event: SubmitEvent) {
     event.preventDefault();
 
     try {
-      const res = await fetch(
-        `${this.apiBase}/users?username=${this.username()}&password=${btoa(
-          this.password()
-        )}`
-      );
+      const users = await this.usersCollection
+        .eq('username', this.username())
+        .eq('password', btoa(this.password()))
+        .exec();
 
-      if (res.status >= 500) return this.error.set('server');
-
-      if (res.status >= 400) return this.error.set('bad-request');
-
-      const users: User[] = await res.json();
       if (users.length) {
         localStorage.setItem('user', JSON.stringify(users[0]));
-        this.router.navigate(['shopping/products'], { replaceUrl: true });
+        this.router.navigate(['products'], { replaceUrl: true });
       } else {
         this.error.set('not-found');
       }
     } catch (e) {
-      this.error.set('network');
+      if (e instanceof NetworkError) this.error.set('network');
+      else if (e instanceof ResponseError) this.error.set('bad-request');
     }
   }
 }

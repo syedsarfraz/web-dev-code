@@ -1,9 +1,25 @@
-import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { autoId } from '../../auto-id';
-import { ModelDirective } from '../../app-model.directive';
-import { API_BASE } from '../api-base.token';
+import { Component, inject, signal } from '@angular/core';
+import { ModelDirective } from '../../../../practice/src/app/app-model.directive';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Product } from '../product-list/product-list.component';
+import {
+  ExtractFromQuery,
+  JsonDB,
+  NetworkError,
+  ResponseError,
+} from '../shared/json-db-adaptor';
+import { autoId } from '../utils/auto-id';
+
+interface Product {
+  id: string;
+  name: string;
+}
+interface ProductVariant {
+  id: string;
+  quantity: number;
+  price: number;
+  variantMap: Record<string, string>;
+  productId: string;
+}
 
 @Component({
   templateUrl: './add-product.component.html',
@@ -11,15 +27,20 @@ import { Product } from '../product-list/product-list.component';
   imports: [ModelDirective],
 })
 export class AddProductComponent {
-  apiBase = inject(API_BASE);
+  jsonDB = inject(JsonDB);
+  productsCollection = this.jsonDB.collection<Product>('products');
+  productVariantsCollection =
+    this.jsonDB.collection<ProductVariant>('productVariants');
   router = inject(Router);
   route = inject(ActivatedRoute);
 
+  productCollectionEmbedded = this.productsCollection.embed<{
+    productVariants: ProductVariant[];
+  }>('productVariants');
+
   mode: 'edit' | undefined = this.route.snapshot.data['mode'];
 
-  oldProduct!: Product;
-
-  // cdr = inject(ChangeDetectorRef)
+  oldProduct!: ExtractFromQuery<typeof this.productCollectionEmbedded>;
 
   productName = signal('');
 
@@ -44,14 +65,16 @@ export class AddProductComponent {
   }
 
   async updateProductData(id: string) {
-    const res = await fetch(
-      `${this.apiBase}/products/${id}?_embed=productVariants`
-    );
-    if (res.status === 404) return console.log('not-found');
+    const product = await this.productCollectionEmbedded.get(id).catch((e: unknown) => {
+      if (e instanceof NetworkError) {
+        console.log('network error');
+      } else if (e instanceof ResponseError) {
+        console.log('not-found');
+      }
+    });
 
-    if (!res.ok) return console.log('unknown error');
+    if (!product) return;
 
-    const product: Product = await res.json();
     this.oldProduct = product;
 
     this.productName.set(product.name);
@@ -76,8 +99,6 @@ export class AddProductComponent {
         };
       })
     );
-
-    // this.cdr.detectChanges()
   }
 
   addVariant() {
@@ -148,39 +169,35 @@ export class AddProductComponent {
         }, {} as Record<string, string>),
       };
     });
-
-    const res = await fetch(`${this.apiBase}/products`, {
-      method: 'POST',
-      body: JSON.stringify(product),
-    });
-    if (res.ok) {
-      const productData: { id: string } = await res.json();
-
-      for (let { id, ...productVariant } of productVariants) {
-        const res = await fetch(`${this.apiBase}/productVariants`, {
-          method: 'POST',
-          body: JSON.stringify({
-            ...productVariant,
-            productId: productData.id,
-          }),
-        });
-        if (res.ok) {
-          if (id === productVariants[productVariants.length - 1].id) {
-            alert('Product added successfully!');
-            this.router.navigate(['shopping', 'products']);
-          }
+    const productData = await this.productsCollection
+      .create(product)
+      .catch((e) => {
+        if (e instanceof NetworkError) {
+          console.log('network error');
         }
+      });
+    if (!productData) return;
+
+    for (let { id, ...productVariant } of productVariants) {
+      await this.productVariantsCollection.create({
+        ...productVariant,
+        productId: productData.id,
+      });
+      if (id === productVariants[productVariants.length - 1].id) {
+        console.log('Product added successfully!');
+        this.router.navigate(['products']);
       }
     }
   }
 
   async editProduct() {
-    const promises: Promise<unknown>[] = []
+    const promises: Promise<unknown>[] = [];
 
-    promises.push(fetch(`${this.apiBase}/products/${this.oldProduct.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ name: this.productName() }),
-    }));
+    promises.push(
+      this.productsCollection.update(this.oldProduct.id, {
+        name: this.productName(),
+      })
+    );
 
     const oldPvIds = this.oldProduct.productVariants.map((pv) => pv.id);
     const currentPvIds = this.productVariants().map((pv) => pv.id);
@@ -198,7 +215,7 @@ export class AddProductComponent {
         };
         return map;
       },
-      {} as Record<string, Omit<Product['productVariants'][0], 'id'>>
+      {} as Record<string, Omit<ProductVariant, 'id'>>
     );
 
     const pvIdsMap = {
@@ -217,25 +234,26 @@ export class AddProductComponent {
     });
 
     for (const rmId of pvIdsMap.remove) {
-      promises.push(fetch(`${this.apiBase}/productVariants/${rmId}`, { method: 'DELETE' }));
+      promises.push(this.productVariantsCollection.remove(rmId));
     }
     for (const createId of pvIdsMap.create) {
-      promises.push(fetch(`${this.apiBase}/productVariants`, {
-        method: 'POST',
-        body: JSON.stringify(productVariantMap[createId]),
-      }));
+      promises.push(
+        this.productVariantsCollection.create(productVariantMap[createId])
+      );
     }
     for (const updateId of pvIdsMap.update) {
-      promises.push(fetch(`${this.apiBase}/productVariants/${updateId}`, {
-        method: 'PUT',
-        body: JSON.stringify(productVariantMap[updateId]),
-      }));
+      promises.push(
+        this.productVariantsCollection.update(
+          updateId,
+          productVariantMap[updateId]
+        )
+      );
     }
 
-    await Promise.all(promises)
+    await Promise.all(promises);
 
-    alert('Product updated')
+    console.log('Product updated');
 
-    this.router.navigate(['shopping', 'products'])
+    this.router.navigate(['products']);
   }
 }

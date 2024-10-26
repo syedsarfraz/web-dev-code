@@ -5,7 +5,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductViewComponent } from './product-view/product-view.component';
 
-export const shoppingRoutes: Routes = [
+export const routes: Routes = [
   {
     path: 'products',
     canActivate: [UserExistGuard],

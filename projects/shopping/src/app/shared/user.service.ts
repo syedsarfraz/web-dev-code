@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { ShoppingComponent } from '../shopping.component';
 import { Router } from '@angular/router';
 
 interface User {
@@ -26,6 +25,6 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('user');
-    this.router.navigate(['shopping', 'auth', 'login']);
+    this.router.navigate(['auth', 'login']);
   }
 }

@@ -2,24 +2,24 @@ type Normalize<Obj extends object> = [{ [key in keyof Obj]: Obj[key] }][0];
 type WithId<Data extends object> = Normalize<Data & { id: string }>;
 type WithoutId<Data extends object> = Normalize<Omit<Data, 'id'>>;
 
-type WithTypeField<Obj extends object, Type, P extends string = ''> = {
-  [K in Extract<keyof Obj, string>]: Obj[K] extends Type
-    ? `${P}${K}`
-    : // : Obj[K] extends any[]
-    // ? WithTypeIndex<Obj[K], Type, `${P}${K}`>
-    Obj[K] extends object
-    ? WithTypeField<Obj[K], Type, `${P}${K}.`>
-    : never;
-}[Extract<keyof Obj, string>];
+export type ExtractFromQuery<T extends Query<object>> = T extends Query<
+  infer Data
+>
+  ? WithId<Data>
+  : never;
 
-// Deep recursive error
-// type WithTypeIndex<Obj extends any[], Type, P extends string = ''> = {
-//   [I in Extract<keyof Obj, string>]: Obj[I] extends Type
-//     ? `${P}[${I}]`
-//     : Obj[I] extends any[]
-//     ? WithTypeIndex<Obj[I], Type, `${P}[${I}]`>
-//     : Obj[I] extends object
-//     ? WithTypeField<Obj[I], Type, `${P}[${I}].`>
+type ExtractFields<Obj extends object, Type> = keyof Obj extends infer K
+  ? K extends string
+    ? K
+    : never
+  : never;
+
+// typescript issue with deep nested data
+// type WithTypeField<Obj extends object, Type, P extends string = ''> = {
+//   [K in Extract<keyof Obj, string>]: Obj[K] extends Type
+//     ? `${P}${K}`
+//     : Obj[K] extends object
+//     ? WithTypeField<Obj[K], Type, `${P}${K}.`>
 //     : never;
 // }[Extract<keyof Obj, string>];
 
@@ -41,18 +41,28 @@ class Query<Data extends object> {
 
   private query = new URLSearchParams();
 
-  embed<Obj extends Record<string, object>, K extends keyof Obj = keyof Obj>(
-    ...collections: K[]
-  ) {
+  embed<
+    Obj extends Record<string, object | object[]>,
+    K extends keyof Obj = keyof Obj
+  >(...collections: K[]) {
     for (const collection of collections) {
       this.query.append('_embed', collection as string);
     }
+    // return this as Query<Normalize<Data & Obj>>; // step 1
+    // return this as Query<Normalize<Data & {[K in keyof Obj]: Obj[K]}>>; // step 2
+    // return this as Query<Normalize<Data & {[K in keyof Obj]: WithId<Obj[K]>}>>; // step 3
     return this as Query<
-      Normalize<Data & { [K in keyof Obj]: WithId<Obj[K]> }>
+      Normalize<
+        Data & {
+          [K in keyof Obj]: Obj[K] extends object[]
+            ? WithId<Obj[K][number]>[]
+            : WithId<Obj[K]>;
+        }
+      >
     >;
   }
 
-  eq<NField extends WithTypeField<Data, string | number> | (string & {})>(
+  eq<NField extends ExtractFields<Data, string | number> | (string & {})>(
     field: NField,
     value: string
   ) {
@@ -60,7 +70,7 @@ class Query<Data extends object> {
     return this;
   }
 
-  ne<NField extends WithTypeField<Data, string | number> | (string & {})>(
+  ne<NField extends ExtractFields<Data, string | number> | (string & {})>(
     field: NField,
     value: string
   ) {
@@ -68,28 +78,28 @@ class Query<Data extends object> {
     return this;
   }
 
-  gt<NField extends WithTypeField<Data, number> | (string & {})>(
+  gt<NField extends ExtractFields<Data, number> | (string & {})>(
     field: NField,
     value: number
   ) {
     this.query.append(`${field as string}_gt`, String(value));
     return this;
   }
-  gte<NField extends WithTypeField<Data, number> | (string & {})>(
+  gte<NField extends ExtractFields<Data, number> | (string & {})>(
     field: NField,
     value: number
   ) {
     this.query.append(`${field as string}_gte`, String(value));
     return this;
   }
-  lt<NField extends WithTypeField<Data, number> | (string & {})>(
+  lt<NField extends ExtractFields<Data, number> | (string & {})>(
     field: NField,
     value: number
   ) {
     this.query.append(`${field as string}lt`, String(value));
     return this;
   }
-  lte<NField extends WithTypeField<Data, number> | (string & {})>(
+  lte<NField extends ExtractFields<Data, number> | (string & {})>(
     field: NField,
     value: number
   ) {
@@ -116,7 +126,7 @@ class Query<Data extends object> {
   }
 
   sort<
-    NField extends WithTypeField<Data, string | number>,
+    NField extends ExtractFields<Data, string | number>,
     SortField extends NField | `-${NField}` | (string & {})
   >(field: SortField) {
     const prev = this.query.get('_sort') || '';
@@ -180,77 +190,3 @@ export class JsonDB {
     return new Collection<Data>(`${this.baseUri}/${name}`);
   }
 }
-
-// testing
-
-interface Post {
-  name: string;
-  views: number;
-  status: 'publish' | 'draft';
-}
-
-interface PostComment {
-  message: string;
-  postId: string;
-}
-
-interface Tag {
-  name: string;
-  postId: string;
-}
-
-const test = async () => {
-  // const db = new JsonDB('http://localhost:3000');
-  // const posts = db.collection<Post>('post');
-
-  // const post1 = await posts.create({ name: '', views: 0, status: 'draft' });
-  // const postAll = await posts.exec();
-  // const postAll2 = await posts
-  //   .embed<{ comments: Comment[]; tags: Tag[] }>('comments', 'tags')
-  //   .eq('status', 'publish')
-  //   .gte('views', 100)
-  //   .sort('-name')
-  //   .sort('views')
-  //   .exec()
-  //   .catch((e) => {
-  //     console.log({ e });
-  //   });
-
-  const db = new JsonDB('http://localhost:3000');
-  const posts = db.collection<Post>('posts');
-  const tags = db.collection<Tag>('tags');
-  const comments = db.collection<PostComment>('comments');
-
-  // const post1 = await posts.create({
-  //   name: 'How iran will retaliate to the israel',
-  //   status: 'publish',
-  //   views: 0,
-  // });
-
-  // await tags.create({ name: 'news', postId: post1.id });
-  // await tags.create({ name: 'iran', postId: post1.id });
-
-  // await comments.create({ message: 'Msg 1', postId: post1.id });
-  // await comments.create({ message: 'Msg 2', postId: post1.id });
-  // await comments.create({ message: 'Msg 3', postId: post1.id });
-
-  // const postAll = await posts.exec();
-  // const tagsAll = await tags.exec();
-  // const commentAll = await comments.exec();
-  // console.log(postAll);
-  // console.log(tagsAll);
-  // console.log(commentAll);
-
-  // await fetch('http://localhost:3000/tags?name=news')
-  const tagSearch = 'iran';
-  const newsTags = await tags.eq('name', tagSearch).exec();
-  console.log(newsTags);
-  for (const tag of newsTags) {
-    const post = await posts
-      .embed<{ tags: Tag; comments: PostComment }>('tags', 'comments')
-      .get(tag.postId);
-    console.log(JSON.stringify(post, null, 2));
-  }
-};
-
-test();
