@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <style>
+    /* Container styling */
+.product-container {
+  max-width: 500px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+h2 {
+  text-align: center;
+  color: #4a90e2;
+}
+
+/* Table styling */
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.product-table th,
+.product-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.product-table th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+}
+
+/* Out of stock styling */
+.out-of-stock {
+  color: red;
+  font-weight: bold;
+}
+
+/* Variants list styling */
+.product-table ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.center{
+    text-align: right;
+    
+}
+.product-info {
+  text-align: right; /* Aligns content to the right */
+  padding-right: 20px; /* Adjust spacing if needed */
+}
+
+.product-info .price {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  display: block; /* Ensures each element is on a new line */
+}
+
+.product-info .center {
+  display: block;
+}
+
+
+  </style>
+
+</head>
+<body>
+
+<div class="product-container">
+  <h2>Product Page</h2>
+
+  <table class="product-table">
+    <tr>
+      <th>Name</th>
+      <td id="productName">A55</td>
+    </tr>
+    <tr>
+      <th>Color</th>
+      <td >
+        <ul id="productPrice" >
+        <li> Red</li>
+        <li> Black</li>
+      </ul></td>
+      
+    </tr>
+    <tr>
+      <th>Quantity</th>
+      <td id="productQuantity">
+        <span id="quantityText">5</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Storage</th>
+      <td>
+        <ul id="productVariants">
+          <li> 128</li>
+          <li> 256</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+        <th>RAM</th>
+        <td>
+          <ul id="productVariants">
+            <li> 8</li>
+            <li> 12</li>
+          </ul>
+        </td>
+      </tr>
+  </table>
+</div>
+<div class="product-info">
+    <strong class="price">$1,999</strong>
+    <p class="center">Available 10 in stock <button>Add to Cart</button></p>
+  </div>
+  
+
+<script>
+  // JavaScript to handle "Out of stock" message based on quantity
+  const quantity = 0; // Change this to test out-of-stock functionality
+  const quantityText = document.getElementById('quantityText');
+
+  if (quantity === 0) {
+    quantityText.innerText = 'Out of stock';
+    quantityText.classList.add('out-of-stock');
+  } else {
+    quantityText.innerText = quantity;
+  }
+</script>
+
+</body>
+</html>
