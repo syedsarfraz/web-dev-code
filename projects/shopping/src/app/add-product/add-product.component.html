@@ -1,0 +1,113 @@
+<div class="p-4">
+  <form
+    class="flex flex-col gap-4"
+    (submit)="$event.preventDefault(); saveProduct()"
+  >
+    <div class="w-3/4 m-auto">
+      @if (mode === 'edit') {
+        <h2 class="text-2xl text-center">Edit Product</h2>
+      }
+      @else {
+      <h2 class="text-2xl text-center">Add Product</h2>
+      }
+      <div>
+        <label class="flex flex-col">
+          Product Name
+          <input
+            class="rounded-lg"
+            type="text"
+            placeholder="Enter product name"
+            [(appModel)]="productName"
+          />
+        </label>
+      </div>
+
+      <div class="flex justify-between">
+        <button
+          type="button"
+          class="mt-4 w-[120px] px-2 py-1 rounded-md bg-gray-600 text-white"
+          (click)="addVariant()"
+        >
+          New Variant
+        </button>
+        <button
+          type="submit"
+          class="mt-4 w-[120px] px-2 py-1 rounded-md bg-emerald-600 text-white"
+        >
+          Save Product
+        </button>
+      </div>
+    </div>
+
+    <div class="w-full overflow-x-auto">
+      <table>
+        <tr>
+          <th class="text-left">Quantity</th>
+          <th class="text-left">Price</th>
+          @for (variant of variants(); track variant.id) {
+          <th class="text-left">
+            <div class="flex justify-between items-center pr-2">
+              <input
+                type="text"
+                class="w-[160px] rounded-md px-2 py-1"
+                [(appModel)]="variant.name"
+              />
+              <button
+                type="button"
+                class="w-6 h-6 bg-red-600 text-white rounded-full"
+                (click)="removeVariant($index)"
+              >
+                x
+              </button>
+            </div>
+          </th>
+          }
+          <th></th>
+        </tr>
+
+        @for(row of productVariants(); track row.id) {
+        <tr>
+          <td>
+            <input
+              class="rounded-lg"
+              type="number"
+              [(appModel)]="row.quantity"
+            />
+          </td>
+          <td>
+            <input class="rounded-lg" type="number" [(appModel)]="row.price" />
+          </td>
+
+          @for (variant of variants(); track variant.id) {
+          <td>
+            <input
+              class="rounded-lg"
+              type="text"
+              [(appModel)]="row.variantMap[variant.id]"
+            />
+          </td>
+          } @if(productVariants().length > 1) {
+          <td>
+            <button
+              type="button"
+              class="w-6 h-6 bg-red-600 text-white rounded-full"
+              (click)="removeProductRow($index)"
+            >
+              x
+            </button>
+          </td>
+          }
+        </tr>
+        }
+      </table>
+
+      <button
+        type="button"
+        class="mt-4 w-[180px] px-2 py-1 rounded-md bg-gray-600 text-white"
+        (click)="addProductRow()"
+      >
+        Add Product Variant
+      </button>
+    </div>
+  </form>
+</div>

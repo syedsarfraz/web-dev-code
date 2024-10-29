@@ -1,47 +1,201 @@
 {
-  "products": [
+  "posts": [
     {
-      "id": "1",
-      "name": "Product 1"
+      "id": "335f",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
     },
     {
-      "id": "2",
-      "name": "Product 2"
+      "id": "6bdc",
+      "name": "How iran will retaliate to the israel",
+      "status": "publish",
+      "views": 0
+    },
+    {
+      "id": "c0c1",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
+    },
+    {
+      "id": "e634",
+      "name": "Who will win the election of United State?",
+      "status": "publish",
+      "views": 0
+    }
+  ],
+  "tags": [
+    {
+      "id": "14a4",
+      "name": "election",
+      "postId": "335f"
+    },
+    {
+      "id": "1a4b",
+      "name": "news",
+      "postId": "335f"
+    },
+    {
+      "id": "78ba",
+      "name": "US",
+      "postId": "335f"
+    },
+    {
+      "id": "1de0",
+      "name": "united state",
+      "postId": "335f"
+    },
+    {
+      "id": "9630",
+      "name": "news",
+      "postId": "6bdc"
+    },
+    {
+      "id": "2b19",
+      "name": "iran",
+      "postId": "6bdc"
+    }
+  ],
+  "comments": [
+    {
+      "id": "f391",
+      "message": "Msg 1",
+      "postId": "7708"
+    },
+    {
+      "id": "884c",
+      "message": "Msg 2",
+      "postId": "7708"
+    },
+    {
+      "id": "d376",
+      "message": "Msg 1",
+      "postId": "335f"
+    },
+    {
+      "id": "f701",
+      "message": "Msg 2",
+      "postId": "335f"
+    },
+    {
+      "id": "a8de",
+      "message": "Msg 3",
+      "postId": "335f"
+    },
+    {
+      "id": "d8a5",
+      "message": "Msg 1",
+      "postId": "6bdc"
+    },
+    {
+      "id": "6a62",
+      "message": "Msg 2",
+      "postId": "6bdc"
+    },
+    {
+      "id": "39a1",
+      "message": "Msg 3",
+      "postId": "6bdc"
+    }
+  ],
+  "products": [
+    {
+      "name": "A25",
+      "id": "d96b"
+    },
+    {
+      "name": "A35",
+      "id": "8e13"
+    },
+    {
+      "name": "A55",
+      "id": "dd17"
     }
   ],
   "productVariants": [
     {
-      "id": "2",
-      "price": 699,
-      "quantity": 50,
-      "color": "royal_blue",
-      "productId": "1"
+      "price": 1000,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "red",
+        "Storage": "128",
+        "RAM": "8"
+      },
+      "productId": "d96b",
+      "id": "8da7"
     },
     {
-      "id": "1",
-      "price": 499,
-      "quantity": 100,
-      "color": "red",
-      "productId": "1"
+      "price": 1200,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "blue",
+        "Storage": "256",
+        "RAM": "16"
+      },
+      "productId": "d96b",
+      "id": "9246"
     },
     {
-      "id": "3",
-      "price": 299,
-      "quantity": 50,
-      "productId": "2"
-    }
-  ],
-  "cart": [
+      "price": 1200,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "red"
+      },
+      "productId": "8e13",
+      "id": "15b6"
+    },
     {
-      "id": "3541",
-      "price": 699,
-      "quantity": 1,
-      "color": "royal_blue",
-      "productId": "1",
-      "productVariantId": "2",
-      "userId": "2"
+      "price": 1299,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "blue"
+      },
+      "productId": "8e13",
+      "id": "f958"
+    },
+    {
+      "price": 1399,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "red"
+      },
+      "productId": "dd17",
+      "id": "f08a"
+    },
+    {
+      "price": 1399,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "green"
+      },
+      "productId": "dd17",
+      "id": "3cfe"
+    },
+    {
+      "price": 1200,
+      "quantity": 10,
+      "variantMap": {
+        "Color": "green",
+        "Storage": "256",
+        "RAM": "16"
+      },
+      "productId": "d96b",
+      "id": "b3ad"
+    },
+    {
+      "id": "e387",
+      "quantity": 10,
+      "price": 1000,
+      "variantMap": {
+        "Color": "green",
+        "Storage": "128",
+        "RAM": "8"
+      },
+      "productId": "d96b"
     }
   ],
+  "cart": [],
   "users": [
     {
       "id": "1",
@@ -51,88 +205,18 @@
       "password": "YWRtaW4="
     },
     {
-      "id": "4866",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
+      "id": "5e5e",
+      "firstName": "Ahmed",
+      "lastName": "Raza",
+      "username": "ahmed",
+      "password": "MTIzNA=="
     },
     {
-      "id": "2335",
-      "firstName": "syed",
-      "lastName": "sarfraz",
-      "username": "syedsarfraz",
-      "password": "007"
-    },
-    {
-      "id": "7f1c",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
-    },
-    {
-      "id": "4e40",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
-    },
-    {
-      "id": "b754",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
-    },
-    {
-      "id": "3fec",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
-    },
-    {
-      "id": "a619",
-      "firstName": "syed",
-      "lastName": "anus",
-      "username": "syedanus",
-      "password": "0001"
-    },
-    {
-      "id": "fca5",
-      "firstName": "hafiz",
-      "lastName": "ahmed",
-      "username": "hafiz ahmed",
-      "password": "0002"
-    },
-    {
-      "id": "7121",
-      "firstName": "hafiz",
-      "lastName": "ahmed",
-      "username": "hafizahmed",
-      "password": "0002"
-    },
-    {
-      "id": "6c95",
-      "firstName": "rizwan",
-      "lastName": "makki",
-      "username": "rizwanmakki",
-      "password": "0003"
-    },
-    {
-      "id": "5b87",
-      "firstName": "syed",
-      "lastName": "mehboob",
-      "username": "syedmehoob",
-      "password": "0005"
-    },
-    {
-      "id": "56f2",
-      "firstName": "syed",
-      "lastName": "zubair",
-      "username": "syedzubair",
-      "password": "000010"
+      "id": "5ca5",
+      "firstName": "AHmed",
+      "lastName": "Raza",
+      "username": "raza",
+      "password": "MTIzNA=="
     }
   ]
 }

@@ -9,8 +9,18 @@
           class="px-2 hover:bg-neutral-500 hover:text-white"
           routerLink="products"
           routerLinkActive="bg-slate-400 text-white"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           Products
+        </button>
+      </li>
+      <li class="flex">
+        <button
+          routerLink="products/add"
+          routerLinkActive="bg-slate-400 text-white"
+          class="px-2 disabled:opacity-50 hover:bg-neutral-500 hover:text-white"
+        >
+          Add Product
         </button>
       </li>
       <li class="flex">

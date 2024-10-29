@@ -1,8 +1,11 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { API_BASE } from '../shopping/api-base.token';
-import { Product } from '../shopping/product-list/product-list.component';
+import { API_BASE } from '../api-base.token';
 import { HttpClient } from '@angular/common/http';
 import { catchError, EMPTY, finalize, Observable } from 'rxjs';
+
+interface Product {
+  name: string;
+}
 
 @Component({
   template: '',

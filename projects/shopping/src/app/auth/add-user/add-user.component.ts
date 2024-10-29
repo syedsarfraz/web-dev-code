@@ -129,7 +129,7 @@ export class AddUserComponent {
 
         // Navigate if registration is successful
         if (response.ok) {
-          this.router.navigate(['shopping/auth/login']);
+          this.router.navigate(['auth/login']);
         } else {
           console.error('Failed to register user');
         }
