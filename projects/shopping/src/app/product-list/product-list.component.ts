@@ -14,7 +14,7 @@ import {
 import { JsonDB } from '../shared/json-db-adaptor';
 import { UserService } from '../shared/user.service';
 
-interface ProductVariant {
+export interface ProductVariant {
   id: string;
   price: number;
   quantity: number;
