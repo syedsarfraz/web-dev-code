@@ -5,13 +5,40 @@
   >
     <div class="w-3/4 m-auto">
       @if (mode === 'edit') {
-        <h2 class="text-2xl text-center">Edit Product</h2>
-      }
-      @else {
+      <h2 class="text-2xl text-center">Edit Product</h2>
+      } @else {
       <h2 class="text-2xl text-center">Add Product</h2>
       }
-      <div>
-        <label class="flex flex-col">
+      <div class="flex gap-4">
+        <div class="text-center">
+          <img
+            class="border rounded-xl size-[300px]"
+            [src]="image() || placeholderImage"
+            alt=""
+          />
+          <label
+            for="upload-file"
+            class="mt-2 mr-2 inline-block py-1 px-2 border rounded-md bg-orange-600 text-white"
+            >{{ image() ? "Change File" : "Upload File" }}</label
+          >
+          @if(image()) {
+          <button
+            type="button"
+            class="mt-2 inline-block py-1 px-2 border rounded-md bg-red-600 text-white"
+            (click)="onResetFile(file)"
+          >
+            Remove File
+          </button>
+          }
+          <input
+            #file
+            class="hidden"
+            type="file"
+            id="upload-file"
+            (input)="onFile($event)"
+          />
+        </div>
+        <label class="flex-1 flex flex-col">
           Product Name
           <input
             class="rounded-lg"
