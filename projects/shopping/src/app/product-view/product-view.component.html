@@ -1,1 +1,45 @@
-<p>Product id: {{ id }}!</p>
+<div class="p-4">
+  <h1 class="text-2xl text-center">Product Page</h1>
+
+  <div class="p-4 max-w-screen-sm md:max-w-screen-md mx-auto flex flex-col">
+    @if (product(); as product) {
+    <h2 class="text-xl">{{ product.name }}</h2>
+    <div class="p-4 flex flex-col gap-2">
+      @for (entry of variantEntries(); track $index) {
+      <div class="flex gap-2 items-center">
+        <p class="min-w-20">{{ entry[0] }}</p>
+        @for (value of entry[1]; track $index) {
+        <button
+          class="min-w-20 py-1 px-2 border rounded-md active:bg-neutral-300"
+          [ngClass]="{
+            'bg-orange-600 text-white': isSelected(entry[0], value)
+          }"
+          (click)="select(entry[0], value)"
+        >
+          {{ value }}
+        </button>
+        }
+      </div>
+      }
+    </div>
+    <p class="py-4 self-end font-bold">
+      {{ price() | currency : "PKR" : "symbol" : "1.2" }}
+    </p>
+    <div class="py-4 flex justify-end gap-2 items-center">
+      @if (quantity() === 0) {
+      <p>Out of stock</p>
+      } @else {
+      <p>Available {{ quantity() }} in stock</p>
+      }
+      <button
+        class="py-2 px-4 border rounded-lg active:bg-neutral-300 disabled:opacity-50 active:disabled:bg-inherit"
+        [disabled]="quantity() === 0"
+      >
+        Add to Cart
+      </button>
+    </div>
+    } @else {
+    <p>Loading...</p>
+    }
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, viewChild } from '@angular/core';
 import { ModelDirective } from '../../../../practice/src/app/app-model.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -34,6 +34,11 @@ export class AddProductComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
+  placeholderImage =
+    'data:image/webp;base64,UklGRvwBAABXRUJQVlA4IPABAADQKACdASosASwBPpFIokwlpKOiIvMImLASCWlu4XShG/OIASOSoKjh043cAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFZrkpCKAwAgAsBYB4gbPe6pg7lDuRJ1frraP+UKY2kMPAryMvVKXyCo4cG2edJ7VgWwGmRpjXbn6/gg3ywjzMa5s0Zg43cAPXDAJ4F+bAZhXyQU1lu0aXFadcERy/oNOAB8HbX3ctu4AsA56J9dNs3db9S7KaX3hO3YuAjWM+stajNAqRL5BUJZfZf99EDkAnJDWInCiwVYyZkolEoXgALAWAq8zfUWjuxJTScN/XBgCaU2u4Ar7eBRlTjlfCJPoKDwUfE5N043cAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAVYAD+/ylAAAAS9V/Vk0ZPxZUCNppPJKh7pLkt/4RS0P0bqRzLQH6vyPdD13yrm6MQzR8dOFbcFMXavgW6+PEnL0dNkbAt70AGU2yrda/zDi1AKzZll5WAveEc+61qyJyZDlhMgHcc3Tk3KGqn228cxZr1xDeHmLCxkH1Txvtid5+ApSb/hxZmRN27FtZOArGVRast3K06HzSPi2EJ4AAAAAAA';
+
+  image = signal('');
+
   productCollectionEmbedded = this.productsCollection.embed<{
     productVariants: ProductVariant[];
   }>('productVariants');
@@ -64,14 +69,31 @@ export class AddProductComponent {
     }
   }
 
+  onFile(e: Event) {
+    const file = (e.target as HTMLInputElement).files![0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const url = reader.result as string;
+      this.image.set(url);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onResetFile(file: HTMLInputElement) {
+    this.image.set('');
+    file.value = '';
+  }
+
   async updateProductData(id: string) {
-    const product = await this.productCollectionEmbedded.get(id).catch((e: unknown) => {
-      if (e instanceof NetworkError) {
-        console.log('network error');
-      } else if (e instanceof ResponseError) {
-        console.log('not-found');
-      }
-    });
+    const product = await this.productCollectionEmbedded
+      .get(id)
+      .catch((e: unknown) => {
+        if (e instanceof NetworkError) {
+          console.log('network error');
+        } else if (e instanceof ResponseError) {
+          console.log('not-found');
+        }
+      });
 
     if (!product) return;
 
