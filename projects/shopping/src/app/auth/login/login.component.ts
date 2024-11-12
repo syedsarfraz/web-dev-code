@@ -5,7 +5,7 @@ import {
   signal,
 } from '@angular/core';
 import { ModelDirective } from '../../../../../practice/src/app/app-model.directive';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { JsonDB, NetworkError, ResponseError } from '../../shared/json-db-adaptor';
 
 interface User {
@@ -19,7 +19,7 @@ interface User {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ModelDirective],
+  imports: [ModelDirective, RouterLink],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
