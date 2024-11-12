@@ -19,7 +19,7 @@ interface User {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ModelDirective],
+  imports: [ModelDirective, RouterLink],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -217,6 +217,20 @@
       "lastName": "Raza",
       "username": "raza",
       "password": "MTIzNA=="
+    },
+    {
+      "id": "62f5",
+      "firstName": "syed",
+      "lastName": "anus",
+      "username": "syedanus",
+      "password": "0001"
+    },
+    {
+      "id": "8b5d",
+      "firstName": "syed",
+      "lastName": "sarfraz",
+      "username": "syedsarfraz",
+      "password": "00007"
     }
   ]
 }

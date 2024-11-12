@@ -1,7 +1,166 @@
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+    
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    h1 {
+        color: #333;
+    }
+    
+    .products {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+    }
+    
+    .product {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding : 15px;
+        text-align: center;
+        width: 200px;
+    }
+    
+    .product img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+    .product h3 {
+        margin: 10px 0;
+    }
+    
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        background-color: #218838;
+    }
+    
+    .cart {
+        border-top: 2px solid #ddd;
+        padding-top: 20px;
+        margin-top: 20px;
+        text-align: left;
+    }
+    
+    .cart h2 {
+        text-align: center;
+    }
+    
+    #cart-items {
+        list-style: none;
+        padding: 0;
+    }
+    
+    #cart-items li {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    #total-price {
+        font-weight: bold;
+        text-align: right;
+    }
+    
+    </style>
+    <script>
+      let cart = [];
+    let totalPrice = 0;
+    
+    function addToCart(productName, productPrice) {
+        cart.push({ name: productName, price: productPrice });
+        totalPrice += productPrice;
+        updateCart();
+    }
+    
+    function updateCart() {
+        const cartItems = document.getElementById("cart-items");
+        const totalPriceElement = document.getElementById("total-price");
+    
+        // Clear the cart display
+        cartItems.innerHTML = "";
+    
+        // Display each item in the cart
+        cart.forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
+            cartItems.appendChild(li);
+        });
+    
+        // Update the total price
+        totalPriceElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
+    }
+    
+    </script>
+        <div class="container">
+            <h1>Product List</h1>
+    
+            <div class="products">
+                <!-- Product 1 -->
+                <div class="product">
+                    <img src="/MainBefore.jpg" alt="Product 1">
+                    <h3>A55</h3>
+                    <p>$199</p>
+                    <button onclick="addToCart('A55', 199)">Add to Cart</button>
+                </div>
+                <!-- Product 2 -->
+                <div class="product">
+                    <img src="https://www.winstore.pk/cdn/shop/products/QjLFaeJKbs.jpg?v=1640450153" alt="Product 2">
+                    <h3>A56</h3>
+                    <p>$220</p>
+                    <button onclick="addToCart('A56', 220)">Add to Cart</button>
+                </div>
+                <!-- Product 3 -->
+                <div class="product">
+                    <img src="https://www.winstore.pk/cdn/shop/products/acJSxaK3Oq.jpg?v=1640450167" alt="Product 3">
+                    <h3>A57</h3>
+                    <p>$250</p>
+                    <button onclick="addToCart('A57', 250)">Add to Cart</button>
+                </div>
+                <div class="product">
+                  <img src="https://phoneexpress.pk/wp-content/uploads/2023/10/Redmi-12.jpg" alt="Product 3">
+                  <h3>A58</h3>
+                  <p>$300</p>
+                  <button onclick="addToCart('A58', 300)">Add to Cart</button>
+              </div>
+            </div>
+    
+            <div class="cart">
+                <h2>Product Cart</h2>
+                <ul id="cart-items"></ul>
+                <p id="total-price">Total: $0.00</p>
+            </div>
+        </div>
+   
+
 <div class="p-4 prose">
+
   @if (loading()) {
   <p>Loading...</p>
   } @else {
+<div class="flex py-4 gap-4">
+ 
+</div>
   <table>
     <tr>
       <th>ID</th>
