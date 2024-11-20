@@ -1,4 +1,4 @@
-<div class="p-4 prose">
+<div contenteditable class="p-4 prose">
   <h1 class="p-4 font-b text-4xl text-center">Welcome</h1>
   <strong>Text binding/interpolation:</strong>
   <ul>
@@ -25,6 +25,12 @@
     <li [textContent]="text"></li>
     <li [className]="'text-red-500'">Style applied</li>
     <li [innerHTML]="'<a>Abc</a>'"></li>
+  </ul>
+  <strong>Attribute Binding:</strong>
+  <ul>
+    <li [attr.id]="'1'"></li>
+    <li [attr.class]="'text-red-500'">Style applied</li>
+    <li [attr.contenteditable]="true">{{ text }}</li>
   </ul>
   <strong>Property Binding (Angular provided):</strong>
   <ul>
