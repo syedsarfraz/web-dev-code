@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, signal, viewChild } from '@angular/core';
 import { ModelDirective } from '../../../../practice/src/app/app-model.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -24,7 +24,7 @@ interface ProductVariant {
 @Component({
   templateUrl: './add-product.component.html',
   standalone: true,
-  imports: [ModelDirective],
+  imports: [ModelDirective]
 })
 export class AddProductComponent {
   jsonDB = inject(JsonDB);
@@ -69,10 +69,10 @@ export class AddProductComponent {
     }
   }
 
-  onFile(e: Event) {
-    const file = (e.target as HTMLInputElement).files![0];
+  onFile(fileElm: HTMLInputElement) {
+    const file = fileElm.files![0];
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = () => {
       const url = reader.result as string;
       this.image.set(url);
     };
