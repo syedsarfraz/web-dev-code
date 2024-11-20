@@ -11,8 +11,25 @@
       <th>Price</th>
       <th>Action</th>
     </tr>
+
+    <!-- <ng-template [ngFor]="products()" let-product let-i="index" let-even="even">
+      <tr>
+        <td>{{ i }}</td>
+        <td>{{ product.id }}</td>
+      </tr>
+    </ng-template> -->
+    <!-- <tr *ngFor="let product of products(); index as i; even as even">
+      <td>{{ i }}</td>
+      <td>{{ product.id }}</td>
+    </tr> -->
+    <!-- <tr *ngFor="let product of products(); let i = index; let even = even">
+      <td>{{ i }}</td>
+      <td>{{ product.id }}</td>
+    </tr> -->
+
     @for (product of products(); track product.id) {
-    <tr>
+      <tr>
+      <!-- <td>{{ $index }}</td> -->
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td class="flex gap-1">

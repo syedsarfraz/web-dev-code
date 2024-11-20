@@ -1,4 +1,4 @@
-import { CurrencyPipe, KeyValuePipe } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe, NgFor } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,7 +31,7 @@ export interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CartComponent, CurrencyPipe, KeyValuePipe, RouterLink],
+  imports: [CartComponent, CurrencyPipe, KeyValuePipe, RouterLink, NgFor],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

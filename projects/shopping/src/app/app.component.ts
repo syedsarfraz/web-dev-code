@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, InjectionToken } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { JsonDB } from './shared/json-db-adaptor';
 import { UserService } from './shared/user.service';
@@ -16,4 +16,16 @@ import { UserMenuComponent } from './user-menu/user-menu.component';
 })
 export class AppComponent {
   userService = inject(UserService);
+
+  // store = inject<Store<{ count: number }>>(Store)
+  // count$ = this.store.select('count');
+
+  getUser() {
+    this.userService.getUser()
+    let obj = {
+      'class-name': 'text',
+      className: 'text'
+    }
+  }
+
 }
