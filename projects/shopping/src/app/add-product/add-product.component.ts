@@ -77,7 +77,7 @@ export class AddProductComponent {
       this.image.set(url);
     };
     reader.readAsDataURL(file);
-  }
+  } 
 
   onResetFile(file: HTMLInputElement) {
     this.image.set('');
@@ -178,6 +178,7 @@ export class AddProductComponent {
     return this.addProduct();
   }
 
+         
   async addProduct() {
     const product = { name: this.productName() };
     const productVariants = this.productVariants().map((productVariant) => {
@@ -191,6 +192,24 @@ export class AddProductComponent {
         }, {} as Record<string, string>),
       };
     });
+    // onResetFile(file: HTMLInputElement) {
+    //   this.image.set('');
+    //   file.value = ''; // Clears the file input
+    // }
+    // onFile(e: Event) {
+    //   const file = (e.target as HTMLInputElement).files![0];
+    //   if (!file.type.startsWith('image/')) {
+    //     console.error('Invalid file type. Please upload an image.');
+    //     return;
+    //   }
+    //   const reader = new FileReader();
+    //   reader.onload = () => {
+    //     this.image.set(reader.result as string);
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+    
+    
     const productData = await this.productsCollection
       .create(product)
       .catch((e) => {
