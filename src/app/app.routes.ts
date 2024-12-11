@@ -13,8 +13,12 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
+    path: 'home',
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+  },
+  {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
 ];
