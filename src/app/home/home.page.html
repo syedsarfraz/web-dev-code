@@ -12,11 +12,30 @@
   </ion-header>
   <ion-list>
     @for (todo of todos(); track todo.id) {
-    <ion-item (click)="toggle(todo)" button detail="false">
-      <ion-label>{{todo.title}}</ion-label>
-      <ion-checkbox slot="end" [checked]="todo.completed"></ion-checkbox>
-      <!-- <ion-icon slot="end"  [color]="todo.completed ? 'dark' : 'success'" name="checkmark-circle"></ion-icon> -->
-    </ion-item>
+    <ion-item-sliding>
+      <ion-item (click)="toggle(todo)" button detail="false">
+        <ion-label>{{todo.title}}</ion-label>
+        <ion-checkbox slot="end" [checked]="todo.completed" (ionChange)="$event.target.checked = todo.completed"></ion-checkbox>
+        <!-- <ion-icon slot="end" [class.completed]="todo.completed" name="checkmark-circle"></ion-icon> -->
+      </ion-item>
+
+      <ion-item-options>
+        <ion-item-option color="danger" (click)="remove(todo)"
+          >Delete</ion-item-option
+        >
+      </ion-item-options>
+    </ion-item-sliding>
     }
   </ion-list>
 </ion-content>
+
+<ion-loading [isOpen]="loading()" message="Loading..."></ion-loading>
+
+<!-- <ion-alert
+  [isOpen]="!!removeTodoAlert()"
+  (didDismiss)="removeTodo($event, removeTodoAlert()!); removeTodoAlert.set(null)"
+  [message]="'Are you sure, you want to delete \'' + removeTodoAlert()?.title + '\'?'"
+  [buttons]="['Cancel', {text: 'OK', role: 'destructive'}]"
+></ion-alert> -->
+
+<ion-toast [isOpen]="!!error()" [message]="error()" color="danger" duration="1500" [buttons]="['Dismiss']" (didDismiss)="error.set('')"></ion-toast>

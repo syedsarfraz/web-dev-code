@@ -1,0 +1,10 @@
+ion-item {
+  ion-icon {
+    font-size: 28px;
+
+    &.completed {
+      color: var(--ion-color-success);
+      font-size: 28px;
+    }
+  }
+}
