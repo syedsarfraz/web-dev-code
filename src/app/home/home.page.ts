@@ -85,7 +85,7 @@ export class HomePage {
 
     const newTodos: Todo[] = await res.json();
 
-    this.todos.update(todos => todos.concat(newTodos));
+    this.todos.update((todos) => todos.concat(newTodos));
   }
 
   async toggle(todo: Todo) {
