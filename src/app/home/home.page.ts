@@ -6,6 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import {
   AlertController,
   IonButton,
@@ -22,15 +23,14 @@ import {
   IonTitle,
   IonToolbar,
   IonAlert,
-  IonLoading, IonToast } from '@ionic/angular/standalone';
+  IonLoading,
+  IonToast,
+  IonButtons,
+  IonRouterLink,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle } from 'ionicons/icons';
-
-interface Todo {
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { add, checkmarkCircle } from 'ionicons/icons';
+import { Todo, todos } from '../shared/todo-list';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +38,11 @@ interface Todo {
   styleUrls: ['./home.page.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IonToast,
+  imports: [
+    RouterLink,
+    IonRouterLink,
+    IonButtons,
+    IonToast,
     IonLoading,
     IonAlert,
     IonItemOptions,
@@ -60,7 +64,7 @@ interface Todo {
   ],
 })
 export class HomePage {
-  todos = signal<Todo[]>([]);
+  todos = todos;
 
   error = signal('');
   loading = signal(false);
@@ -71,7 +75,7 @@ export class HomePage {
 
   constructor() {
     this.getTodos();
-    addIcons({ checkmarkCircle });
+    addIcons({ checkmarkCircle, add });
   }
 
   async getTodos() {
@@ -79,9 +83,9 @@ export class HomePage {
     const res = await fetch('https://jsonplaceholder.typicode.com/todos');
     this.loading.set(false);
 
-    const todos: Todo[] = await res.json();
+    const newTodos: Todo[] = await res.json();
 
-    this.todos.set(todos);
+    this.todos.update(todos => todos.concat(newTodos));
   }
 
   async toggle(todo: Todo) {
@@ -90,10 +94,12 @@ export class HomePage {
     await fetch(`https://jsonplaceholder.typicode.com/todos/${todo.id}`, {
       method: 'PUT',
       body: JSON.stringify(updatedTodo),
-    }).catch((e) => {
-      this.error.set('Failed to toggle todo')
-      throw e
-    }).finally(() => this.loading.set(false));
+    })
+      .catch((e) => {
+        this.error.set('Failed to toggle todo');
+        throw e;
+      })
+      .finally(() => this.loading.set(false));
     this.todos.update((todos) =>
       todos.map((_todo) => {
         if (_todo === todo) {

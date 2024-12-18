@@ -21,4 +21,8 @@ export const routes: Routes = [
     redirectTo: '/home',
     pathMatch: 'full',
   },
+  {
+    path: 'add-todo',
+    loadComponent: () => import('./add-todo/add-todo.page').then( m => m.AddTodoPage)
+  },
 ];
