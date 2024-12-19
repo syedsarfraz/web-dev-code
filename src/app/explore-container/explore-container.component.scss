@@ -25,3 +25,12 @@
 #container a {
   text-decoration: none;
 }
+
+.space-top {
+  margin-top: 16px;
+}
+
+ion-button::part(native) {
+  padding-left: 24px;
+  padding-right: 24px;
+}

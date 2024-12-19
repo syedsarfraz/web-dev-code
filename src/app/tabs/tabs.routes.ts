@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import type { AddTodoPage } from '../add-todo/add-todo.page';
 
 export const routes: Routes = [
   {
@@ -7,9 +8,27 @@ export const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
-        loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+        path: 'home',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('../home/home.page').then((m) => m.HomePage),
+          },
+          {
+            path: 'add-todo',
+            canDeactivate: [
+              (component: AddTodoPage) => {
+                if (component.isEdited()) {
+                  return component.showDiscardAlert();
+                }
+                return true;
+              },
+            ],
+            loadComponent: () =>
+              import('../add-todo/add-todo.page').then((m) => m.AddTodoPage),
+          },
+        ],
       },
       {
         path: 'tab2',
@@ -23,9 +42,9 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/home',
         pathMatch: 'full',
       },
     ],
-  }
+  },
 ];

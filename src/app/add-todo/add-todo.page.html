@@ -33,3 +33,10 @@
   message="Please fill the todo title"
   [buttons]="['OK']"
 ></ion-alert>
+
+<ion-alert
+  [isOpen]="discardAlert()"
+  (didDismiss)="discardAlert.set(false); discardPromise($event.detail.role === 'destructive')"
+  message="Would you like to discard changes?"
+  [buttons]="[{text: 'No', role: 'cancel'}, {text: 'Yes', role: 'destructive'}]"
+></ion-alert>

@@ -56,6 +56,8 @@ export class AddTodoPage {
 
   loading = signal(false);
   emptyTitleAlert = signal(false);
+  discardAlert = signal(false);
+  discardPromise!: (value: boolean) => void;
 
   constructor() {}
 
@@ -76,7 +78,19 @@ export class AddTodoPage {
     }).finally(() => this.loading.set(false));
     todos.update((todos) => [todo].concat(todos));
     this.navCtrl.navigateBack('home', { animationDirection: 'back' });
+    // equivalent to
     // this.router.navigateByUrl('home');
     // this.navCtrl.setDirection('back');
+  }
+
+  isEdited() {
+    return this.title() !== '';
+  }
+
+  showDiscardAlert() {
+    this.discardAlert.set(true);
+    return new Promise<boolean>((resolve) => {
+      this.discardPromise = resolve;
+    });
   }
 }
