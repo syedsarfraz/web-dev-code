@@ -53,6 +53,7 @@ export class AddTodoPage {
 
   title = signal('');
   completed = signal(false);
+  saved = false
 
   loading = signal(false);
   emptyTitleAlert = signal(false);
@@ -76,14 +77,16 @@ export class AddTodoPage {
       method: 'POST',
       body: JSON.stringify(todo),
     }).finally(() => this.loading.set(false));
+    this.saved = true;
     todos.update((todos) => [todo].concat(todos));
-    this.navCtrl.navigateBack('home', { animationDirection: 'back' });
+    this.navCtrl.navigateBack('/tabs/home', { animationDirection: 'back' });
     // equivalent to
     // this.router.navigateByUrl('home');
     // this.navCtrl.setDirection('back');
   }
 
   isEdited() {
+    if (this.saved) return false
     return this.title() !== '';
   }
 
