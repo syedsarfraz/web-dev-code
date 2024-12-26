@@ -114,7 +114,9 @@ export class AddTodoPage {
 
   async scheduleReminder(id: number, title: string, due: string) {
     const hasPermission = await LocalNotifications.checkPermissions();
-    if (hasPermission.display !== 'denied') {
+    if (hasPermission.display === 'denied') return;
+
+    if (hasPermission.display !== 'granted') {
       const granted = await LocalNotifications.requestPermissions();
       if (granted.display === 'denied') return;
     }
