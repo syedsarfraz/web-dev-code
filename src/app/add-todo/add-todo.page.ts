@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import {
   IonAlert,
   IonBackButton,
@@ -17,6 +18,9 @@ import {
   IonTitle,
   IonToolbar,
   NavController,
+  IonDatetime,
+  IonModal,
+  IonDatetimeButton,
 } from '@ionic/angular/standalone';
 import { todos } from '../shared/todo-list';
 import { Router } from '@angular/router';
@@ -29,6 +33,9 @@ let count = 200;
   styleUrls: ['./add-todo.page.scss'],
   standalone: true,
   imports: [
+    IonDatetimeButton,
+    IonModal,
+    IonDatetime,
     IonLoading,
     IonAlert,
     IonLabel,
@@ -53,7 +60,12 @@ export class AddTodoPage {
 
   title = signal('');
   completed = signal(false);
-  saved = false
+  due = signal(
+    new Date(Date.now() + 1000 * 60 * 30 + 1000 * 60 * 60 * 5)
+      .toJSON()
+      .slice(0, -5)
+  );
+  saved = false;
 
   loading = signal(false);
   emptyTitleAlert = signal(false);
@@ -77,6 +89,9 @@ export class AddTodoPage {
       method: 'POST',
       body: JSON.stringify(todo),
     }).finally(() => this.loading.set(false));
+    if (!this.completed()) {
+      await this.scheduleReminder(todo.id, this.title(), this.due());
+    }
     this.saved = true;
     todos.update((todos) => [todo].concat(todos));
     this.navCtrl.navigateBack('/tabs/home', { animationDirection: 'back' });
@@ -86,7 +101,7 @@ export class AddTodoPage {
   }
 
   isEdited() {
-    if (this.saved) return false
+    if (this.saved) return false;
     return this.title() !== '';
   }
 
@@ -94,6 +109,25 @@ export class AddTodoPage {
     this.discardAlert.set(true);
     return new Promise<boolean>((resolve) => {
       this.discardPromise = resolve;
+    });
+  }
+
+  async scheduleReminder(id: number, title: string, due: string) {
+    const hasPermission = await LocalNotifications.checkPermissions();
+    if (hasPermission.display !== 'denied') {
+      const granted = await LocalNotifications.requestPermissions();
+      if (granted.display === 'denied') return;
+    }
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id,
+          title,
+          body: 'Please complete the item',
+          schedule: { at: new Date(due) },
+          smallIcon: 'ic_launcher'
+        },
+      ],
     });
   }
 }

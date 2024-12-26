@@ -19,6 +19,10 @@
         [(ngModel)]="title"
       ></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label>Due</ion-label>
+      <ion-datetime-button slot="end" datetime="datetime" [disabled]="completed()"></ion-datetime-button>
+    </ion-item>
     <ion-item lines="none">
       <ion-label>Completed</ion-label>
       <ion-checkbox slot="end" [(ngModel)]="completed"></ion-checkbox>
@@ -40,3 +44,9 @@
   message="Would you like to discard changes?"
   [buttons]="[{text: 'No', role: 'cancel'}, {text: 'Yes', role: 'destructive'}]"
 ></ion-alert>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime id="datetime" [value]="due()" (ionChange)="due.set($any($event.target).value)"></ion-datetime>
+  </ng-template>
+</ion-modal>

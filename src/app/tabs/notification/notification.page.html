@@ -1,0 +1,22 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Notification</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">notification</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list>
+    @for(item of notifications(); track $index) {
+    <ion-item>
+      <ion-label>{{item.title}}</ion-label>
+      <ion-badge>{{item.schedule?.at}}</ion-badge>
+      <ion-button slot="end" fill="clear"><ion-icon color="danger" slot="icon-only" name="trash"></ion-icon></ion-button>
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>
