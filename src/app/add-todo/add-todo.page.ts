@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import {
   IonAlert,
@@ -21,6 +28,7 @@ import {
   IonDatetime,
   IonModal,
   IonDatetimeButton,
+  IonNote,
 } from '@ionic/angular/standalone';
 import { todos } from '../shared/todo-list';
 import { Router } from '@angular/router';
@@ -33,6 +41,7 @@ let count = 200;
   styleUrls: ['./add-todo.page.scss'],
   standalone: true,
   imports: [
+    IonNote,
     IonDatetimeButton,
     IonModal,
     IonDatetime,
@@ -51,46 +60,68 @@ let count = 200;
     IonTitle,
     IonToolbar,
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class AddTodoPage {
   // router = inject(Router);
   navCtrl = inject(NavController);
 
-  title = signal('');
-  completed = signal(false);
-  due = signal(
-    new Date(Date.now() + 1000 * 60 * 30 + 1000 * 60 * 60 * 5)
-      .toJSON()
-      .slice(0, -5)
-  );
+  formGroup = new FormGroup({
+    title: new FormControl('', {
+      validators: [Validators.required, Validators.minLength(3)],
+      nonNullable: true,
+    }),
+    due: new FormControl(
+      new Date(Date.now() + 1000 * 60 * 30 + 1000 * 60 * 60 * 5)
+        .toJSON()
+        .slice(0, -5)
+    ),
+    completed: new FormControl(false, { nonNullable: true }),
+  });
+
+  titleChanges = toSignal(this.formGroup.controls.title.valueChanges, {
+    initialValue: null,
+  });
+
+  titleError = computed(() => {
+    this.titleChanges();
+    const titleControl = this.formGroup.controls.title;
+    if (titleControl.hasError('required')) return 'Title is required';
+    if (titleControl.hasError('minlength')) return 'At least 3 chars required';
+    return '';
+  });
+
+  dueDisabled$ = this.formGroup.controls.completed.valueChanges
+
   saved = false;
 
   loading = signal(false);
-  emptyTitleAlert = signal(false);
   discardAlert = signal(false);
   discardPromise!: (value: boolean) => void;
 
   constructor() {}
 
   async add() {
-    if (this.title() === '') {
-      this.emptyTitleAlert.set(true);
-      return;
-    }
+    this.formGroup.markAllAsTouched();
+    if (this.formGroup.invalid) return;
+    console.log('submit', this.formGroup);
     this.loading.set(true);
     const todo = {
       id: ++count,
-      title: this.title(),
-      completed: this.completed(),
+      title: this.formGroup.value.title!,
+      completed: this.formGroup.value.completed!,
     };
     await fetch('https://jsonplaceholder.typicode.com/todos', {
       method: 'POST',
       body: JSON.stringify(todo),
     }).finally(() => this.loading.set(false));
-    if (!this.completed()) {
-      await this.scheduleReminder(todo.id, this.title(), this.due());
+    if (!todo.completed) {
+      await this.scheduleReminder(
+        todo.id,
+        todo.title,
+        this.formGroup.value.due!
+      );
     }
     this.saved = true;
     todos.update((todos) => [todo].concat(todos));
@@ -102,7 +133,7 @@ export class AddTodoPage {
 
   isEdited() {
     if (this.saved) return false;
-    return this.title() !== '';
+    return this.formGroup.controls.title.value !== '';
   }
 
   showDiscardAlert() {
@@ -127,7 +158,7 @@ export class AddTodoPage {
           title,
           body: 'Please complete the item',
           schedule: { at: new Date(due) },
-          smallIcon: 'ic_launcher'
+          smallIcon: 'ic_launcher',
         },
       ],
     });
