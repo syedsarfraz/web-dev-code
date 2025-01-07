@@ -1,228 +1,104 @@
+ <style>
 
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f9fa;
-    }
-    
-    .container {
-        max-width: 900px;
-        margin: 20px auto;
-        padding: 10px;
-        text-align: center;
-    }
-    
-    h1 {
-        color: #333;
-    }
-    
-    .products {
-        display: flex;
-        justify-content: space-around;
-        margin: 20px 0;
-    }
-    
-    .product {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding : 15px;
-        text-align: center;
-        width: 200px;
-    }
-    
-    .product img {
-        width: 100%;
-        height: auto;
-        margin-bottom: 10px;
-    }
-    
-    .product h3 {
-        margin: 10px 0;
-    }
-    
-    button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-    
-    button:hover {
-        background-color: #218838;
-    }
-    
-    .cart {
-        border-top: 2px solid #ddd;
-        padding-top: 20px;
-        margin-top: 20px;
-        text-align: left;
-    }
-    
-    .cart h2 {
-        text-align: center;
-    }
-    
-    #cart-items {
-        list-style: none;
-        padding: 0;
-    }
-    
-    #cart-items li {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-    }
-    
-    #total-price {
-        font-weight: bold;
-        text-align: right;
-    }
-    
-    </style>
-    <script>
-      let cart = [];
-    let totalPrice = 0;
-    
-    function addToCart(productName, productPrice) {
-        cart.push({ name: productName, price: productPrice });
-        totalPrice += productPrice;
-        updateCart();
-    }
-    
-    function updateCart() {
-        const cartItems = document.getElementById("cart-items");
-        const totalPriceElement = document.getElementById("total-price");
-    
-        // Clear the cart display
-        cartItems.innerHTML = "";
-    
-        // Display each item in the cart
-        cart.forEach((item) => {
-            const li = document.createElement("li");
-            li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-            cartItems.appendChild(li);
-        });
-    
-        // Update the total price
-        totalPriceElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
-    }
-    
-    </script>
-        <div class="container">
-            <h1>Product List</h1>
-    
-            <div class="products">
-                <!-- Product 1 -->
-                <div class="product">
-                    <img src="/MainBefore.jpg" alt="Product 1">
-                    <h3>A55</h3>
-                    <p>$199</p>
-                    <button onclick="addToCart('A55', 199)">Add to Cart</button>
-                </div>
-                <!-- Product 2 -->
-                <div class="product">
-                    <img src="https://www.winstore.pk/cdn/shop/products/QjLFaeJKbs.jpg?v=1640450153" alt="Product 2">
-                    <h3>A56</h3>
-                    <p>$220</p>
-                    <button onclick="addToCart('A56', 220)">Add to Cart</button>
-                </div>
-                <!-- Product 3 -->
-                <div class="product">
-                    <img src="https://www.winstore.pk/cdn/shop/products/acJSxaK3Oq.jpg?v=1640450167" alt="Product 3">
-                    <h3>A57</h3>
-                    <p>$250</p>
-                    <button onclick="addToCart('A57', 250)">Add to Cart</button>
-                </div>
-                <div class="product">
-                  <img src="https://phoneexpress.pk/wp-content/uploads/2023/10/Redmi-12.jpg" alt="Product 3">
-                  <h3>A58</h3>
-                  <p>$300</p>
-                  <button onclick="addToCart('A58', 300)">Add to Cart</button>
-              </div>
-            </div>
-    
-            <div class="cart">
-                <h2>Product Cart</h2>
-                <ul id="cart-items"></ul>
-                <p id="total-price">Total: $0.00</p>
-            </div>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  width: 240px;
+}
+
+.card-img {
+  height: 206px;
+  width: 206px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.stock {
+  color: #4b5563;
+}
+
+.button-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.edit-button {
+  background: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+  background: #2563eb;
+}
+
+ </style>
+
+<div class="container">
+  @for (product of products(); track product.id) {
+  <div class="card">
+    <a [routerLink]="product.id">
+      <img
+        [src]="product.image || placeholderImage"
+        alt="{{ product.name }}"
+        class="card-img"
+      />
+      <div class="card-content">
+        <h3 class="card-title">{{ product.name }}</h3>
+        <div class="card-details">
+          <span class="price">
+            {{ getSelectedVariant(product).price | currency: "PKR": "symbol-narrow" }}
+          </span>
+          <span class="stock">In stock: 10</span>
         </div>
-   
-
-<div class="p-4 prose">
-
-  @if (loading()) {
-  <p>Loading...</p>
-  } @else {
-<div class="flex py-4 gap-4">
- 
-</div>
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Color</th>
-      <th>Quantity</th>
-      <th>Price</th>
-      <th>Action</th>
-    </tr>
-    @for (product of products(); track product.id) {
-    <tr>
-      <td>{{ product.id }}</td>
-      <td>{{ product.name }}</td>
-      <td class="flex gap-1">
-        @if (product.productVariants.length > 1) { @for(variant of
-        product.productVariants; track variant.id) {
-        <div>
-          @for(subVariant of variant.variantMap | keyvalue; track $index) {
-
-          <button
-            class="py-0.5 px-1.5 border rounded-xl hover:bg-gray-300"
-            [class.bg-gray-200]="getSelectedVariant(product).id === variant.id"
-            [class.bg-gray-50]="getSelectedVariant(product).id !== variant.id"
-            (click)="selectVariant(product.id, variant.id)"
-          >
-            {{ subVariant.key }}: {{ subVariant.value }}
-          </button>
-          }
-        </div>
-        } }
-      </td>
-      <td>{{ getSelectedVariant(product).quantity }}</td>
-      <td>
-        {{
-          getSelectedVariant(product).price | currency : "PKR" : "symbol-narrow"
-        }}
-      </td>
-      <td class="flex gap-2 items-center">
-        <button
-          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
-          (click)="addToCart(product, getSelectedVariant(product))"
-        >
-          Add to cart
-        </button>
-        <button
-          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
-          [routerLink]="product.id"
-        >
-          View
-        </button>
-        <button
-          class="px-1 py-0.5 bg-slate-700 text-white rounded-md"
-          [routerLink]="['edit', product.id]"
-        >
-          Edit
-        </button>
-      </td>
-    </tr>
-    } @empty {
-    <p>No products there</p>
-    }
-  </table>
+      </div>
+    </a>
+    <div class="button-container">
+      <button
+        [routerLink]="['edit', product.id]"
+        class="edit-button"
+      >
+        Edit Product
+      </button>
+    </div>
+  </div>
   }
-  <app-cart (remove)="removeCartItem($event)"></app-cart>
 </div>

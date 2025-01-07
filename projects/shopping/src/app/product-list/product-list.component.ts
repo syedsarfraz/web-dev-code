@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
 import {
   CartComponent,
   CartItem,
-  CartItemWithProduct,
+  CartItemEmbeded,
 } from '../cart/cart.component';
 import { JsonDB } from '../shared/json-db-adaptor';
 import { UserService } from '../shared/user.service';
@@ -24,6 +24,7 @@ export interface ProductVariant {
 
 export interface Product {
   id: string;
+  image?:string;
   name: string;
   productVariants: ProductVariant[];
 }
@@ -31,7 +32,7 @@ export interface Product {
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CartComponent, CurrencyPipe, KeyValuePipe, RouterLink],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,7 +46,9 @@ export class ProductListComponent {
   products = signal<Product[]>([]);
   productVariantSelection = signal<Record<string, string>>({});
 
-  cart = signal<CartItemWithProduct[]>([]);
+  cart = signal<CartItemEmbeded[]>([]);
+  placeholderImage =
+  'data:image/webp;base64,UklGRvwBAABXRUJQVlA4IPABAADQKACdASosASwBPpFIokwlpKOiIvMImLASCWlu4XShG/OIASOSoKjh043cAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFZrkpCKAwAgAsBYB4gbPe6pg7lDuRJ1frraP+UKY2kMPAryMvVKXyCo4cG2edJ7VgWwGmRpjXbn6/gg3ywjzMa5s0Zg43cAPXDAJ4F+bAZhXyQU1lu0aXFadcERy/oNOAB8HbX3ctu4AsA56J9dNs3db9S7KaX3hO3YuAjWM+stajNAqRL5BUJZfZf99EDkAnJDWInCiwVYyZkolEoXgALAWAq8zfUWjuxJTScN/XBgCaU2u4Ar7eBRlTjlfCJPoKDwUfE5N043cAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAWAsBYCwFgLAVYAD+/ylAAAAS9V/Vk0ZPxZUCNppPJKh7pLkt/4RS0P0bqRzLQH6vyPdD13yrm6MQzR8dOFbcFMXavgW6+PEnL0dNkbAt70AGU2yrda/zDi1AKzZll5WAveEc+61qyJyZDlhMgHcc3Tk3KGqn228cxZr1xDeHmLCxkH1Txvtid5+ApSb/hxZmRN27FtZOArGVRast3K06HzSPi2EJ4AAAAAAA';
 
   constructor() {
     this.loadProducts();
@@ -72,6 +75,8 @@ export class ProductListComponent {
     { id: productVariantId, ...productVariant }: ProductVariant
   ) {}
 
+  
+
   updateItemQueueMap: Record<string, ((newId: string) => void)[] | undefined> =
     {};
   async continueUpdateItems(oldId: string, newId: string) {
@@ -89,7 +94,6 @@ export class ProductListComponent {
       this.updateItemQueueMap[itemId].push(callback);
     }
   }
-
   async removeCartItem(id: string) {
     await this.cartCollection.remove(id);
     this.loadCart();
@@ -97,8 +101,9 @@ export class ProductListComponent {
 
   async loadCart() {
     const user = this.userServer.getUser();
-    const cartList: CartItemWithProduct[] = await this.cartCollection
-      .embed<{ product: Product; productVariant: ProductVariant }>(
+
+    const cartList: CartItemEmbeded[] = await this.cartCollection
+      .embed<{ product: Omit<Product, 'productVariants'>; productVariant: ProductVariant }>(
         'product',
         'productVariant'
       )
@@ -115,4 +120,5 @@ export class ProductListComponent {
     this.products.set(data);
     this.loading.set(false);
   }
+  
 }
