@@ -1,4 +1,4 @@
-import { CurrencyPipe, KeyValuePipe } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe, NgFor } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
