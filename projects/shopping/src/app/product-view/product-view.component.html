@@ -9,13 +9,9 @@
       <div class="flex gap-2 items-center">
         <p class="min-w-20">{{ entry[0] }}</p>
         @for (value of entry[1]; track $index) {
-        <button
-          class="min-w-20 py-1 px-2 border rounded-md active:bg-neutral-300"
-          [ngClass]="{
+        <button class="min-w-20 py-1 px-2 border rounded-md active:bg-neutral-300" [ngClass]="{
             'bg-orange-600 text-white': isSelected(entry[0], value)
-          }"
-          (click)="select(entry[0], value)"
-        >
+          }" (click)="select(entry[0], value)">
           {{ value }}
         </button>
         }
@@ -31,12 +27,22 @@
       } @else {
       <p>Available {{ quantity() }} in stock</p>
       }
-      <button
-        class="py-2 px-4 border rounded-lg active:bg-neutral-300 disabled:opacity-50 active:disabled:bg-inherit"
-        [disabled]="quantity() === 0"
-      >
+     <button
+      class="py-2 px-4 border rounded-lg active:bg-neutral-300 disabled:opacity-50 active:disabled:bg-inherit"
+      [disabled]="quantity() === 0"
+      (click)="onAddToCart()"
+    >
+      Add to Cart 
+    </button> 
+
+<!--     
+      <button class="py-2 px-4 border rounded-lg active:bg-neutral-300 disabled:opacity-50"
+        [disabled]="quantity() === 0" (click)="onAddToCart()">
         Add to Cart
-      </button>
+      </button> -->
+
+
+
     </div>
     } @else {
     <p>Loading...</p>

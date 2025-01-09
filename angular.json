@@ -152,9 +152,6 @@
             "outputPath": "dist/shopping",
             "index": "projects/shopping/src/index.html",
             "browser": "projects/shopping/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "projects/shopping/tsconfig.app.json",
             "assets": [
               {
